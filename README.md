@@ -64,18 +64,87 @@ Use the single source code file [PerseusGeoStar.swift](https://github.com/perseu
 
 `Step 2:` Install the package dependency in the prefered way either Standalone or SPM
 
-`Step 3:` Locate Location Services Agent globally (recommended), custom service object in your app
+`Step 3:` Locate variable for location data globally (recommended)
 
-`Setp 4:` Configure Accuracy and GoTo Settings Alert 
+`Step 4:` Locate Location Services Agent globally (recommended)
 
-`Step 5:` Deal with Location Services permission 
+`Setp 5:` Configure Accuracy and GoTo Settings Alert 
 
-`Step 6:` Process Location Services events
+```swift
 
-`Step 7 A:` Request current location
+import ConsolePerseusLogger
+import PerseusGeoLocationKit
 
-`Step 7 B:` Request start/stop location updates
+struct AppGlobals {
 
+    // MARK: - Business Data
+
+    static var currentLocation: PerseusLocation? {
+        didSet {
+            let location = currentLocation?.description ?? "current location is erased"
+            log.message("\(location) [\(type(of: self))].\(#function)", .info)
+        }
+    }
+
+    // MARK: - Constants
+
+    static let preferedAccuracy = LocationAccuracy.threeKilometers
+
+    // MARK: - Custom Services
+
+    public let locationDealer: LocationAgent
+
+    // MARK: - Initializer
+
+    init() {
+        log.message("[\(type(of: self))].\(#function)", .info)
+
+        locationDealer = LocationAgent.shared
+
+        // Configure accuracy
+
+        var lm = locationDealer.locationManager
+        lm?.desiredAccuracy = AppGlobals.preferedAccuracy.rawValue
+
+        // Configure GoTo Settings alert
+
+        TODO: GoTo Settings alert
+    }
+}
+
+```
+
+`Step 6:` Deal with Location Services permission 
+
+```ruby
+
+TODO: requesting permission sample
+
+```
+
+`Step 7:` Subscribe for Location Services events
+
+```ruby
+
+TODO: subscribing for Location Services events sample
+
+```
+
+`Step 8 A:` Request current location
+
+```ruby
+
+TODO: requesting for current location sample
+
+```
+
+`Step 8 B:` Request start/stop location updates
+
+```ruby
+
+TODO: requesting start/stop location updates sample
+
+```
 
 # Third-party software
 
