@@ -18,8 +18,8 @@ public class LocationAgent: NSObject {
     // MARK: - Difficult Dependencies
 
     #if DEBUG
-    var locationManager: LocationManagerProtocol!
-    var notificationCenter: NotificationCenterProtocol!
+    public var locationManager: LocationManagerProtocol!
+    public var notificationCenter: NotificationCenterProtocol!
 
     internal func resetDefaults() { // Used for keeping test room cleaned only.
         order = .none
