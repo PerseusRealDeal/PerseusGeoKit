@@ -67,3 +67,21 @@ extension CLAuthorizationStatus: CustomStringConvertible {
         }
     }
 }
+
+// MARK: - Open Settings App function
+
+#if os(iOS)
+
+public func redirectToSettingsApp() {
+    log.message("\(#function)", .info)
+
+}
+
+#elseif os(macOS)
+
+public func redirectToSettingsApp() {
+    log.message("\(#function)", .info)
+
+}
+
+#endif

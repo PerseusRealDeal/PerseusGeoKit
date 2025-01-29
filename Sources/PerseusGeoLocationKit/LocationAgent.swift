@@ -26,9 +26,11 @@ public class LocationAgent: NSObject {
         locationManager?.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
     }
     #else
-    public let locationManager: CLLocationManager
-    public let notificationCenter: NotificationCenter
+    public var locationManager: CLLocationManager
+    public var notificationCenter: NotificationCenter
     #endif
+
+    public let alert: OneFunctionAlert
 
     // MARK: - Calculated Properties
 
@@ -57,6 +59,8 @@ public class LocationAgent: NSObject {
 
         locationManager = CLLocationManager()
         notificationCenter = NotificationCenter.default
+
+        alert = OneFunctionAlert()
 
         super.init()
 
