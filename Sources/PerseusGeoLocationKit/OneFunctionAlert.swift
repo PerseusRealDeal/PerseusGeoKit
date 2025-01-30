@@ -17,28 +17,38 @@ import UIKit
 import Cocoa
 #endif
 
-public struct AlertText {
+public struct OneFunctionAlertText {
 
-    public var title = "Title"
+    public var title: String
+    public var message: String
+    public var buttonCancel: String
+    public var buttonFunction: String
 
-    public var message = "Message"
+    public init(title: String = "Title",
+                message: String = "Message",
+                buttonCancel: String = "Cancel",
+                buttonFunction: String = "Action") {
 
-    public var buttonCancel = "Cancel"
-
-    public var buttonFunction = "Function"
+        self.title = title
+        self.message = message
+        self.buttonCancel = buttonCancel
+        self.buttonFunction = buttonFunction
+    }
 }
 
 #if os(iOS)
 
 public class OneFunctionAlert {
 
-    public var titles: AlertText {
+    public var titles: OneFunctionAlertText {
         didSet {
             log.message("[\(type(of: self))].\(#function)", .info)
 
-            configure()
+            alert = createAlert()
         }
     }
+
+    private let action: () -> Void
 
     private var alert: UIAlertController?
 
@@ -47,23 +57,28 @@ public class OneFunctionAlert {
 
     // MARK: - Initializer
 
-    init() {
+    init(using function: @escaping () -> Void) {
+
         log.message("[\(type(of: self))].\(#function)", .info)
 
-        titles = AlertText()
-        configure()
+        action = function
+        titles = OneFunctionAlertText()
+
+        alert = createAlert()
     }
 
-    private func configure() {
-        alert = UIAlertController(title: titles.title,
-                                  message: titles.message,
-                                  preferredStyle: .alert)
+    private func createAlert() -> UIAlertController {
+        let alert = UIAlertController(title: titles.title,
+                                      message: titles.message,
+                                      preferredStyle: .alert)
 
-        alert?.addAction(UIAlertAction(title: titles.buttonCancel, style: .cancel))
-        alert?.addAction(UIAlertAction(title: titles.buttonFunction,
-                                       style: .default) { _ in
-            redirectToSettingsApp()
+        alert.addAction(UIAlertAction(title: titles.buttonCancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: titles.buttonFunction,
+                                      style: .default) { _ in
+            self.action()
         })
+
+        return alert
     }
 
     // MARK: - Contract
@@ -81,11 +96,51 @@ public class OneFunctionAlert {
 
 public class OneFunctionAlert {
 
+    public var titles: OneFunctionAlertText {
+        didSet {
+            log.message("[\(type(of: self))].\(#function)", .info)
+
+            alert = createAlert()
+        }
+    }
+
+    private let action: () -> Void
+    private var alert: NSAlert?
+
     // MARK: - Initializer
 
-    init() {
+    init(using function: @escaping () -> Void) {
+
         log.message("[\(type(of: self))].\(#function)", .info)
 
+        action = function
+        titles = OneFunctionAlertText()
+
+        alert = createAlert()
+    }
+
+    private func createAlert() -> NSAlert {
+        let alert = NSAlert.init()
+
+        alert.alertStyle = .informational
+
+        alert.messageText = titles.title
+        alert.informativeText = titles.message
+
+        alert.addButton(withTitle: titles.buttonFunction)
+        alert.addButton(withTitle: titles.buttonCancel)
+
+        return alert
+    }
+
+    // MARK: - Contract
+
+    public func show() {
+        log.message("[\(type(of: self))].\(#function)", .info)
+
+        guard let alert = alert, alert.runModal() == .alertFirstButtonReturn else { return }
+
+        action()
     }
 }
 

@@ -60,7 +60,7 @@ public class LocationAgent: NSObject {
         locationManager = CLLocationManager()
         notificationCenter = NotificationCenter.default
 
-        alert = OneFunctionAlert()
+        alert = OneFunctionAlert(using: redirectToSettingsApp)
 
         super.init()
 
