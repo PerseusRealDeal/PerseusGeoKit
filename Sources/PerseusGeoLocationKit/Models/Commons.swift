@@ -10,7 +10,12 @@
 //  All rights reserved.
 //
 
-import Foundation
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(Cocoa)
+import Cocoa
+#endif
+
 import CoreLocation
 
 // MARK: - Constants
@@ -79,9 +84,19 @@ public func redirectToSettingsApp() {
 
 #elseif os(macOS)
 
+public let systemApp = "x-apple.systempreferences:"
+
 public func redirectToSettingsApp() {
+
     log.message("\(#function)", .info)
 
+    guard let pathURL = URL(string: systemApp)
+    else {
+        log.message("\(#function)", .error)
+        return
+    }
+
+    NSWorkspace.shared.open(pathURL)
 }
 
 #endif
