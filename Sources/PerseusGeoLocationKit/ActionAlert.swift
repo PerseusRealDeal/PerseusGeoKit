@@ -1,5 +1,5 @@
 //
-//  OneFunctionAlert.swift
+//  ActionAlert.swift
 //  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7533 (27.01.2025).
@@ -17,7 +17,7 @@ import UIKit
 import Cocoa
 #endif
 
-public struct OneFunctionAlertText {
+public struct ActionAlertText {
 
     public var title: String
     public var message: String
@@ -38,9 +38,9 @@ public struct OneFunctionAlertText {
 
 #if os(iOS)
 
-public class OneFunctionAlert {
+public class ActionAlert {
 
-    public var titles: OneFunctionAlertText {
+    public var titles: ActionAlertText {
         didSet {
             log.message("[\(type(of: self))].\(#function)", .info)
 
@@ -62,7 +62,7 @@ public class OneFunctionAlert {
         log.message("[\(type(of: self))].\(#function)", .info)
 
         action = function
-        titles = OneFunctionAlertText()
+        titles = ActionAlertText()
 
         alert = createAlert()
     }
@@ -94,9 +94,9 @@ public class OneFunctionAlert {
 
 #elseif os(macOS)
 
-public class OneFunctionAlert {
+public class ActionAlert {
 
-    public var titles: OneFunctionAlertText {
+    public var titles: ActionAlertText {
         didSet {
             log.message("[\(type(of: self))].\(#function)", .info)
 
@@ -105,6 +105,7 @@ public class OneFunctionAlert {
     }
 
     private let action: () -> Void
+
     private var alert: NSAlert?
 
     // MARK: - Initializer
@@ -114,7 +115,7 @@ public class OneFunctionAlert {
         log.message("[\(type(of: self))].\(#function)", .info)
 
         action = function
-        titles = OneFunctionAlertText()
+        titles = ActionAlertText()
 
         alert = createAlert()
     }

@@ -30,7 +30,7 @@ public class LocationAgent: NSObject {
     public var notificationCenter: NotificationCenter
     #endif
 
-    public let alert: OneFunctionAlert
+    public let alert: ActionAlert
 
     // MARK: - Calculated Properties
 
@@ -60,7 +60,7 @@ public class LocationAgent: NSObject {
         locationManager = CLLocationManager()
         notificationCenter = NotificationCenter.default
 
-        alert = OneFunctionAlert(using: redirectToSettingsApp)
+        alert = ActionAlert(using: redirectToSettingsApp)
 
         super.init()
 
