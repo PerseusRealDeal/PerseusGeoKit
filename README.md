@@ -53,7 +53,7 @@ Use the single source code file [PerseusGeoStar.swift](https://github.com/perseu
 
 # Usage
 
-`Step 1:` Put Location Services Declaration messages to Info.plist
+`Step 1:` **Put Location Services Declaration messages to Info.plist**
 
 | Info.plist Keys                              | iOS 16.2 .always | macOS 12.7.6 |
 | -------------------------------------------- | ---------------- | ------------ |
@@ -62,13 +62,13 @@ Use the single source code file [PerseusGeoStar.swift](https://github.com/perseu
 | NSLocationWhenInUseUsageDescription          | required         |              |
 | NSLocationAlwaysAndWhenInUseUsageDescription | required         |              |
 
-`Step 2:` Install the package dependency in the prefered way either Standalone or SPM
+`Step 2:` **Install the package dependency in the prefered way either Standalone or SPM**
 
-`Step 3:` Locate variable for location data globally (recommended)
+`Step 3:` **Locate variable for location data globally (recommended)**
 
-`Step 4:` Locate Location Services Agent globally (recommended)
+`Step 4:` **Locate Location Services Agent globally (recommended)**
 
-`Setp 5:` Configure Accuracy and GoTo Settings Alert 
+`Setp 5:` **Configure Accuracy and GoTo Settings Alert**
 
 ```swift
 
@@ -82,7 +82,8 @@ struct AppGlobals {
     static var currentLocation: PerseusLocation? {
         didSet {
             let location = currentLocation?.description ?? "current location is erased"
-            log.message("\(location) [\(type(of: self))].\(#function)", .info)
+            log.message("\(location)", .info)
+            // [LOG] [INFO] [55.75, 37.61]: latitude = 55.7557, longitude = 37.6176
         }
     }
 
@@ -119,25 +120,25 @@ struct AppGlobals {
 
 ```
 
-`Step 6:` Deal with Location Services permission 
+`Step 6:` **Deal with Location Services permission**
 
 `for iOS:`
 
 ```swift
 
     @IBAction func buttonRequestPermissionTapped(_ sender: UIButton) {
-        let permit = globals.locationDealer.locationPermit
+        let permit = LocationAgent.shared.locationPermit 
 
         guard permit != .allowed else { return }
 
-        let dealer = globals.locationDealer
+        let dealer = LocationAgent.shared
 
         if permit == .notDetermined {
             // Deal with permission
             dealer.requestPermission()
         } else if let vc = self.parentViewController() {
             // Show GoTo Settings alert
-            dealer.alert.show(parent: vc)
+            dealer.alert.show(using: vc)
         }
     }
 
@@ -148,11 +149,11 @@ struct AppGlobals {
 ```swift
 
     @IBAction func buttonRequestPermissionTapped(_ sender: NSButton) {
-        let permit = globals.locationDealer.locationPermit
+        let permit = LocationAgent.shared.locationPermit
 
         guard permit != .allowed else { return }
 
-        let dealer = globals.locationDealer
+        let dealer = LocationAgent.shared
 
         if permit == .notDetermined {
             // Deal with permission
@@ -165,36 +166,63 @@ struct AppGlobals {
 
 ```
 
-`Step 7:` Subscribe for Location Services events
+`Step 7:` **Subscribe for Location Services events**
 
 ```swift
 
 import PerseusGeoLocationKit
 
-let nc = AppGlobals.notificationCenter
+let nc = NotificationCenter.default
 
 nc.addObserver(self, selector: #selector(locationDealerCurrentHandler(_:)),
                name: .locationDealerCurrentNotification,
                object: nil)
 
-nc.addObserver(self, selector: #selector(locationDealerStatusChangedHandler),
+nc.addObserver(self, selector: #selector(locationDealerStatusChangedHandler(_:)),
                name: .locationDealerStatusChangedNotification,
                object: nil)
 
-nc.addObserver(self, selector: #selector(locationDealerErrorHandler),
+nc.addObserver(self, selector: #selector(locationDealerErrorHandler(_:)),
                name: .locationDealerErrorNotification,
+               object: nil)
+
+nc.addObserver(self, selector: #selector(locationDealerUpdatesHandler(_:)),
+               name: .locationDealerUpdatesNotification,
                object: nil)
 
 ```
 
-`Step 8 A:` Request current location
+**Location event handler sample**
+
+```swift
+    @objc private func locationDealerCurrentHandler(_ notification: Notification) {
+        log.message("[\(type(of: self))]:[NOTIFICATION].\(#function)")
+
+        guard let result = notification.object as? Result<PerseusLocation, LocationError>
+        else {
+            log.message("[\(type(of: self))]:[NOTIFICATION].\(#function)", .error)
+            return
+        }
+
+        switch result {
+        case .success(let data):
+            AppGlobals.currentLocation = data
+        case .failure(let error):
+            log.message("\(error)", .error)
+        }
+
+        refresh()
+    }
+```
+
+`Step 8 A:` **Request current location**
 
 `for iOS`
 
 ```swift
 
     @IBAction func buttonCurrentLocationTapped(_ sender: UIButton) {
-        let dealer = globals.locationDealer
+        let dealer = LocationAgent.shared
         let permit = dealer.locationPermit
 
         if permit == .notDetermined {
@@ -205,7 +233,7 @@ nc.addObserver(self, selector: #selector(locationDealerErrorHandler),
             try? dealer.requestCurrentLocation()
         } else if let vc = self.parentViewController() {
             // Show Goto Setting alert
-            dealer.alert.show(parent: vc)
+            dealer.alert.show(using: vc)
         }
     }
 
@@ -216,7 +244,7 @@ nc.addObserver(self, selector: #selector(locationDealerErrorHandler),
 ```swift
 
     @IBAction func buttonCurrentLocationTapped(_ sender: NSButton) {
-        let dealer = globals.locationDealer
+        let dealer = LocationAgent.shared
         let permit = dealer.locationPermit
 
         if permit == .notDetermined {
@@ -233,11 +261,17 @@ nc.addObserver(self, selector: #selector(locationDealerErrorHandler),
 
 ```
 
-`Step 8 B:` Request start/stop location updates
+`Step 8 B:` **Request start/stop location updates**
 
 ```swift
 
-TODO: requesting start/stop location updates sample
+LocationAgent.shared.startUpdatingLocation()
+
+```
+
+```swift
+
+LocationAgent.shared.stopUpdatingLocation()
 
 ```
 
