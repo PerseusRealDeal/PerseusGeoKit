@@ -106,9 +106,14 @@ struct AppGlobals {
         var lm = locationDealer.locationManager
         lm?.desiredAccuracy = AppGlobals.preferedAccuracy.rawValue
 
+        
         // Configure GoTo Settings alert
+        let text = ActionAlertText(title: "Custom Title",
+                                   message: "Custom Message",
+                                   buttonCancel: "MyCancel",
+                                   buttonFunction: "MyAction")
 
-        TODO: GoTo Settings alert
+        locationDealer.alert.titles = text
     }
 }
 
@@ -116,31 +121,121 @@ struct AppGlobals {
 
 `Step 6:` Deal with Location Services permission 
 
-```ruby
+`for iOS:`
 
-TODO: requesting permission sample
+```swift
+
+    @IBAction func buttonRequestPermissionTapped(_ sender: UIButton) {
+        let permit = globals.locationDealer.locationPermit
+
+        guard permit != .allowed else { return }
+
+        let dealer = globals.locationDealer
+
+        if permit == .notDetermined {
+            // Deal with permission
+            dealer.requestPermission()
+        } else if let vc = self.parentViewController() {
+            // Show GoTo Settings alert
+            dealer.alert.show(parent: vc)
+        }
+    }
+
+```
+
+`for macOS:`
+
+```swift
+
+    @IBAction func buttonRequestPermissionTapped(_ sender: NSButton) {
+        let permit = globals.locationDealer.locationPermit
+
+        guard permit != .allowed else { return }
+
+        let dealer = globals.locationDealer
+
+        if permit == .notDetermined {
+            // Deal with permission
+            dealer.requestPermission()
+        } else {
+            // Show GoTo Settings alert
+            dealer.alert.show()
+        }
+    }
 
 ```
 
 `Step 7:` Subscribe for Location Services events
 
-```ruby
+```swift
 
-TODO: subscribing for Location Services events sample
+import PerseusGeoLocationKit
+
+let nc = AppGlobals.notificationCenter
+
+nc.addObserver(self, selector: #selector(locationDealerCurrentHandler(_:)),
+               name: .locationDealerCurrentNotification,
+               object: nil)
+
+nc.addObserver(self, selector: #selector(locationDealerStatusChangedHandler),
+               name: .locationDealerStatusChangedNotification,
+               object: nil)
+
+nc.addObserver(self, selector: #selector(locationDealerErrorHandler),
+               name: .locationDealerErrorNotification,
+               object: nil)
 
 ```
 
 `Step 8 A:` Request current location
 
-```ruby
+`for iOS`
 
-TODO: requesting for current location sample
+```swift
+
+    @IBAction func buttonCurrentLocationTapped(_ sender: UIButton) {
+        let dealer = globals.locationDealer
+        let permit = dealer.locationPermit
+
+        if permit == .notDetermined {
+            // Deal with permission
+            dealer.requestPermission()
+        } else if permit == .allowed {
+            // Request current location
+            try? dealer.requestCurrentLocation()
+        } else if let vc = self.parentViewController() {
+            // Show Goto Setting alert
+            dealer.alert.show(parent: vc)
+        }
+    }
+
+```
+
+`for macOS`
+
+```swift
+
+    @IBAction func buttonCurrentLocationTapped(_ sender: NSButton) {
+        let dealer = globals.locationDealer
+        let permit = dealer.locationPermit
+
+        if permit == .notDetermined {
+            // Deal with permission
+            dealer.requestPermission()
+        } else if permit == .allowed {
+            // Request current location
+            try? dealer.requestCurrentLocation()
+        } else {
+            // Show Goto Setting alert
+            dealer.alert.show()
+        }
+    }
 
 ```
 
 `Step 8 B:` Request start/stop location updates
 
-```ruby
+```swift
 
 TODO: requesting start/stop location updates sample
 
