@@ -57,7 +57,7 @@ public class ActionAlert {
 
     // MARK: - Initializer
 
-    init(using function: @escaping () -> Void) {
+    init(_ function: @escaping () -> Void) {
 
         log.message("[\(type(of: self))].\(#function)", .info)
 
@@ -83,11 +83,11 @@ public class ActionAlert {
 
     // MARK: - Contract
 
-    public func show(parent controller: UIViewController) {
+    public func show(using parent: UIViewController) {
         log.message("[\(type(of: self))].\(#function)", .info)
 
         if let alert = alert {
-            controller.present(alert, animated: true, completion: nil)
+            parent.present(alert, animated: true, completion: nil)
         }
     }
 }
@@ -110,7 +110,7 @@ public class ActionAlert {
 
     // MARK: - Initializer
 
-    init(using function: @escaping () -> Void) {
+    init(_ function: @escaping () -> Void) {
 
         log.message("[\(type(of: self))].\(#function)", .info)
 
