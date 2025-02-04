@@ -78,8 +78,23 @@ extension CLAuthorizationStatus: CustomStringConvertible {
 #if os(iOS)
 
 public func redirectToSettingsApp() {
+
     log.message("\(#function)", .info)
 
+    guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+        log.message("\(#function) : URL no good", .error)
+        return
+    }
+
+    guard UIApplication.shared.canOpenURL(settingsURL) else {
+        log.message("\(#function) : URL cann't be opened", .error)
+        return
+    }
+
+    UIApplication.shared.open(settingsURL) { (opened) in
+        let result = opened == true ? "opened" : "not opened"
+        log.message("\(#function) : \(result)", .info)
+    }
 }
 
 #elseif os(macOS)
