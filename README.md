@@ -170,8 +170,6 @@ struct AppGlobals {
 
 ```swift
 
-import PerseusGeoLocationKit
-
 let nc = NotificationCenter.default
 
 nc.addObserver(self, selector: #selector(locationDealerCurrentHandler(_:)),
