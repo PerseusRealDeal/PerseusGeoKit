@@ -17,7 +17,7 @@ import CoreLocation
 extension CLLocationManager: LocationManagerProtocol { }
 extension NotificationCenter: NotificationCenterProtocol { }
 
-protocol LocationManagerProtocol {
+public protocol LocationManagerProtocol {
     var delegate: CLLocationManagerDelegate? { get set }
     var desiredAccuracy: CLLocationAccuracy { get set }
 
@@ -34,6 +34,6 @@ protocol LocationManagerProtocol {
     #endif
 }
 
-protocol NotificationCenterProtocol {
+public protocol NotificationCenterProtocol {
     func post(name aName: NSNotification.Name, object anObject: Any?)
 }

@@ -10,7 +10,12 @@
 //  All rights reserved.
 //
 
-import Foundation
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(Cocoa)
+import Cocoa
+#endif
+
 import CoreLocation
 
 // MARK: - Constants
@@ -60,6 +65,54 @@ extension CLAuthorizationStatus: CustomStringConvertible {
             return "authorizedAlways"
         case .authorizedWhenInUse: // iOS only.
             return "authorizedWhenInUse"
+        @unknown default:
+            log.message("Unknown CLAuthorizationStatus \(self)", .error)
+            // fatalError("Unknown CLAuthorizationStatus \(self)")
+            return "unknown"
         }
     }
 }
+
+// MARK: - Open Settings App function
+
+#if os(iOS)
+
+public func redirectToSettingsApp() {
+
+    guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+        log.message("\(#function) : URL no good", .error)
+        return
+    }
+
+    guard UIApplication.shared.canOpenURL(settingsURL) else {
+        log.message("\(#function) : URL cann't be opened", .error)
+        return
+    }
+
+    UIApplication.shared.open(settingsURL) { (opened) in
+        if opened {
+            log.message("\(#function) : opened", .info)
+        } else {
+            log.message("\(#function) : not opened", .error)
+        }
+    }
+}
+
+#elseif os(macOS)
+
+public func redirectToSettingsApp() {
+
+    guard let pathURL = URL(string: "x-apple.systempreferences:")
+    else {
+        log.message("\(#function) : URL no good", .error)
+        return
+    }
+
+    if NSWorkspace.shared.open(pathURL) {
+        log.message("\(#function) : opened", .info)
+    } else {
+        log.message("\(#function) : not opened", .error)
+    }
+}
+
+#endif

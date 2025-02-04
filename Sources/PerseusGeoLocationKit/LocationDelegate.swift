@@ -1,5 +1,5 @@
 //
-//  CLLocationManagerDelegate.swift
+//  LocationDelegate.swift
 //  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -13,20 +13,18 @@
 
 import CoreLocation
 
-extension PerseusLocationDealer: CLLocationManagerDelegate {
+extension LocationAgent: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
-
-        log.message("[\(type(of: self))].\(#function) status .\(status)", .info)
+        log.message("[\(type(of: self))].\(#function) status .\(status)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
-
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function) \(error.localizedDescription)", .error)
 
         locationManager.stopUpdatingLocation()
 
@@ -37,38 +35,39 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         // or new macOS releases.
 
         #if os(macOS)
-        if order == .authorization, locationPermit == .notDetermined { return }
+        if order == .permission, locationPermit == .notDetermined { return }
         #endif
 
         order = .none
 
-        let result: LocationDealerError = .failedRequest(error.localizedDescription)
+        let result: LocationError = .failedRequest(error.localizedDescription)
 
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
-
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
         if order == .none {
-            log.message("[\(type(of: self))].\(#function) — Locations for no order!", .error)
+            log.message("[\(type(of: self))].\(#function) — Locations for no order!", .notice)
             locationManager.stopUpdatingLocation()
             return
         }
 
-        if order == .authorization {
-            log.message("[\(type(of: self))].\(#function) — Authorization order!")
-            locationManager.stopUpdatingLocation(); order = .none
+        if order == .permission {
+            log.message("[\(type(of: self))].\(#function) — Authorization order!", .notice)
+            locationManager.stopUpdatingLocation()
+            order = .none
             return
         }
 
         if order == .currentLocation {
 
-            locationManager.stopUpdatingLocation(); order = .none
+            locationManager.stopUpdatingLocation()
+            order = .none
 
-            let result: Result<PerseusLocation, LocationDealerError> = locations.first == nil ?
+            let result: Result<PerseusLocation, LocationError> = locations.first == nil ?
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.first!.perseus)
 
@@ -77,11 +76,12 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
-                log.message("[\(type(of: self))].\(#function) — No locations!", .error)
-                locationManager.stopUpdatingLocation(); order = .none
+                log.message("[\(type(of: self))].\(#function) — No locations!", .notice)
+                locationManager.stopUpdatingLocation()
+                order = .none
             }
 
-            let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
+            let result: Result<[PerseusLocation], LocationError> = locations.isEmpty ?
                 .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
