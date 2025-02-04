@@ -44,7 +44,7 @@ public class ActionAlert {
         didSet {
             log.message("[\(type(of: self))].\(#function)", .info)
 
-            alert = createAlert()
+            self.alert = create()
         }
     }
 
@@ -64,10 +64,10 @@ public class ActionAlert {
         action = function
         titles = ActionAlertText()
 
-        alert = createAlert()
+        alert = create()
     }
 
-    private func createAlert() -> UIAlertController {
+    private func create() -> UIAlertController {
         let alert = UIAlertController(title: titles.title,
                                       message: titles.message,
                                       preferredStyle: .alert)
@@ -100,7 +100,7 @@ public class ActionAlert {
         didSet {
             log.message("[\(type(of: self))].\(#function)", .info)
 
-            alert = createAlert()
+            self.alert = create()
         }
     }
 
@@ -117,10 +117,10 @@ public class ActionAlert {
         action = function
         titles = ActionAlertText()
 
-        alert = createAlert()
+        alert = create()
     }
 
-    private func createAlert() -> NSAlert {
+    private func create() -> NSAlert {
         let alert = NSAlert.init()
 
         alert.alertStyle = .informational
