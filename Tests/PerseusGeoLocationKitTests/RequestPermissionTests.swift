@@ -106,7 +106,7 @@ extension LocationAgentTests {
         MockLocationManager.status = .notDetermined
         MockLocationManager.isLocationServiceEnabled = true
 
-        let error = LocationError.failedRequest("")
+        let error = LocationError.failedRequest("", "", 0)
 
         // act, assert
 

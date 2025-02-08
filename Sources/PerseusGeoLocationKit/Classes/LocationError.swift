@@ -14,7 +14,18 @@ import Foundation
 
 public enum LocationError: Error, Equatable {
 
-    case needsPermission(LocationPermit)
+    case needsPermission(LocationPermit) // Permission status used to make decision.
     case receivedEmptyLocationData
-    case failedRequest(String)
+    case failedRequest(String, String, Int) // localizedDescription, domain, code.
+
+    public var failedRequestDetails: (domain: String, code: Int)? {
+        switch self {
+        case .needsPermission(_):
+            return nil
+        case .receivedEmptyLocationData:
+            return nil
+        case .failedRequest(_, let domain, let code):
+            return (domain: domain, code: code)
+        }
+    }
 }
