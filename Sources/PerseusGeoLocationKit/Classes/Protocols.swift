@@ -36,4 +36,8 @@ public protocol LocationManagerProtocol {
 
 public protocol NotificationCenterProtocol {
     func post(name aName: NSNotification.Name, object anObject: Any?)
+    func addObserver(_ observer: Any,
+                     selector aSelector: Selector,
+                     name aName: NSNotification.Name?,
+                     object anObject: Any?)
 }

@@ -20,7 +20,7 @@ public enum LocationError: Error, Equatable {
 
     public var failedRequestDetails: (domain: String, code: Int)? {
         switch self {
-        case .needsPermission(_):
+        case .needsPermission:
             return nil
         case .receivedEmptyLocationData:
             return nil
