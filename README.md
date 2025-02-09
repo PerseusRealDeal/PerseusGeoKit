@@ -170,23 +170,21 @@ struct AppGlobals {
 
 ```swift
 
-let nc = NotificationCenter.default
+        LocationAgent.getNotified(with: self,
+                                  selector: #selector(locationDealerCurrentHandler(_:)),
+                                  name: .locationDealerCurrentNotification)
 
-nc.addObserver(self, selector: #selector(locationDealerCurrentHandler(_:)),
-               name: .locationDealerCurrentNotification,
-               object: nil)
+        LocationAgent.getNotified(with: self,
+                                  selector: #selector(locationDealerStatusChangedHandler(_:)),
+                                  name: .locationDealerStatusChangedNotification)
 
-nc.addObserver(self, selector: #selector(locationDealerStatusChangedHandler(_:)),
-               name: .locationDealerStatusChangedNotification,
-               object: nil)
+        LocationAgent.getNotified(with: self,
+                                  selector: #selector(locationDealerErrorHandler(_:)),
+                                  name: .locationDealerErrorNotification)
 
-nc.addObserver(self, selector: #selector(locationDealerErrorHandler(_:)),
-               name: .locationDealerErrorNotification,
-               object: nil)
-
-nc.addObserver(self, selector: #selector(locationDealerUpdatesHandler(_:)),
-               name: .locationDealerUpdatesNotification,
-               object: nil)
+        LocationAgent.getNotified(with: self,
+                                  selector: #selector(locationDealerUpdatesHandler(_:)),
+                                  name: .locationDealerUpdatesNotification)
 
 ```
 

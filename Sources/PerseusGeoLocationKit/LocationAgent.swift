@@ -70,6 +70,17 @@ public class LocationAgent: NSObject {
 
     // MARK: - Contract
 
+    public static func getNotified(with observer: Any,
+                                   selector aSelector: Selector,
+                                   name aName: NSNotification.Name?) {
+        log.message("[\(type(of: self))].\(#function) for \(observer.self)")
+
+        shared.notificationCenter.addObserver(observer,
+                                              selector: aSelector,
+                                              name: aName,
+                                              object: nil)
+    }
+
     public func requestPermission(_ authorization: LocationPermission = .always,
                                   _ actionIfdetermined: ((_ permit: LocationPermit)
                                                          -> Void)? = nil) {
