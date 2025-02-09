@@ -34,13 +34,16 @@ extension LocationAgent: CLLocationManagerDelegate {
         // so that there is no difference in Current Location Diolog behavior in either early
         // or new macOS releases.
 
-        #if os(macOS)
+#if os(macOS)
         if order == .permission, locationPermit == .notDetermined { return }
-        #endif
+#endif
 
         order = .none
 
-        let result: LocationError = .failedRequest(error.localizedDescription)
+        let nsError = error as NSError
+        let result: LocationError = .failedRequest(error.localizedDescription,
+                                                   nsError.domain,
+                                                   nsError.code)
 
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }

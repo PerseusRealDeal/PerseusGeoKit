@@ -38,8 +38,11 @@ extension LocationAgentTests {
         MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = true
 
-        let error = LocationError.failedRequest("")
-        let result: LocationError = .failedRequest(error.localizedDescription)
+        let error = LocationError.failedRequest("", "", 0)
+        let nsError = error as NSError
+        let result: LocationError = .failedRequest(error.localizedDescription,
+                                                   nsError.domain,
+                                                   nsError.code)
 
         // act, assert
 
