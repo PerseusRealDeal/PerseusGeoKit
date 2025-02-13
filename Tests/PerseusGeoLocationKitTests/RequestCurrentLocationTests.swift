@@ -23,7 +23,7 @@ extension LocationAgentTests {
         MockLocationManager.status = .denied
         MockLocationManager.isLocationServiceEnabled = true
 
-        let exeption = LocationError.needsPermission(.deniedForTheApp)
+        let exeption = LocationError.permissionRequired(.deniedForTheApp)
 
         // act, assert
 

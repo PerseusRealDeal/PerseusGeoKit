@@ -73,7 +73,7 @@ public class LocationAgent: NSObject {
     public static func getNotified(with observer: Any,
                                    selector aSelector: Selector,
                                    name aName: NSNotification.Name?) {
-        log.message("[\(type(of: self))].\(#function) for \(observer.self)")
+        log.message("[\(type(of: self))].\(#function)")
 
         shared.notificationCenter.addObserver(observer,
                                               selector: aSelector,
@@ -82,14 +82,14 @@ public class LocationAgent: NSObject {
     }
 
     public func requestPermission(_ authorization: LocationPermission = .always,
-                                  _ actionIfdetermined: ((_ permit: LocationPermit)
+                                  _ actionIfAlreadyDetermined: ((_ permit: LocationPermit)
                                                          -> Void)? = nil) {
         log.message("[\(type(of: self))].\(#function)")
 
         let permit = locationPermitHidden
         guard permit == .notDetermined else {
-            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
-            actionIfdetermined?(permit)
+            log.message("[\(type(of: self))].\(#function) — .\(permit)", .notice)
+            actionIfAlreadyDetermined?(permit)
             return
         }
 
@@ -113,8 +113,12 @@ public class LocationAgent: NSObject {
         log.message("[\(type(of: self))].\(#function)")
 
         guard permit == .allowed else {
-            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
-            throw LocationError.needsPermission(permit)
+            log.message("[\(type(of: self))].\(#function) — .\(permit)", .notice)
+
+            locationManager.stopUpdatingLocation()
+            order = .none
+
+            throw LocationError.permissionRequired(permit)
         }
 
         locationManager.stopUpdatingLocation()
@@ -129,8 +133,20 @@ public class LocationAgent: NSObject {
 #endif
     }
 
-    public func startUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
+    public func startUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY)
+    throws {
+        let permit = locationPermitHidden
         log.message("[\(type(of: self))].\(#function)")
+
+        guard permit == .allowed else {
+            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
+
+            locationManager.stopUpdatingLocation()
+            order = .none
+
+            throw LocationError.permissionRequired(permit)
+        }
+
         order = .locationUpdates
 
         locationManager.desiredAccuracy = accuracy.rawValue

@@ -60,9 +60,18 @@ final class LocationAgentTests: XCTestCase {
 
     func test_startUpdatingLocation() {
 
-        // arrange, act
+        // arrange
 
-        sut.startUpdatingLocation(accuracy: .best)
+        #if os(iOS)
+        MockLocationManager.status = .authorizedAlways
+        #elseif os(macOS)
+        MockLocationManager.status = .authorized
+        #endif
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
+
+        try? sut.startUpdatingLocation(accuracy: .best)
 
         // assert
 

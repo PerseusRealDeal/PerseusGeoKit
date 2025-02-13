@@ -146,7 +146,7 @@ extension LocationAgentTests {
 
         // act, assert
 
-        sut.startUpdatingLocation()
+        try? sut.startUpdatingLocation()
         XCTAssertTrue(sut.order == .locationUpdates)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
@@ -173,7 +173,7 @@ extension LocationAgentTests {
 
         // act, assert
 
-        sut.startUpdatingLocation()
+        try? sut.startUpdatingLocation()
         XCTAssertTrue(sut.order == .locationUpdates)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)

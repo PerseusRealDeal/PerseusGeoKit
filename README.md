@@ -127,18 +127,12 @@ struct AppGlobals {
 ```swift
 
     @IBAction func buttonRequestPermissionTapped(_ sender: UIButton) {
-        let permit = LocationAgent.shared.locationPermit 
+        let dealer = globals.locationDealer
 
-        guard permit != .allowed else { return }
-
-        let dealer = LocationAgent.shared
-
-        if permit == .notDetermined {
-            // Deal with permission
-            dealer.requestPermission()
-        } else if let vc = self.parentViewController() {
-            // Show GoTo Settings alert
-            dealer.alert.show(using: vc)
+        dealer.requestPermission { permit in
+            if permit != .allowed, let vc = self.parentViewController() {
+                dealer.alert.show(using: vc)
+            }
         }
     }
 
@@ -149,18 +143,12 @@ struct AppGlobals {
 ```swift
 
     @IBAction func buttonRequestPermissionTapped(_ sender: NSButton) {
-        let permit = LocationAgent.shared.locationPermit
+        let dealer = globals.locationDealer
 
-        guard permit != .allowed else { return }
-
-        let dealer = LocationAgent.shared
-
-        if permit == .notDetermined {
-            // Deal with permission
-            dealer.requestPermission()
-        } else {
-            // Show GoTo Settings alert
-            dealer.alert.show()
+        dealer.requestPermission { permit in
+            if permit != .allowed {
+                dealer.alert.show()
+            }
         }
     }
 
@@ -217,19 +205,23 @@ struct AppGlobals {
 
 ```swift
 
-    @IBAction func buttonCurrentLocationTapped(_ sender: UIButton) {
-        let dealer = LocationAgent.shared
-        let permit = dealer.locationPermit
+    @IBAction func buttonRefreshCurrentTapped(_ sender: UIButton) {
+        let dealer = globals.locationDealer
 
-        if permit == .notDetermined {
-            // Deal with permission
-            dealer.requestPermission()
-        } else if permit == .allowed {
-            // Request current location
-            try? dealer.requestCurrentLocation()
-        } else if let vc = self.parentViewController() {
-            // Show Goto Setting alert
-            dealer.alert.show(using: vc)
+        do {
+            try dealer.requestCurrentLocation()
+        } catch LocationError.permissionRequired(let permit) {
+
+            log.message("[\(type(of: self))].\(#function) - permission required", .notice)
+
+            if permit == .notDetermined {
+                dealer.requestPermission()
+            } else if let vc = self.parentViewController() {
+                dealer.alert.show(using: vc)
+            }
+
+        } catch {
+            log.message("[\(type(of: self))].\(#function) - something went wrong", .error)
         }
     }
 
@@ -239,19 +231,23 @@ struct AppGlobals {
 
 ```swift
 
-    @IBAction func buttonCurrentLocationTapped(_ sender: NSButton) {
-        let dealer = LocationAgent.shared
-        let permit = dealer.locationPermit
+    @IBAction func buttonRefreshCurrentTapped(_ sender: NSButton) {
+        let dealer = globals.locationDealer
 
-        if permit == .notDetermined {
-            // Deal with permission
-            dealer.requestPermission()
-        } else if permit == .allowed {
-            // Request current location
-            try? dealer.requestCurrentLocation()
-        } else {
-            // Show Goto Setting alert
-            dealer.alert.show()
+        do {
+            try dealer.requestCurrentLocation()
+        } catch LocationError.permissionRequired(let permit) {
+
+            log.message("[\(type(of: self))].\(#function) - permission required", .notice)
+
+            if permit == .notDetermined {
+                dealer.requestPermission()
+            } else {
+                dealer.alert.show()
+            }
+
+        } catch {
+            log.message("[\(type(of: self))].\(#function) - something went wrong", .error)
         }
     }
 
