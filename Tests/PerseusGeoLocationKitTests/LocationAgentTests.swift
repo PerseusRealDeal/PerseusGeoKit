@@ -13,6 +13,7 @@
 
 import XCTest
 import CoreLocation
+
 @testable import PerseusGeoLocationKit
 
 #if os(iOS)
@@ -62,11 +63,11 @@ final class LocationAgentTests: XCTestCase {
 
         // arrange
 
-        #if os(iOS)
+#if os(iOS)
         MockLocationManager.status = .authorizedAlways
-        #elseif os(macOS)
+#elseif os(macOS)
         MockLocationManager.status = .authorized
-        #endif
+#endif
         MockLocationManager.isLocationServiceEnabled = true
 
         // act

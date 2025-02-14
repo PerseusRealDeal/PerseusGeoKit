@@ -14,8 +14,8 @@
 //
 
 import CoreLocation
-
 import XCTest
+
 @testable import PerseusGeoLocationKit
 
 class MockNotificationCenter: NotificationCenterProtocol {

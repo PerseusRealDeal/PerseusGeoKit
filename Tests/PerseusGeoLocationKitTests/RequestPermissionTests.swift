@@ -13,6 +13,7 @@
 
 import XCTest
 import CoreLocation
+
 @testable import PerseusGeoLocationKit
 
 extension LocationAgentTests {
@@ -40,7 +41,7 @@ extension LocationAgentTests {
         XCTAssertTrue(permitReturned == .deniedForTheApp)
     }
 
-    #if os(iOS)
+#if os(iOS)
 
     func test_requestPermission_invokes_requestWhenInUseAuthorization() {
 
@@ -78,7 +79,7 @@ extension LocationAgentTests {
         XCTAssertTrue(sut.order == .none)
     }
 
-    #elseif os(macOS)
+#elseif os(macOS)
 
     func test_requestPermission_called_startUpdatingLocation() {
 

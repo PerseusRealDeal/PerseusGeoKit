@@ -12,6 +12,7 @@
 //
 
 import XCTest
+
 @testable import PerseusGeoLocationKit
 
 extension LocationAgentTests {
@@ -38,11 +39,11 @@ extension LocationAgentTests {
 
         // arrange
 
-        #if os(iOS)
+#if os(iOS)
         MockLocationManager.status = .authorizedAlways
-        #elseif os(macOS)
+#elseif os(macOS)
         MockLocationManager.status = .authorized
-        #endif
+#endif
         MockLocationManager.isLocationServiceEnabled = true
 
         // act
@@ -56,22 +57,22 @@ extension LocationAgentTests {
         XCTAssertTrue(sut.order == .currentLocation)
         XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
 
-        #if os(iOS)
+#if os(iOS)
         mockLM.verify_requestLocation_CalledOnce()
-        #elseif os(macOS)
+#elseif os(macOS)
         mockLM.verify_startUpdatingLocation_CalledOnce()
-        #endif
+#endif
     }
 
     func test_requestCurrentLocation_should_set_the_accuracy() {
 
         // arrange
 
-        #if os(iOS)
+#if os(iOS)
         MockLocationManager.status = .authorizedAlways
-        #elseif os(macOS)
+#elseif os(macOS)
         MockLocationManager.status = .authorized
-        #endif
+#endif
         MockLocationManager.isLocationServiceEnabled = true
 
         // act

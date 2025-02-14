@@ -13,6 +13,7 @@
 
 import XCTest
 import CoreLocation
+
 @testable import PerseusGeoLocationKit
 
 extension LocationAgentTests {
