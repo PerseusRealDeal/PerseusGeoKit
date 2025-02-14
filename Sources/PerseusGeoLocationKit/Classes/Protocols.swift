@@ -27,11 +27,11 @@ public protocol LocationManagerProtocol {
     func startUpdatingLocation()
     func stopUpdatingLocation()
 
-    #if os(iOS)
+#if os(iOS)
     func requestWhenInUseAuthorization()
     func requestAlwaysAuthorization()
     func requestLocation()
-    #endif
+#endif
 }
 
 public protocol NotificationCenterProtocol {

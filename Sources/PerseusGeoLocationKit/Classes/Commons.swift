@@ -80,20 +80,20 @@ extension CLAuthorizationStatus: CustomStringConvertible {
 public func redirectToSettingsApp() {
 
     guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
-        log.message("\(#function) : URL no good", .error)
+        log.message("\(#function) - URL not good", .error)
         return
     }
 
     guard UIApplication.shared.canOpenURL(settingsURL) else {
-        log.message("\(#function) : URL cann't be opened", .error)
+        log.message("\(#function) - Right URL, but cann't be opened", .error)
         return
     }
 
     UIApplication.shared.open(settingsURL) { (opened) in
         if opened {
-            log.message("\(#function) : opened", .info)
+            log.message("\(#function) - opened")
         } else {
-            log.message("\(#function) : not opened", .error)
+            log.message("\(#function) - not opened", .error)
         }
     }
 }
@@ -104,14 +104,14 @@ public func redirectToSettingsApp() {
 
     guard let pathURL = URL(string: "x-apple.systempreferences:")
     else {
-        log.message("\(#function) : URL no good", .error)
+        log.message("\(#function) - URL not good", .error)
         return
     }
 
     if NSWorkspace.shared.open(pathURL) {
-        log.message("\(#function) : opened", .info)
+        log.message("\(#function) - opened")
     } else {
-        log.message("\(#function) : not opened", .error)
+        log.message("\(#function) - not opened", .error)
     }
 }
 

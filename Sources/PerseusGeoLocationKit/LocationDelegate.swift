@@ -17,14 +17,14 @@ extension LocationAgent: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
-        log.message("[\(type(of: self))].\(#function) status .\(status)")
+        log.message("[\(type(of: self))].\(#function)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
-        log.message("[\(type(of: self))].\(#function) \(error.localizedDescription)", .error)
+        log.message("[\(type(of: self))].\(#function)")
 
         locationManager.stopUpdatingLocation()
 

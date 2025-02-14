@@ -42,7 +42,7 @@ public class ActionAlert {
 
     public var titles: ActionAlertText {
         didSet {
-            log.message("[\(type(of: self))].\(#function)", .info)
+            log.message("[\(type(of: self))].\(#function)")
 
             self.alert = create()
         }
@@ -68,6 +68,8 @@ public class ActionAlert {
     }
 
     private func create() -> UIAlertController {
+        log.message("[\(type(of: self))].\(#function)")
+
         let alert = UIAlertController(title: titles.title,
                                       message: titles.message,
                                       preferredStyle: .alert)
@@ -84,7 +86,7 @@ public class ActionAlert {
     // MARK: - Contract
 
     public func show(using parent: UIViewController) {
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
         if let alert = alert {
             parent.present(alert, animated: true, completion: nil)
@@ -98,7 +100,7 @@ public class ActionAlert {
 
     public var titles: ActionAlertText {
         didSet {
-            log.message("[\(type(of: self))].\(#function)", .info)
+            log.message("[\(type(of: self))].\(#function)")
 
             self.alert = create()
         }
@@ -111,8 +113,7 @@ public class ActionAlert {
     // MARK: - Initializer
 
     init(_ function: @escaping () -> Void) {
-
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
         action = function
         titles = ActionAlertText()
@@ -121,6 +122,8 @@ public class ActionAlert {
     }
 
     private func create() -> NSAlert {
+        log.message("[\(type(of: self))].\(#function)")
+
         let alert = NSAlert.init()
 
         alert.alertStyle = .informational
@@ -137,9 +140,13 @@ public class ActionAlert {
     // MARK: - Contract
 
     public func show() {
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
-        guard let alert = alert, alert.runModal() == .alertFirstButtonReturn else { return }
+        guard let alert = alert, alert.runModal() == .alertFirstButtonReturn
+        else {
+            log.message("[\(type(of: self))].\(#function) - Cancel tapped.")
+            return
+        }
 
         action()
     }
