@@ -52,8 +52,6 @@ public class LocationAgent: NSObject {
     public static let shared: LocationAgent = { return LocationAgent() }()
 
     private override init() {
-        // log.level = .info
-        // log.turned = .off
 
         log.message("[\(LocationAgent.self)].\(#function)", .info)
 
@@ -109,8 +107,9 @@ public class LocationAgent: NSObject {
 
     public func requestCurrentLocation(with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY)
     throws {
-        let permit = locationPermitHidden
         log.message("[\(type(of: self))].\(#function)")
+
+        let permit = locationPermitHidden
 
         guard permit == .allowed else {
             log.message("[\(type(of: self))].\(#function) — .\(permit)", .notice)
@@ -135,11 +134,12 @@ public class LocationAgent: NSObject {
 
     public func startUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY)
     throws {
-        let permit = locationPermitHidden
         log.message("[\(type(of: self))].\(#function)")
 
+        let permit = locationPermitHidden
+
         guard permit == .allowed else {
-            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
+            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
