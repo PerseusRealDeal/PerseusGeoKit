@@ -22,9 +22,13 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
 ### Updated
 
-- ConsolePerseusLogger to v1.0.3.
+- License notices.
 - Logging messages.
 - README.
+
+### Upgraded
+
+- PerseusLogger to [CPL v1.0.3](https://github.com/perseusrealdeal/ConsolePerseusLogger).
 
 ## [0.1.0] - [2023-07-24], Developer Release
 
