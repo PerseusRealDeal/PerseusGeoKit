@@ -1,4 +1,4 @@
-# Approbation Matrix / PerseusGeoLocationKit v1.0.0
+# Approbation Matrix / PerseusGeoLocationKit 1.0.0
 
 > Approbated features: request permission, request current location, request start/stop <br/>
 
@@ -7,6 +7,8 @@
 > Compilation: macOS Monterey 12.7.6 / Xcode 14.2
 
 ## macOS approbation result
+
+> The macOS app used to approbate PerseusGeoLocationKit 1.0.0 is [macos.darkmode.discovery](https://github.com/perseusrealdeal/macOS.DarkMode.Discovery).
 
 | macOS       | Version | Result  | Details |
 | ----------- | ------- | :-----: | ------- |
@@ -20,6 +22,8 @@
 | Sequoia     | 15.1    | ??      | - |
 
 ## iOS approbation result
+
+> The iOS app used to approbate PerseusGeoLocationKit 1.0.0 is [ios.darkmode.discovery](https://github.com/perseusrealdeal/iOS.DarkMode.Discovery).
 
 | Device          | Simulator | OS Version | Result  | Details |
 | --------------- | :-------: | ---------- | :-----: | ------- |
