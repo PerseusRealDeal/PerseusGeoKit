@@ -18,15 +18,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "PerseusGeoLocationKit",
+    name: "PerseusGeoKit",
     platforms: [
         .macOS(.v10_13),
         .iOS(.v11)
     ],
     products: [
         .library(
-            name: "PerseusGeoLocationKit",
-            targets: ["PerseusGeoLocationKit"])
+            name: "PerseusGeoKit",
+            targets: ["PerseusGeoKit"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -34,10 +34,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PerseusGeoLocationKit",
+            name: "PerseusGeoKit",
             dependencies: []),
         .testTarget(
-            name: "PerseusGeoLocationKitTests",
-            dependencies: ["PerseusGeoLocationKit"])
+            name: "PerseusGeoKitTests",
+            dependencies: ["PerseusGeoKit"])
     ]
 )

@@ -1,6 +1,6 @@
 //
 //  RequestPermissionTests.swift
-//  PerseusGeoLocationKitTests
+//  PerseusGeoKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
@@ -14,7 +14,7 @@
 import XCTest
 import CoreLocation
 
-@testable import PerseusGeoLocationKit
+@testable import PerseusGeoKit
 
 extension LocationAgentTests {
 

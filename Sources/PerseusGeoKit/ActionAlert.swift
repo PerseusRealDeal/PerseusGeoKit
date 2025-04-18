@@ -1,6 +1,6 @@
 //
 //  ActionAlert.swift
-//  PerseusGeoLocationKit
+//  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7533 (27.01.2025).
 //

@@ -1,6 +1,6 @@
 //
 //  LocationDelegate.swift
-//  PerseusGeoLocationKit
+//  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
 //

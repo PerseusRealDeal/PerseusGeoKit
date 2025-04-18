@@ -1,6 +1,6 @@
 //
 //  MockLocationManager.swift
-//  PerseusGeoLocationKitTests
+//  PerseusGeoKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
@@ -14,7 +14,7 @@
 import CoreLocation
 import XCTest
 
-@testable import PerseusGeoLocationKit
+@testable import PerseusGeoKit
 
 class MockLocationManager: LocationManagerProtocol {
 
