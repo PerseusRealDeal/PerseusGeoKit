@@ -37,7 +37,7 @@ let package = Package(
             name: "PerseusGeoKit",
             dependencies: []),
         .testTarget(
-            name: "PerseusGeoKitTests",
+            name: "UnitTests",
             dependencies: ["PerseusGeoKit"])
     ]
 )
