@@ -3,6 +3,8 @@
 /* Package.swift
  Version: 1.0.0
 
+ For iOS and macOS only. Use Stars to adopt for the specifics you need.
+
  Created by Mikhail Zhigulin in 7531.
 
  Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk
@@ -12,7 +14,7 @@
  All rights reserved.
 
  Abstract:
- Package manifest for an App component.
+ Package manifest for PerseusGeoKit.
  */
 
 import PackageDescription

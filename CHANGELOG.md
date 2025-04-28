@@ -5,9 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
-## [1.0.0] - [2025-NN-NN], PerseusGeoKit 1.0.0
+## [1.0.0] - [2025-NN-NN], PGK
 
-- Minimum build requirements: macOS 10.13+, iOS 11.0+, and Xcode 14.2+.
+- Minimum build requirements: macOS 10.13+, iOS 11.0+, Xcode 14.2+.
 
 ### Changed
 
@@ -20,15 +20,14 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 - Wrapper for addObserver usage as a contract static method of LocationAgent class to simplify usage.
 - Approbation and Changelog.
 
-### Updated
+### Improved
 
-- License notices.
-- Logging messages.
-- README.
+- Source Code.
+- Documentation.
 
 ### Upgraded
 
-- PerseusLogger to [CPL v1.0.3](https://github.com/perseusrealdeal/ConsolePerseusLogger).
+- PerseusLogger to [CPL v1.1.0](https://github.com/perseusrealdeal/ConsolePerseusLogger).
 
 ## [0.1.0] - [2023-07-24], Developer Release
 
