@@ -1,5 +1,5 @@
 //
-//  LocationPermit.swift
+//  GeoPermit.swift
 //  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -13,7 +13,7 @@
 import Foundation
 import CoreLocation
 
-public enum LocationPermit: CustomStringConvertible {
+public enum GeoPermit: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -53,8 +53,7 @@ public enum LocationPermit: CustomStringConvertible {
     case allowed
 }
 
-public func getPermit(serviceEnabled: Bool,
-                      status: CLAuthorizationStatus) -> LocationPermit {
+public func getPermit(serviceEnabled: Bool, status: CLAuthorizationStatus) -> GeoPermit {
 
     // There is no status .notDetermined with serviceEnabled false.
     if status == .notDetermined { // So, serviceEnabled takes true.

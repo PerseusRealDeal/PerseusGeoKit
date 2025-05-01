@@ -1,5 +1,5 @@
 //
-//  ActionAlert.swift
+//  RedirectActionAlert.swift
 //  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7533 (27.01.2025).
@@ -9,6 +9,8 @@
 //
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
+//
+// swiftlint:disable file_length
 //
 
 #if canImport(UIKit)
@@ -40,14 +42,17 @@ public struct ActionAlertText {
 
 public class ActionAlert {
 
-    public var titles: ActionAlertText {
+    public var titles: ActionAlertText? {
         didSet {
+
             log.message("[\(type(of: self))].\(#function)")
 
+            self.alertText = titles ?? ActionAlertText()
             self.alert = create()
         }
     }
 
+    private var alertText: ActionAlertText
     private let action: () -> Void
 
     private var alert: UIAlertController?
@@ -57,25 +62,26 @@ public class ActionAlert {
 
     // MARK: - Initializer
 
-    init(_ function: @escaping () -> Void) {
+    init(_ function: @escaping () -> Void, _ titles: ActionAlertText? = nil) {
 
         log.message("[\(type(of: self))].\(#function)", .info)
 
-        action = function
-        titles = ActionAlertText()
+        self.action = function
+        self.alertText = titles ?? ActionAlertText()
 
-        alert = create()
+        self.alert = create()
     }
 
     private func create() -> UIAlertController {
+
         log.message("[\(type(of: self))].\(#function)")
 
-        let alert = UIAlertController(title: titles.title,
-                                      message: titles.message,
+        let alert = UIAlertController(title: alertText.title,
+                                      message: alertText.message,
                                       preferredStyle: .alert)
 
-        alert.addAction(UIAlertAction(title: titles.buttonCancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: titles.buttonFunction,
+        alert.addAction(UIAlertAction(title: alertText.buttonCancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: alertText.buttonFunction,
                                       style: .default) { _ in
             self.action()
         })
@@ -86,6 +92,7 @@ public class ActionAlert {
     // MARK: - Contract
 
     public func show(using parent: UIViewController) {
+
         log.message("[\(type(of: self))].\(#function)")
 
         if let alert = alert {
@@ -98,41 +105,46 @@ public class ActionAlert {
 
 public class ActionAlert {
 
-    public var titles: ActionAlertText {
+    public var titles: ActionAlertText? {
         didSet {
+
             log.message("[\(type(of: self))].\(#function)")
 
+            self.alertText = titles ?? ActionAlertText()
             self.alert = create()
         }
     }
 
+    private var alertText: ActionAlertText
     private let action: () -> Void
 
     private var alert: NSAlert?
 
     // MARK: - Initializer
 
-    init(_ function: @escaping () -> Void) {
-        log.message("[\(type(of: self))].\(#function)")
+    init(_ function: @escaping () -> Void, _ titles: ActionAlertText? = nil) {
 
-        action = function
-        titles = ActionAlertText()
+        log.message("[\(type(of: self))].\(#function)", .info)
 
-        alert = create()
+        self.action = function
+        self.alertText = titles ?? ActionAlertText()
+
+        self.alert = create()
     }
 
     private func create() -> NSAlert {
+
         log.message("[\(type(of: self))].\(#function)")
 
         let alert = NSAlert.init()
 
         alert.alertStyle = .informational
 
-        alert.messageText = titles.title
-        alert.informativeText = titles.message
+        alert.messageText = alertText.title
+        alert.informativeText = alertText.message
 
-        alert.addButton(withTitle: titles.buttonFunction)
-        alert.addButton(withTitle: titles.buttonCancel)
+        alert.addButton(withTitle: alertText.buttonFunction)
+        alert.addButton(withTitle: alertText.buttonCancel)
 
         return alert
     }
@@ -140,15 +152,60 @@ public class ActionAlert {
     // MARK: - Contract
 
     public func show() {
+
         log.message("[\(type(of: self))].\(#function)")
 
         guard let alert = alert, alert.runModal() == .alertFirstButtonReturn
         else {
-            log.message("[\(type(of: self))].\(#function) - Cancel tapped.")
+            log.message("[\(type(of: self))].\(#function) tapped cancel.")
             return
         }
 
         action()
+    }
+}
+
+#endif
+
+// MARK: - Redirect Function
+
+#if os(iOS)
+
+public func redirectToSettingsApp() {
+
+    guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+        log.message("\(#function) URL not corrent", .error)
+        return
+    }
+
+    guard UIApplication.shared.canOpenURL(settingsURL) else {
+        log.message("\(#function) right URL, but cann't be opened", .error)
+        return
+    }
+
+    UIApplication.shared.open(settingsURL) { (opened) in
+        if opened {
+            log.message("\(#function) opened")
+        } else {
+            log.message("\(#function) not opened", .error)
+        }
+    }
+}
+
+#elseif os(macOS)
+
+public func redirectToSettingsApp() {
+
+    guard let pathURL = URL(string: "x-apple.systempreferences:")
+    else {
+        log.message("\(#function) URL not corrent", .error)
+        return
+    }
+
+    if NSWorkspace.shared.open(pathURL) {
+        log.message("\(#function) opened")
+    } else {
+        log.message("\(#function) not opened", .error)
     }
 }
 

@@ -14,7 +14,7 @@ import Foundation
 
 public enum LocationError: Error, Equatable {
 
-    case permissionRequired(LocationPermit) // Permission status used to make decision.
+    case permissionRequired(GeoPermit)
     case receivedEmptyLocationData
     case failedRequest(String, String, Int) // localizedDescription, domain, code.
 

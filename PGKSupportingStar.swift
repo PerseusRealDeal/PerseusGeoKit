@@ -2,12 +2,16 @@
 //  PGKSupportingStar.swift
 //  Version: 1.0.0
 //
-//  For iOS and macOS only. Use Stars to adopt for the platform specifics you need.
+//  PerseysGeoKit Support Code
+//
+//
+//  For iOS and macOS only. Use Stars to adopt for the specifics you need.
 //
 //  Created by Mikhail Zhigulin of Novosibirsk in 7533.
 //
 //  The year starts from the creation of the world according to a Slavic calendar.
 //  September, the 1st of Slavic year.
+//
 //
 //  Unlicensed Free Software
 //

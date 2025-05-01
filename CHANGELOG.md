@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
-## [1.0.0] - [2025-NN-NN], PGK
+## [1.0.0] - [2025-05-NN], PGK
 
 - Minimum build requirements: macOS 10.13+, iOS 11.0+, Xcode 14.2+.
 
@@ -15,10 +15,13 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
 ### Added
 
-- Goto Settings Alert represented as ActionAlert class for iOS and macOS.
+- Approbation and Changelog.
 - Redirecting to Settings app function for iOS and macOS.
 - Wrapper for addObserver usage as a contract static method of LocationAgent class to simplify usage.
-- Approbation and Changelog.
+
+### Included
+
+- ActionAlert for both iOS and macOS.
 
 ### Improved
 

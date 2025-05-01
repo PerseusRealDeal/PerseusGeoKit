@@ -1,5 +1,5 @@
 //
-//  PerseusLocation.swift
+//  GeoPoint.swift
 //  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -13,21 +13,14 @@
 import Foundation
 import CoreLocation
 
-extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
+extension CLLocation {
 
-extension Double {
-
-    public enum DecimalPlaces: Double {
-        case two  = 100.0
-        case four = 10000.0
-    }
-
-    public func cut(_ off: DecimalPlaces) -> Double {
-        return (self * off.rawValue).rounded(self > 0 ? .down : .up) / off.rawValue
+    public var point: GeoPoint {
+        return GeoPoint(self)
     }
 }
 
-public struct PerseusLocation: CustomStringConvertible, Equatable {
+public struct GeoPoint: CustomStringConvertible, Equatable {
 
     public var description: String {
 
@@ -54,7 +47,19 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
 
     // MARK: - Equatable
 
-    public static func == (lhs: PerseusLocation, rhs: PerseusLocation) -> Bool {
+    public static func == (lhs: GeoPoint, rhs: GeoPoint) -> Bool {
         return lhs.location == rhs.location
+    }
+}
+
+extension Double {
+
+    public enum DecimalPlaces: Double {
+        case two  = 100.0
+        case four = 10000.0
+    }
+
+    public func cut(_ off: DecimalPlaces) -> Double {
+        return (self * off.rawValue).rounded(self > 0 ? .down : .up) / off.rawValue
     }
 }

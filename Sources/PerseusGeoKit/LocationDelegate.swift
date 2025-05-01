@@ -13,10 +13,34 @@
 
 import CoreLocation
 
-extension LocationAgent: CLLocationManagerDelegate {
+// MARK: - Notifications
+
+extension Notification.Name {
+
+    // Current Location
+    public static let locationDealerCurrentNotification =
+    Notification.Name("locationDealerCurrentNotification")
+
+    // Location Changing Updates
+    public static let locationDealerUpdatesNotification =
+    Notification.Name("locationDealerUpdatesNotification")
+
+    // Error
+    public static let locationDealerErrorNotification =
+    Notification.Name("locationDealerErrorNotification")
+
+    // Location Service Status
+    public static let locationDealerStatusChangedNotification =
+    Notification.Name("locationDealerStatusChangedNotification")
+}
+
+// MARK: - Location Delegate
+
+extension GeoAgent: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
+
         log.message("[\(type(of: self))].\(#function)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
@@ -24,6 +48,7 @@ extension LocationAgent: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
+
         log.message("[\(type(of: self))].\(#function)")
 
         locationManager.stopUpdatingLocation()
@@ -35,7 +60,11 @@ extension LocationAgent: CLLocationManagerDelegate {
         // or new macOS releases.
 
 #if os(macOS)
-        if order == .permission, locationPermit == .notDetermined { return }
+        if order == .permission, geoPermit == .notDetermined {
+            let details = "order: \(order), permit: \(geoPermit)"
+            log.message("[\(type(of: self))].\(#function) \(details)", .notice)
+            return
+        }
 #endif
 
         order = .none
@@ -50,16 +79,19 @@ extension LocationAgent: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
+
         log.message("[\(type(of: self))].\(#function)")
 
         if order == .none {
-            log.message("[\(type(of: self))].\(#function) — Locations for no order!", .notice)
+            let notice = "There's no order for locations!"
+            log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
             locationManager.stopUpdatingLocation()
             return
         }
 
         if order == .permission {
-            log.message("[\(type(of: self))].\(#function) — Authorization order!", .notice)
+            let notice = "The order only for permission!"
+            log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
             locationManager.stopUpdatingLocation()
             order = .none
             return
@@ -70,22 +102,23 @@ extension LocationAgent: CLLocationManagerDelegate {
             locationManager.stopUpdatingLocation()
             order = .none
 
-            let result: Result<PerseusLocation, LocationError> = locations.first == nil ?
+            let result: Result<GeoPoint, LocationError> = locations.first == nil ?
                 .failure(.receivedEmptyLocationData) :
-                .success(locations.first!.perseus)
+                .success(locations.first!.point)
 
             notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
 
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
-                log.message("[\(type(of: self))].\(#function) — No locations!", .notice)
+                log.message("[\(type(of: self))].\(#function) empty locations!", .notice)
                 locationManager.stopUpdatingLocation()
                 order = .none
             }
 
-            let result: Result<[PerseusLocation], LocationError> = locations.isEmpty ?
-                .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
+            let result: Result<[GeoPoint], LocationError> = locations.isEmpty ?
+                .failure(.receivedEmptyLocationData) :
+                .success(locations.map { $0.point })
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
         }
