@@ -60,11 +60,20 @@ extension GeoAgent: CLLocationManagerDelegate {
         // or new macOS releases.
 
 #if os(macOS)
+
         if order == .permission, geoPermit == .notDetermined {
+
+            // It means that an end-user took more than 2 or 3 sec to make decision.
+            // Does nothing, just a note.
+
+            // TODO: - What macOS systems generate a such error? List of macOS systems.
+
             let details = "order: \(order), permit: \(geoPermit)"
             log.message("[\(type(of: self))].\(#function) \(details)", .notice)
+
             return
         }
+
 #endif
 
         order = .none
@@ -83,15 +92,19 @@ extension GeoAgent: CLLocationManagerDelegate {
         log.message("[\(type(of: self))].\(#function)")
 
         if order == .none {
-            let notice = "There's no order for locations!"
+
+            let notice = "there's no order for locations!"
             log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
+
             locationManager.stopUpdatingLocation()
             return
         }
 
         if order == .permission {
-            let notice = "The order only for permission!"
+
+            let notice = "the order only for permission!"
             log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
+
             locationManager.stopUpdatingLocation()
             order = .none
             return
@@ -111,9 +124,15 @@ extension GeoAgent: CLLocationManagerDelegate {
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
+
                 log.message("[\(type(of: self))].\(#function) empty locations!", .notice)
-                locationManager.stopUpdatingLocation()
-                order = .none
+
+                // TODO: - [ISSUE] Should stop updating if locations is empty? Till do nothing.
+
+                // locationManager.stopUpdatingLocation()
+                // order = .none
+
+                return
             }
 
             let result: Result<[GeoPoint], LocationError> = locations.isEmpty ?

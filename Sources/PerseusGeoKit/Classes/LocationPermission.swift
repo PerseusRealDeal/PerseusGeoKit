@@ -12,7 +12,7 @@
 
 import Foundation
 
-public enum LocationPermission: CustomStringConvertible {
+public enum LocationPermissionRequest: CustomStringConvertible {
 
     public var description: String {
         switch self {

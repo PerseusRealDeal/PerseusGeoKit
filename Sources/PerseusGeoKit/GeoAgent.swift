@@ -134,7 +134,7 @@ public class GeoAgent: NSObject {
 
 #endif
 
-    public func requestPermission(_ authorization: LocationPermission = .always,
+    public func requestPermission(_ authorization: LocationPermissionRequest = .always,
                                   _ actionIfAlreadyDetermined: ((_ permitUsed: GeoPermit)
                                                          -> Void)? = nil) {
 
@@ -151,6 +151,7 @@ public class GeoAgent: NSObject {
         }
 
 #if os(iOS)
+
         switch authorization {
         case .whenInUse:
             locationManager.requestWhenInUseAuthorization()
@@ -158,14 +159,17 @@ public class GeoAgent: NSObject {
             locationManager.requestAlwaysAuthorization()
         }
         order = .none
+
 #elseif os(macOS)
+
         order = .permission
         locationManager.startUpdatingLocation()
+
 #endif
+
     }
 
-    public func getCurrent(with accuracy: GeoAccuracy = APPROPRIATE_ACCURACY_DEFAULT)
-    throws {
+    public func getCurrent() throws {
 
         log.message("[\(type(of: self))].\(#function)")
 
@@ -187,14 +191,18 @@ public class GeoAgent: NSObject {
         locationManager.desiredAccuracy = accuracy.rawValue
 
 #if os(iOS)
+
         locationManager.requestLocation()
+
 #elseif os(macOS)
+
         locationManager.startUpdatingLocation()
+
 #endif
+
     }
 
-    public func startUpdating(with accuracy: GeoAccuracy = APPROPRIATE_ACCURACY_DEFAULT)
-    throws {
+    public func startUpdating() throws {
 
         log.message("[\(type(of: self))].\(#function)")
 

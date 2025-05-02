@@ -19,6 +19,8 @@ import UIKit
 import Cocoa
 #endif
 
+// MARK: - Alert Titles
+
 public struct ActionAlertText {
 
     public var title: String
@@ -37,6 +39,8 @@ public struct ActionAlertText {
         self.buttonFunction = buttonFunction
     }
 }
+
+// MARK: - Alert for iOS
 
 #if os(iOS)
 
@@ -103,6 +107,8 @@ public class ActionAlert {
 
 #elseif os(macOS)
 
+// MARK: - Alert for macOS
+
 public class ActionAlert {
 
     public var titles: ActionAlertText? {
@@ -167,9 +173,9 @@ public class ActionAlert {
 
 #endif
 
-// MARK: - Redirect Function
-
 #if os(iOS)
+
+// MARK: - Redirect Function for iOS
 
 public func redirectToSettingsApp() {
 
@@ -193,6 +199,8 @@ public func redirectToSettingsApp() {
 }
 
 #elseif os(macOS)
+
+// MARK: - Redirect Function for macOS
 
 public func redirectToSettingsApp() {
 
