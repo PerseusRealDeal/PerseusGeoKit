@@ -105,14 +105,13 @@ public class GeoAgent: NSObject {
 
     public static func register(_ observer: Any,
                                 _ selector: Selector,
-                                _ name: NSNotification.Name) {
+                                _ event: GeoEvent) {
 
-        let detail = "for \(type(of: observer)) > \(name.rawValue)"
-
+        let detail = "for \(type(of: observer)) > \(event)"
         log.message("[\(type(of: self))].\(#function) \(detail)")
 
         let nc = shared.notificationCenter
-        nc.addObserver(observer, selector: selector, name: name, object: nil)
+        nc.addObserver(observer, selector: selector, name: event.name, object: nil)
     }
 
 #if os(iOS)

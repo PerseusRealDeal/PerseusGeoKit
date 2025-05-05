@@ -13,23 +13,6 @@
 
 import CoreLocation
 
-// MARK: - Notifications
-
-extension Notification.Name {
-
-    // Error
-    public static let locationErrorEvent = Notification.Name("locationErrorEvent")
-
-    // Location Service Status
-    public static let locationStatusEvent = Notification.Name("locationStatusEvent")
-
-    // Current Location
-    public static let currentLocationEvent = Notification.Name("currentLocationEvent")
-
-    // Location Updates
-    public static let locationUpdatesEvent = Notification.Name("locationUpdatesEvent")
-}
-
 // MARK: - Location Delegate
 
 extension GeoAgent: CLLocationManagerDelegate {
@@ -73,7 +56,7 @@ extension GeoAgent: CLLocationManagerDelegate {
                                                    nsError.domain,
                                                    nsError.code)
 
-        notificationCenter.post(name: .locationErrorEvent, object: result)
+        notificationCenter.post(name: GeoEvent.locationErrorEvent.name, object: result)
     }
 
     // MARK: - To catch location status change
@@ -83,7 +66,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         log.message("[\(type(of: self))].\(#function)")
 
-        notificationCenter.post(name: .locationStatusEvent, object: status)
+        notificationCenter.post(name: GeoEvent.locationStatusEvent.name, object: status)
     }
 
     // MARK: - To catch current location and updates
@@ -129,7 +112,7 @@ extension GeoAgent: CLLocationManagerDelegate {
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.first!.point)
 
-            notificationCenter.post(name: .currentLocationEvent, object: result)
+            notificationCenter.post(name: GeoEvent.currentLocationEvent.name, object: result)
 
         } else if order == .locationUpdates {
 
@@ -153,7 +136,7 @@ extension GeoAgent: CLLocationManagerDelegate {
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.map { $0.point })
 
-            notificationCenter.post(name: .locationUpdatesEvent, object: result)
+            notificationCenter.post(name: GeoEvent.locationUpdatesEvent.name, object: result)
         }
     }
 }
