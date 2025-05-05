@@ -17,34 +17,24 @@ import CoreLocation
 
 extension Notification.Name {
 
-    // Current Location
-    public static let locationDealerCurrentNotification =
-    Notification.Name("locationDealerCurrentNotification")
-
-    // Location Changing Updates
-    public static let locationDealerUpdatesNotification =
-    Notification.Name("locationDealerUpdatesNotification")
-
     // Error
-    public static let locationDealerErrorNotification =
-    Notification.Name("locationDealerErrorNotification")
+    public static let locationErrorEvent = Notification.Name("locationErrorEvent")
 
     // Location Service Status
-    public static let locationDealerStatusChangedNotification =
-    Notification.Name("locationDealerStatusChangedNotification")
+    public static let locationStatusEvent = Notification.Name("locationStatusEvent")
+
+    // Current Location
+    public static let currentLocationEvent = Notification.Name("currentLocationEvent")
+
+    // Location Updates
+    public static let locationUpdatesEvent = Notification.Name("locationUpdatesEvent")
 }
 
 // MARK: - Location Delegate
 
 extension GeoAgent: CLLocationManagerDelegate {
 
-    public func locationManager(_ manager: CLLocationManager,
-                                didChangeAuthorization status: CLAuthorizationStatus) {
-
-        log.message("[\(type(of: self))].\(#function)")
-
-        notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
-    }
+    // MARK: - To catch location service error
 
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
@@ -53,11 +43,11 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         locationManager.stopUpdatingLocation()
 
-        // ISSUE: macOS (new releases) generates an error on startUpdatingLocation()
-        // if a user makes no decision immediately, 2 or 3 sec, with Current Location Diolog.
-        // FIXED: Restrict error notifiying in case when a user tries to give a permission
-        // so that there is no difference in Current Location Diolog behavior in either early
-        // or new macOS releases.
+        // ISSUE: macOS (new releases) generates an error on startUpdatingLocation() if
+        // an end-user makes no decision immediately, 2 or 3 sec, with Current Location Diolog.
+        // FIXED: In case if an end-user tries to give a permission not immediately,
+        // restrict error notifiying so that there is no difference
+        // in Current Location Diolog behavior in either early or newer macOS releases.
 
 #if os(macOS)
 
@@ -66,9 +56,9 @@ extension GeoAgent: CLLocationManagerDelegate {
             // It means that an end-user took more than 2 or 3 sec to make decision.
             // Does nothing, just a note.
 
-            // TODO: - What macOS systems generate a such error? List of macOS systems.
+            // TODO: - [ISSUE] What macOS systems generate a such error? List of macOS systems.
 
-            let details = "order: \(order), permit: \(geoPermit)"
+            let details = "order: .permission, permit: .notDetermined"
             log.message("[\(type(of: self))].\(#function) \(details)", .notice)
 
             return
@@ -83,8 +73,20 @@ extension GeoAgent: CLLocationManagerDelegate {
                                                    nsError.domain,
                                                    nsError.code)
 
-        notificationCenter.post(name: .locationDealerErrorNotification, object: result)
+        notificationCenter.post(name: .locationErrorEvent, object: result)
     }
+
+    // MARK: - To catch location status change
+
+    public func locationManager(_ manager: CLLocationManager,
+                                didChangeAuthorization status: CLAuthorizationStatus) {
+
+        log.message("[\(type(of: self))].\(#function)")
+
+        notificationCenter.post(name: .locationStatusEvent, object: status)
+    }
+
+    // MARK: - To catch current location and updates
 
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
@@ -94,7 +96,7 @@ extension GeoAgent: CLLocationManagerDelegate {
         if order == .none {
 
             let notice = "there's no order for locations!"
-            log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
+            log.message("[\(type(of: self))].\(#function) \(notice)", .error)
 
             locationManager.stopUpdatingLocation()
             return
@@ -102,8 +104,8 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .permission {
 
-            let notice = "the order only for permission!"
-            log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
+            let notice = "the order for permission only!"
+            log.message("[\(type(of: self))].\(#function) \(notice)", .error)
 
             locationManager.stopUpdatingLocation()
             order = .none
@@ -112,6 +114,14 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .currentLocation {
 
+            if locations.isEmpty {
+                let notice = "locations is empty!" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+            } else if locations.first != nil {
+                let debug = "location is catched!"
+                log.message("[\(type(of: self))].\(#function) \(debug)")
+            }
+
             locationManager.stopUpdatingLocation()
             order = .none
 
@@ -119,27 +129,31 @@ extension GeoAgent: CLLocationManagerDelegate {
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.first!.point)
 
-            notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
+            notificationCenter.post(name: .currentLocationEvent, object: result)
 
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
 
-                log.message("[\(type(of: self))].\(#function) empty locations!", .notice)
+                let notice = "locations is empty!" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(notice)", .error)
 
                 // TODO: - [ISSUE] Should stop updating if locations is empty? Till do nothing.
 
                 // locationManager.stopUpdatingLocation()
                 // order = .none
 
-                return
+                // return
+            } else if locations.first != nil {
+                let debug = "locations are catched!"
+                log.message("[\(type(of: self))].\(#function) \(debug)")
             }
 
             let result: Result<[GeoPoint], LocationError> = locations.isEmpty ?
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.map { $0.point })
 
-            notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
+            notificationCenter.post(name: .locationUpdatesEvent, object: result)
         }
     }
 }

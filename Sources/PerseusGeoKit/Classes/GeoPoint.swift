@@ -14,7 +14,6 @@ import Foundation
 import CoreLocation
 
 extension CLLocation {
-
     public var point: GeoPoint {
         return GeoPoint(self)
     }
@@ -54,7 +53,7 @@ public struct GeoPoint: CustomStringConvertible, Equatable {
 
 extension Double {
 
-    public enum DecimalPlaces: Double {
+    public enum DecimalPlaces: Double { // Mathematical precision.
         case two  = 100.0
         case four = 10000.0
     }

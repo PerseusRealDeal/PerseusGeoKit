@@ -87,7 +87,7 @@ public class GeoAgent: NSObject {
 
     // MARK: - Singletone
 
-    public static let shared: GeoAgent = { return GeoAgent() }()
+    public static let shared = GeoAgent()
     private override init() {
 
         log.message("[\(GeoAgent.self)].\(#function)", .info)
@@ -103,14 +103,16 @@ public class GeoAgent: NSObject {
 
     // MARK: - Contract
 
-    public static func register(with observer: Any,
-                                selector aSelector: Selector,
-                                name aName: NSNotification.Name?) {
+    public static func register(_ observer: Any,
+                                _ selector: Selector,
+                                _ name: NSNotification.Name) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        let detail = "for \(type(of: observer)) > \(name.rawValue)"
+
+        log.message("[\(type(of: self))].\(#function) \(detail)")
 
         let nc = shared.notificationCenter
-        nc.addObserver(observer, selector: aSelector, name: aName, object: nil)
+        nc.addObserver(observer, selector: selector, name: name, object: nil)
     }
 
 #if os(iOS)

@@ -56,7 +56,7 @@ public enum GeoPermit: CustomStringConvertible {
 public func getPermit(serviceEnabled: Bool, status: CLAuthorizationStatus) -> GeoPermit {
 
     // There is no status .notDetermined with serviceEnabled false.
-    if status == .notDetermined { // So, serviceEnabled takes true.
+    if status == .notDetermined { // So, it means that serviceEnabled is true for now.
         return .notDetermined
     }
 
