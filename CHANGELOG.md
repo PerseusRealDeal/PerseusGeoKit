@@ -18,11 +18,12 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 - Approbation and Changelog.
 - Redirecting to Settings app function for both iOS and macOS.
 - ActionAlert for both iOS and macOS.
-- Wrapper for addObserver usage as a contract static method of GeoAgent class to simplify usage.
+- GeoAgent showRedirectAlert method to simplify redirect function usage.
+- GeoAgent register method as the wrapper for addObserver to simplify notifying usage.
 
 ### Improved
 
-- Source Code.
+- Source Code (renamed, cleared, restructured, logged).
 - Documentation.
 
 ### Upgraded

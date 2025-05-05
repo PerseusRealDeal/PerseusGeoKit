@@ -56,7 +56,7 @@ extension GeoAgent: CLLocationManagerDelegate {
                                                    nsError.domain,
                                                    nsError.code)
 
-        notificationCenter.post(name: GeoEvent.locationErrorEvent.name, object: result)
+        notificationCenter.post(name: GeoEvent.locationError.name, object: result)
     }
 
     // MARK: - To catch location status change
@@ -66,7 +66,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         log.message("[\(type(of: self))].\(#function)")
 
-        notificationCenter.post(name: GeoEvent.locationStatusEvent.name, object: status)
+        notificationCenter.post(name: GeoEvent.locationStatus.name, object: status)
     }
 
     // MARK: - To catch current location and updates
@@ -112,7 +112,7 @@ extension GeoAgent: CLLocationManagerDelegate {
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.first!.point)
 
-            notificationCenter.post(name: GeoEvent.currentLocationEvent.name, object: result)
+            notificationCenter.post(name: GeoEvent.currentLocation.name, object: result)
 
         } else if order == .locationUpdates {
 
@@ -128,7 +128,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
                 // return
             } else if locations.first != nil {
-                let debug = "locations are catched!"
+                let debug = "locations is catched!"
                 log.message("[\(type(of: self))].\(#function) \(debug)")
             }
 
@@ -136,7 +136,7 @@ extension GeoAgent: CLLocationManagerDelegate {
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.map { $0.point })
 
-            notificationCenter.post(name: GeoEvent.locationUpdatesEvent.name, object: result)
+            notificationCenter.post(name: GeoEvent.locationUpdates.name, object: result)
         }
     }
 }

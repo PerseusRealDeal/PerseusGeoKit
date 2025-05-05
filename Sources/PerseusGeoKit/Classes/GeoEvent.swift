@@ -11,19 +11,19 @@
 //  All rights reserved.
 //
 
-import CoreLocation
+import Foundation
 
 public enum GeoEvent: CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .locationErrorEvent:
+        case .locationError:
             return "locationErrorEvent"
-        case .locationStatusEvent:
+        case .locationStatus:
             return "locationStatusEvent"
-        case .currentLocationEvent:
+        case .currentLocation:
             return "currentLocationEvent"
-        case .locationUpdatesEvent:
+        case .locationUpdates:
             return "locationUpdatesEvent"
         }
     }
@@ -32,8 +32,8 @@ public enum GeoEvent: CustomStringConvertible {
         return Notification.Name("\(self)")
     }
 
-    case locationErrorEvent
-    case locationStatusEvent
-    case currentLocationEvent
-    case locationUpdatesEvent
+    case locationError
+    case locationStatus
+    case currentLocation
+    case locationUpdates
 }

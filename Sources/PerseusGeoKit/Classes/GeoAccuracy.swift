@@ -15,39 +15,37 @@ import CoreLocation
 
 public struct GeoAccuracy: RawRepresentable, Equatable {
 
-    // MARK: - RawRepresentable
-
-    public var rawValue: CLLocationAccuracy
-
     // MARK: - Values
 
     // The highest possible accuracy that uses additional sensor data.
-    public static let bestForNavigation = GeoAccuracy(
-        rawValue: kCLLocationAccuracyBestForNavigation)
+    public static let bestForNavigation = setup(kCLLocationAccuracyBestForNavigation)
 
     // The best level of accuracy available.
-    public static let best = GeoAccuracy(
-        rawValue: kCLLocationAccuracyBest)
+    public static let best = setup(kCLLocationAccuracyBest)
 
     // Accurate to within ten meters of the desired target.
-    public static let nearestTenMeters = GeoAccuracy(
-        rawValue: kCLLocationAccuracyNearestTenMeters)
+    public static let nearestTenMeters = setup(kCLLocationAccuracyNearestTenMeters)
 
     // Accurate to within one hundred meters.
-    public static let hundredMeters = GeoAccuracy(
-        rawValue: kCLLocationAccuracyHundredMeters)
+    public static let hundredMeters = setup(kCLLocationAccuracyHundredMeters)
 
     // Accurate to the nearest kilometer.
-    public static let kilometer = GeoAccuracy(
-        rawValue: kCLLocationAccuracyKilometer)
+    public static let kilometer = setup(kCLLocationAccuracyKilometer)
 
     // Accurate to the nearest three kilometers.
-    public static let threeKilometers = GeoAccuracy(
-        rawValue: kCLLocationAccuracyThreeKilometers)
+    public static let threeKilometers = setup(kCLLocationAccuracyThreeKilometers)
+
+    // MARK: - RawRepresentable
+
+    public var rawValue: CLLocationAccuracy
 
     // MARK: - Initializer
 
     public init(rawValue: CLLocationAccuracy) {
         self.rawValue = rawValue
+    }
+
+    public static func setup(_ rawValue: CLLocationAccuracy) -> GeoAccuracy {
+        return GeoAccuracy(rawValue: rawValue)
     }
 }
