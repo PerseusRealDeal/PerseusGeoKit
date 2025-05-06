@@ -41,8 +41,6 @@
 
 > HAVE A DEAL WITH WHERE YOU ARE.</br>
 
-> - TODO: screenshots
-
 <table>
   <tr>
     <th>iOS</th>
@@ -82,99 +80,344 @@
 
 > Swift Package Manager: `https://github.com/perseusrealdeal/PerseusGeoKit`
 
-`Step 2:` Declare a reference to GeoAgent and register for Geo events
+`Step 2:` Change `Info.plist`, add the following items
 
-```swift
+| iOS                                        | macOS                    |
+|:-------------------------------------------|:-------------------------|
+|NSLocationAlwaysAndWhenInUseUsageDescription|NSLocationUsageDescription|
+|NSLocationWhenInUseUsageDescription         |                          |
 
-import Foundation
-
-import ConsolePerseusLogger
-import PerseusGeoKit
-
-class GeoCoordinator: NSObject {
-
-    // MARK: - Properties
-
-    public let locationDealer = GeoAgent.shared
-
-    // MARK: - Singletone
-
-    public static let shared: GeoCoordinator = { return GeoCoordinator() }()
-
-    private override init() {
-
-        log.message("[\(GeoCoordinator.self)].\(#function)", .info)
-
-        super.init()
-
-        GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
-        GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
-        GeoAgent.register(self, #selector(currentLocationHandler(_:)), .currentLocation)
-        GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
-    }
-}
-
-// MARK: - Event handlers
-
-extension GeoCoordinator {
-
-    @objc private func locationErrorHandler(_ notification: Notification) {
-        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
-    }
-
-    @objc private func locationStatusHandler(_ notification: Notification) {
-        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
-    }
-
-    @objc private func currentLocationHandler(_ notification: Notification) {
-        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
-    }
-
-    @objc private func locationUpdatesHandler(_ notification: Notification) {
-        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
-    }
-}
-
-```
+For macOS in `App Sandbox` of your project target tap `Location`.
 
 # Usage
 
 ## Get Current Location Services Status
 
+Location Services Status is calculated as a unified value for both iOS and macOS.
+
 ```swift
+
+let status = GeoAgent.currentStatus
+
+```
+
+| Status                   | Description                                            |
+|:-------------------------|:-------------------------------------------------------|
+|.notDetermined            |Not Authorized. Neither restricted nor the app denided. |
+|.deniedForAllAndRestricted|Location Services turned off and the app restricted.    |
+|.restricted               |Location Services turned on and the app restricted.     |
+|.deniedForAllApps         |Location Services turned off but the app not restricted.|
+|.deniedForTheApp          |Location Services turned on but the app not restricted. |
+|.allowed                  |Authorized.                                             |
+
+> Register for Location Services Status changed event.
+
+```swift
+
+GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
 
 ```
 
 ## Request permission for Location Services
 
+It is good to use **GeoAgent.requestPermission()** with an ending action that will be invoked if status had been determined before. 
+
+For instance, to offer an end-user open system settings app for changing Location Services status.
+
 ```swift
+
+GeoAgent.shared.requestPermission { status in
+    if status != .allowed {
+        GeoAgent.showRedirectAlert()
+    }
+}
 
 ```
 
-## Redirect to system settings app
+> Also, custom text for the alert.
 
 ```swift
+
+let REDIRECT_ALERT_TITLES = ActionAlertText(title: "Geo Agent for the App",
+                                            message: "Open System Settings App?",
+                                            buttonCancel: "Cancel",
+                                            buttonFunction: "Open")
+
+GeoAgent.showRedirectAlert(REDIRECT_ALERT_TITLES)
+
+```
+
+> [!IMPORTANT]
+> For iOS **GeoAgent.showRedirectAlert(vc)** goes from parent ViewController.
+
+```swift
+
+GeoAgent.shared.requestPermission { status in
+    if status != .allowed, let vc = self.parentViewController() {
+        GeoAgent.showRedirectAlert(vc)
+    }
+}
 
 ```
 
 ## Request Current Location
 
 > [!IMPORTANT]
-> Method **GeoAgent.requestCurrentLocation()** will stop location updates if started already. You will need to restart location updates.
+> Method **GeoAgent.shared.requestCurrentLocation()** will stop updating location.
+
+`Step 1:` Register for Geo events both error and current location.
 
 ```swift
+
+GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
+GeoAgent.register(self, #selector(currentLocationHandler(_:)), .currentLocation)
 
 ```
 
-## Request Location Updates
+`Step 2:` Set required accuracy up.
 
 ```swift
+
+let PREFERED_ACCURACY = GeoAccuracy.threeKilometers
+
+GeoAgent.currentAccuracy = PREFERED_ACCURACY
+
+```
+
+`Step 3:` Use **GeoAgent.shared.requestCurrentLocation()**
+
+```swift
+
+do {
+    try GeoAgent.shared.requestCurrentLocation()
+} catch LocationError.permissionRequired(let status) { // Permission required.
+
+    if status == .notDetermined {
+        GeoAgent.shared.requestPermission() // Request permission.
+    } else {
+        GeoAgent.showRedirectAlert() // Offer redirect.
+    }
+
+} catch {
+    // Something went wrong.
+}
+
+```
+
+## Request Updating Location
+
+`Step 1:` Register for Geo events both error and updating location.
+
+```swift
+
+GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
+GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
+
+```
+
+`Step 2:` Set required accuracy up.
+
+```swift
+
+let PREFERED_ACCURACY = GeoAccuracy.threeKilometers
+
+GeoAgent.currentAccuracy = PREFERED_ACCURACY
+
+```
+
+`Step 3:` Use **GeoAgent.shared.requestUpdatingLocation()**
+
+```swift
+
+do {
+    try GeoAgent.shared.requestUpdatingLocation()
+} catch LocationError.permissionRequired(let status) { // Permission required.
+
+    if status == .notDetermined {
+        GeoAgent.shared.requestPermission() // Request permission.
+    } else {
+        GeoAgent.showRedirectAlert() // Offer redirect.
+    }
+
+} catch {
+    // Something went wrong.
+}
+
+```
+
+> [!IMPORTANT]
+> Use method **GeoAgent.shared.stopUpdatingLocation()** to stop updating location.
+
+```swift
+
+GeoAgent.shared.stopUpdatingLocation()
 
 ```
 
 ## Process Geo Events
 
+`Event: Location Error`
+
+> Register first.
+
 ```swift
+
+GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
+
+```
+
+> Handle event.
+
+> [!IMPORTANT]
+> Catches all errors that goes through didFailWithError method delegate.</br>
+> Every error from didFailWithError is wrapped with .failedRequest(_, _, _).
+
+```swift
+
+@objc private func locationErrorHandler(_ notification: Notification) {
+
+    log.message("[\(type(of: self))].\(#function) [EVENT]")
+    var errtext = ""
+
+    guard let error = notification.object as? LocationError else {
+        errtext = "nothing is about error"
+        log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
+        return
+    }
+
+    switch error {
+    case .failedRequest(_, let domain, let code):
+        let domaincode = "domain: \(domain), code: \(code)"
+        switch code {
+        case 0:
+            errtext = "hardware issue: try to tap Wi-Fi in system tray, \(domaincode)"
+        case 1:
+            errtext = "permission required, \(domaincode)"
+        default:
+            break
+        }
+    default:
+        break
+    }
+
+    log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
+
+    // Any changes.
+}
+
+```
+
+`Event: Location Status`
+
+> Register first.
+
+```swift
+
+GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
+
+```
+
+> Handle event.
+
+```swift
+
+@objc private func locationStatusHandler(_ notification: Notification) {
+
+    let currentStatus = GeoAgent.currentStatus
+    log.message("[\(type(of: self))].\(#function) status: \(status) [EVENT]")
+    
+    // Current Status is here, it's always actual value. Any changes.
+}
+
+```
+
+`Event: Current Location`
+
+> Register first.
+
+```swift
+
+GeoAgent.register(self, #selector(currentLocationHandler(_:)), .currentLocation)
+
+```
+
+> Handle event.
+
+```swift
+
+@objc private func currentLocationHandler(_ notification: Notification) {
+    
+    log.message("[\(type(of: self))].\(#function) [EVENT]")
+
+    var errtext = ""
+    var location: GeoPoint?
+
+    guard let result = notification.object as? Result<GeoPoint, LocationError> else {
+        errtext = "nothing is about location"
+        log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
+        return
+    }
+
+    switch result {
+    case .success(let point):
+        location = point
+    case .failure(let error):
+        errtext = "\(error)"
+    }
+
+    if let current = location {
+
+        // Current location is here! Any changes.
+
+    } else if !errtext.isEmpty {
+        log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
+    }
+}
+
+```
+
+`Event: Location Updates`
+
+> Register first.
+
+```swift
+
+GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
+
+```
+
+> Handle event.
+
+```swift
+
+@objc private func locationUpdatesHandler(_ notification: Notification) {
+    
+    log.message("[\(type(of: self))].\(#function) [EVENT]")
+
+    var errtext = ""
+    var updates: [GeoPoint]?
+
+    guard let result = notification.object as? Result<[GeoPoint], LocationError> else {
+        errtext = "nothing is about location updates"
+        log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
+        return
+    }
+
+    switch result {
+    case .success(let points):
+        updates = points
+    case .failure(let error):
+        errtext = "\(error)"
+    }
+
+    if let locations = updates {
+
+        // Location updates are here! Any changes.
+
+    } else if !errtext.isEmpty {
+        log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
+    }
+}
 
 ```
 

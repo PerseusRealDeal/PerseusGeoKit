@@ -25,8 +25,8 @@ import CoreLocation
 
 public let APPROPRIATE_ACCURACY_DEFAULT = GeoAccuracy.threeKilometers
 
-public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent",
-                                                   message: "Open Settings.app?",
+public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent for the App",
+                                                   message: "Open System Settings App?",
                                                    buttonCancel: "Cancel",
                                                    buttonFunction: "Open")
 
@@ -59,14 +59,14 @@ public class GeoAgent: NSObject {
 
     // MARK: - Properties
 
-    public var permit: GeoPermit { return geoPermit }
+    public static var currentStatus: GeoStatus { return sharedInstance.geoStatus }
 
-    public var accuracy: GeoAccuracy {
+    public static var currentAccuracy: GeoAccuracy {
         get {
-            return GeoAccuracy(rawValue: locationManager.desiredAccuracy)
+            return GeoAccuracy(rawValue: sharedInstance.locationManager.desiredAccuracy)
         }
         set {
-            locationManager.desiredAccuracy = newValue.rawValue
+            accuracy = newValue.rawValue
         }
     }
 
@@ -75,19 +75,30 @@ public class GeoAgent: NSObject {
     internal let locationManager: CLLocationManager
     internal let notificationCenter: NotificationCenter
 
-    internal var geoPermit: GeoPermit {
+    internal var geoStatus: GeoStatus {
 
         let enabled = type(of: locationManager).locationServicesEnabled()
         let status = type(of: locationManager).authorizationStatus()
 
-        return getPermit(serviceEnabled: enabled, status: status)
+        return getGeoStatus(serviceEnabled: enabled, status: status)
+    }
+
+    internal static var accuracy: CLLocationAccuracy {
+        get {
+            return sharedInstance.locationManager.desiredAccuracy
+        }
+        set {
+            sharedInstance.locationManager.desiredAccuracy = newValue
+        }
     }
 
     internal var order: GeoAgentOrder = .none
 
     // MARK: - Singletone
 
-    public static let shared = GeoAgent()
+    public static var shared: GeoAgent { return sharedInstance }
+
+    private static let sharedInstance = GeoAgent()
     private override init() {
 
         log.message("[\(GeoAgent.self)].\(#function)", .info)
@@ -108,7 +119,7 @@ public class GeoAgent: NSObject {
         let detail = "for \(type(of: stakeholder)) > \(event)"
         log.message("[\(type(of: self))].\(#function) \(detail)")
 
-        let nc = shared.notificationCenter
+        let nc = sharedInstance.notificationCenter
         nc.addObserver(stakeholder, selector: selector, name: event.name, object: nil)
     }
 
@@ -134,18 +145,18 @@ public class GeoAgent: NSObject {
 #endif
 
     public func requestPermission(_ authorization: LocationPermissionRequest = .always,
-                                  _ actionIfAlreadyDetermined: ((_ permitUsed: GeoPermit)
+                                  _ actionIfAlreadyDetermined: ((_ statusUsed: GeoStatus)
                                                          -> Void)? = nil) {
 
         log.message("[\(type(of: self))].\(#function)")
 
-        let currentPermit = geoPermit
+        let status = geoStatus
 
-        guard currentPermit == .notDetermined else {
+        guard status == .notDetermined else {
 
-            log.message("[\(type(of: self))].\(#function) permit: \(currentPermit)", .notice)
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
-            actionIfAlreadyDetermined?(currentPermit)
+            actionIfAlreadyDetermined?(status)
             return
         }
 
@@ -172,22 +183,22 @@ public class GeoAgent: NSObject {
 
         log.message("[\(type(of: self))].\(#function)")
 
-        let currentPermit = geoPermit
+        let status = geoStatus
 
-        guard currentPermit == .allowed else {
+        guard status == .allowed else {
 
-            log.message("[\(type(of: self))].\(#function) permit: \(currentPermit)", .notice)
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
 
-            throw LocationError.permissionRequired(currentPermit)
+            throw LocationError.permissionRequired(status)
         }
 
         locationManager.stopUpdatingLocation()
 
         order = .currentLocation
-        locationManager.desiredAccuracy = accuracy.rawValue
+        locationManager.desiredAccuracy = GeoAgent.accuracy
 
 #if os(iOS)
 
@@ -201,25 +212,25 @@ public class GeoAgent: NSObject {
 
     }
 
-    public func requestLocationUpdates() throws {
+    public func requestUpdatingLocation() throws {
 
         log.message("[\(type(of: self))].\(#function)")
 
-        let currentPermit = geoPermit
+        let status = geoStatus
 
-        guard currentPermit == .allowed else {
+        guard status == .allowed else {
 
-            log.message("[\(type(of: self))].\(#function) permit: \(currentPermit)", .notice)
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
 
-            throw LocationError.permissionRequired(currentPermit)
+            throw LocationError.permissionRequired(status)
         }
 
         order = .locationUpdates
 
-        locationManager.desiredAccuracy = accuracy.rawValue
+        locationManager.desiredAccuracy = GeoAgent.accuracy
         locationManager.startUpdatingLocation()
     }
 

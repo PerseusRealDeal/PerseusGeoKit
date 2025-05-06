@@ -27,22 +27,22 @@ extension GeoAgent: CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
 
         // ISSUE: macOS (new releases) generates an error on startUpdatingLocation() if
-        // an end-user makes no decision immediately, 2 or 3 sec, with Current Location Diolog.
+        // an end-user makes no decision about permission immediately, 2 or 3 sec.
         // FIXED: In case if an end-user tries to give a permission not immediately,
         // restrict error notifiying so that there is no difference
         // in Current Location Diolog behavior in either early or newer macOS releases.
 
 #if os(macOS)
 
-        if order == .permission, geoPermit == .notDetermined {
+        if order == .permission, geoStatus == .notDetermined {
 
             // It means that an end-user took more than 2 or 3 sec to make decision.
             // Does nothing, just a note.
 
             // TODO: - [ISSUE] What macOS systems generate a such error? List of macOS systems.
 
-            let details = "order: .permission, permit: .notDetermined"
-            log.message("[\(type(of: self))].\(#function) \(details)", .notice)
+            let notice = "order: .permission, status: .notDetermined"
+            log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
 
             return
         }
@@ -78,8 +78,8 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .none {
 
-            let notice = "there's no order for locations!"
-            log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+            let error = "there's no order for locations"
+            log.message("[\(type(of: self))].\(#function) \(error)", .error)
 
             locationManager.stopUpdatingLocation()
             return
@@ -87,8 +87,8 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .permission {
 
-            let notice = "the order for permission only!"
-            log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+            let error = "the order for permission only"
+            log.message("[\(type(of: self))].\(#function) \(error)", .error)
 
             locationManager.stopUpdatingLocation()
             order = .none
@@ -98,10 +98,10 @@ extension GeoAgent: CLLocationManagerDelegate {
         if order == .currentLocation {
 
             if locations.isEmpty {
-                let notice = "locations is empty!" // Something went wrong.
-                log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+                let error = "location is empty" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(error)", .error)
             } else if locations.first != nil {
-                let debug = "location is catched!"
+                let debug = "location is catched"
                 log.message("[\(type(of: self))].\(#function) \(debug)")
             }
 
@@ -117,18 +117,10 @@ extension GeoAgent: CLLocationManagerDelegate {
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
-
-                let notice = "locations is empty!" // Something went wrong.
-                log.message("[\(type(of: self))].\(#function) \(notice)", .error)
-
-                // TODO: - [ISSUE] Should stop updating if locations is empty? Till do nothing.
-
-                // locationManager.stopUpdatingLocation()
-                // order = .none
-
-                // return
+                let error = "locations is empty" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(error)", .error)
             } else if locations.first != nil {
-                let debug = "locations is catched!"
+                let debug = "location updates are catched"
                 log.message("[\(type(of: self))].\(#function) \(debug)")
             }
 

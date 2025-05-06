@@ -12,9 +12,20 @@
 
 import Foundation
 
-public enum LocationError: Error, Equatable {
+public enum LocationError: Error, Equatable, CustomStringConvertible {
 
-    case permissionRequired(GeoPermit)
+    public var description: String {
+        switch self {
+        case .permissionRequired(let status):
+            return "permission required if status: \(status)"
+        case .receivedEmptyLocationData:
+            return "recieved empty location data"
+        case .failedRequest(_, let domain, let code):
+            return "domain: \(domain), code: \(code)"
+        }
+    }
+
+    case permissionRequired(GeoStatus)
     case receivedEmptyLocationData
     case failedRequest(String, String, Int) // localizedDescription, domain, code.
 

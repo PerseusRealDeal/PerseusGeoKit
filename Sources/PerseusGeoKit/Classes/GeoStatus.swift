@@ -1,5 +1,5 @@
 //
-//  GeoPermit.swift
+//  GeoStatus.swift
 //  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -13,7 +13,7 @@
 import Foundation
 import CoreLocation
 
-public enum GeoPermit: CustomStringConvertible {
+public enum GeoStatus: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -32,28 +32,28 @@ public enum GeoPermit: CustomStringConvertible {
         }
     }
 
-    // Location service is neither restricted nor the app denided.
+    // Not authorized. Neither restricted nor the app denided.
     case notDetermined
 
     // Go to Settings > General > Restrictions.
-    // In case if location services turned off and the app restricted.
+    // Location Services turned off and the app restricted.
     case deniedForAllAndRestricted
-    // In case if location services turned on and the app restricted.
+    // Location Services turned on and the app restricted.
     case restricted
 
     // Go to Settings > Privacy.
-    // In case if location services turned off but the app not restricted.
+    // Location Services turned off but the app not restricted.
     case deniedForAllApps
 
     // Go to Settings > The App.
-    // In case if location services turned on but the app not restricted.
+    // Location Services turned on but the app not restricted.
     case deniedForTheApp
 
-    // Either authorizedAlways or authorizedWhenInUse.
+    // Authorized. Either authorizedAlways or authorizedWhenInUse.
     case allowed
 }
 
-public func getPermit(serviceEnabled: Bool, status: CLAuthorizationStatus) -> GeoPermit {
+public func getGeoStatus(serviceEnabled: Bool, status: CLAuthorizationStatus) -> GeoStatus {
 
     // There is no status .notDetermined with serviceEnabled false.
     if status == .notDetermined { // So, it means that serviceEnabled is true for now.

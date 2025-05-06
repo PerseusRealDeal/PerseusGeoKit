@@ -2,7 +2,7 @@
 //  PGKSupportingStar.swift
 //  Version: 1.0.0
 //
-//  PerseysGeoKit Support Code
+//  PerseusGeoKit Support Code
 //
 //
 //  For iOS and macOS only. Use Stars to adopt for the specifics you need.
