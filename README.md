@@ -2,7 +2,13 @@
 
 [`iOS approbation app`](https://github.com/perseusrealdeal/TheOneRing) [`macOS approbation app`](https://github.com/perseusrealdeal/Arkenstone)
 
-> A wrapper in Swift for Location Services API. Hereinafter PGK stands for Perseus Geo Kit.<br/>
+> Simple Geo API wrapper in Swift for Location Services API. Hereinafter `PGK` stands for `P`erseus `G`eo `K`it.
+
+> - To be informed about current Location Services Access Status.<br/>
+> - To request permission for Location Services.<br/>
+> - To redirect to system settings app for changing Location Services Access Status.<br/>
+> - To get current location and location updates.
+
 > `PGK` is a single author and personale solution developed in `person-to-person` relationship paradigm.
 
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/main.yml)
@@ -33,7 +39,26 @@
 
 ## In brief > Idea to use, the Why
 
-> TODO: - In brief
+> HAVE A DEAL WITH WHERE YOU ARE.</br>
+
+> - TODO: screenshots
+
+<table>
+  <tr>
+    <th>iOS</th>
+    <th>macOS</th>
+  </tr>
+  <tr>
+    <td>
+        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+    </td>
+    <td>
+        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+    </td>
+  </tr>
+</table>
 
 ## Build system requirements
 
@@ -57,11 +82,101 @@
 
 > Swift Package Manager: `https://github.com/perseusrealdeal/PerseusGeoKit`
 
-> TODO: - Installation steps
+`Step 2:` Declare a reference to GeoAgent and register for Geo events
+
+```swift
+
+import Foundation
+
+import ConsolePerseusLogger
+import PerseusGeoKit
+
+class GeoCoordinator: NSObject {
+
+    // MARK: - Properties
+
+    public let locationDealer = GeoAgent.shared
+
+    // MARK: - Singletone
+
+    public static let shared: GeoCoordinator = { return GeoCoordinator() }()
+
+    private override init() {
+
+        log.message("[\(GeoCoordinator.self)].\(#function)", .info)
+
+        super.init()
+
+        GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
+        GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
+        GeoAgent.register(self, #selector(currentLocationHandler(_:)), .currentLocation)
+        GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
+    }
+}
+
+// MARK: - Event handlers
+
+extension GeoCoordinator {
+
+    @objc private func locationErrorHandler(_ notification: Notification) {
+        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
+    }
+
+    @objc private func locationStatusHandler(_ notification: Notification) {
+        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
+    }
+
+    @objc private func currentLocationHandler(_ notification: Notification) {
+        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
+    }
+
+    @objc private func locationUpdatesHandler(_ notification: Notification) {
+        log.message("[\(type(of: self))].\(#function) [EVENT]", .info)
+    }
+}
+
+```
 
 # Usage
 
-> TODO: - Usage tips
+## Get Current Location Services Status
+
+```swift
+
+```
+
+## Request permission for Location Services
+
+```swift
+
+```
+
+## Redirect to system settings app
+
+```swift
+
+```
+
+## Request Current Location
+
+> [!IMPORTANT]
+> Method **GeoAgent.requestCurrentLocation()** will stop location updates if started already. You will need to restart location updates.
+
+```swift
+
+```
+
+## Request Location Updates
+
+```swift
+
+```
+
+## Process Geo Events
+
+```swift
+
+```
 
 # Points taken into account
 

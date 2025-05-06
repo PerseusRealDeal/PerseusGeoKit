@@ -168,7 +168,7 @@ public class GeoAgent: NSObject {
 
     }
 
-    public func getCurrent() throws {
+    public func requestCurrentLocation() throws {
 
         log.message("[\(type(of: self))].\(#function)")
 
@@ -201,7 +201,7 @@ public class GeoAgent: NSObject {
 
     }
 
-    public func startUpdating() throws {
+    public func requestLocationUpdates() throws {
 
         log.message("[\(type(of: self))].\(#function)")
 
@@ -223,7 +223,7 @@ public class GeoAgent: NSObject {
         locationManager.startUpdatingLocation()
     }
 
-    public func stopUpdating() {
+    public func stopUpdatingLocation() {
 
         log.message("[\(type(of: self))].\(#function)")
 
