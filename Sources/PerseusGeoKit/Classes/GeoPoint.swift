@@ -22,13 +22,15 @@ extension CLLocation {
 public struct GeoPoint: CustomStringConvertible, Equatable {
 
     public var description: String {
-
+        /*
         let locationTwo = "[\(latitude.cut(.two)), \(longitude.cut(.two))]"
 
         let latitudeFour = "latitude = \(latitude.cut(.four))"
         let longitudeFour = "longitude = \(longitude.cut(.four))"
 
-        return locationTwo + ": " + latitudeFour + ", " + longitudeFour
+        return locationTwo + ": \(latitudeFour), \(longitudeFour)"
+        */
+        return "\(latitude.cut(.four)), \(longitude.cut(.four))"
     }
 
     // MARK: - Location Data, As Is

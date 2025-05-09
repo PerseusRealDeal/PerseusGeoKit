@@ -7,7 +7,7 @@
 //
 //  For iOS and macOS only. Use Stars to adopt for the specifics you need.
 //
-// TODO: - //  DESC: ...
+//  DESC: HAVE A DEAL WITH WHERE YOU ARE.
 //
 //  Created by Mikhail Zhigulin in 7531.
 //

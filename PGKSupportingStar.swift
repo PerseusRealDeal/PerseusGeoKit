@@ -177,7 +177,12 @@ class GeoCoordinator: NSObject {
 
     // MARK: - Properties
 
-    public var nc: NotificationCenter?
+    public var notifier: NotificationCenter?
+
+    public var locationRecieved: ((GeoPoint) -> Void)?
+    public var locationUpdatesRecieved: (([GeoPoint]) -> Void)?
+
+    public var onStatusAllowed: (() -> Void)?
 
     // MARK: - Singletone
 
@@ -198,10 +203,10 @@ class GeoCoordinator: NSObject {
     // MARK: - Contract
 
     public static func register(stakeholder: Any, selector: Selector) {
-        shared.nc?.addObserver(stakeholder,
-                               selector: selector,
-                               name: .ReloadGeoDataNotification,
-                               object: nil)
+        shared.notifier?.addObserver(stakeholder,
+                                     selector: selector,
+                                     name: .ReloadGeoDataNotification,
+                                     object: nil)
     }
 
     public static func reloadGeoComponents() {
@@ -213,7 +218,7 @@ class GeoCoordinator: NSObject {
 
     private func updateGeoComponents() {
         log.message("[\(type(of: self))].\(#function)")
-        self.nc?.post(name: .ReloadGeoDataNotification, object: nil)
+        self.notifier?.post(name: .ReloadGeoDataNotification, object: nil)
     }
 
     // MARK: - Event Handlers
@@ -255,7 +260,7 @@ class GeoCoordinator: NSObject {
         updateGeoComponents()
 
         if status == .allowed {
-            LocationDealer.requestCurrent()
+            onStatusAllowed?()
         }
     }
 
@@ -280,7 +285,7 @@ class GeoCoordinator: NSObject {
         }
 
         if let current = location {
-            AppGlobals.currentLocation = current
+            locationRecieved?(current)
         } else if !errtext.isEmpty {
             log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
         }
@@ -307,8 +312,8 @@ class GeoCoordinator: NSObject {
             errtext = "\(error)"
         }
 
-        if updates != nil {
-            // Location updates are here!
+        if let updates = updates {
+            locationUpdatesRecieved?(updates)
         } else if !errtext.isEmpty {
             log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
         }
