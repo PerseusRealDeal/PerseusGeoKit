@@ -31,7 +31,7 @@
 
 > [`PGKSupportingStar.swift`](/PGKSupportingStar.swift) is a peace of code a widly helpful in accord with PGK.
 
-> `PGKSupportingStar.swift` goes as an external part of `PGK`.
+> PGKSupportingStar.swift goes as an external part of PGK.
 
 ## Approbation Matrix
 
@@ -43,20 +43,29 @@
 
 <table>
   <tr>
-    <th>iOS</th>
-    <th>macOS</th>
+    <th>Approbation App: iOS</th>
+    <th>Approbation App: macOS</th>
   </tr>
   <tr>
     <td>
-        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+        <img src="https://github.com/user-attachments/assets/2d7ba9fc-aa1b-468e-a9b7-1f7570521a0e" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        The "current location" dialog</br>
+        <img src="https://github.com/user-attachments/assets/bbd9bff4-2754-4c1a-9c13-8aef489348e7" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        The "redirect" dialog</br>
+        <img src="https://github.com/user-attachments/assets/6435531c-5de1-441e-b3eb-482da2e981ff" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
     </td>
     <td>
-        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        <img src="?" width="200" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+        The "current location" dialog</br>
+        <img src="https://github.com/user-attachments/assets/689f08c2-421d-4de1-9971-aa5f129a34ef" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        <img src="https://github.com/user-attachments/assets/dffcba0b-3bc3-40ff-b203-e4ef0c8c705c" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        The "redirect" dialog</br>
+        <img src="https://github.com/user-attachments/assets/31b44ad1-75e3-460e-95b7-14526a4ffd15" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
     </td>
   </tr>
 </table>
+
+> [!IMPORTANT]
+> Screenshots above had been taken from Approbation Apps [`iOS`](https://github.com/perseusrealdeal/TheOneRing) and [`macOS`](https://github.com/perseusrealdeal/Arkenstone).
 
 ## Build system requirements
 
@@ -178,9 +187,7 @@ GeoAgent.register(self, #selector(currentLocationHandler(_:)), .currentLocation)
 
 ```swift
 
-let PREFERED_ACCURACY = GeoAccuracy.threeKilometers
-
-GeoAgent.currentAccuracy = PREFERED_ACCURACY
+GeoAgent.currentAccuracy = .threeKilometers
 
 ```
 
@@ -219,9 +226,7 @@ GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
 
 ```swift
 
-let PREFERED_ACCURACY = GeoAccuracy.threeKilometers
-
-GeoAgent.currentAccuracy = PREFERED_ACCURACY
+GeoAgent.currentAccuracy = .threeKilometers
 
 ```
 
