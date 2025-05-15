@@ -73,7 +73,7 @@
 
 ## First-party software
 
-- [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.1.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.1.0)
+- [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.2.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.2.0)
 
 ## Third-party software
 
