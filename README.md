@@ -52,14 +52,14 @@
         The "current location" dialog</br>
         <img src="https://github.com/user-attachments/assets/bbd9bff4-2754-4c1a-9c13-8aef489348e7" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
         The "redirect" dialog</br>
-        <img src="https://github.com/user-attachments/assets/6435531c-5de1-441e-b3eb-482da2e981ff" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+        <img src="https://github.com/user-attachments/assets/6d805297-84be-49fe-8a34-ac8b29f8ee21" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
     </td>
     <td>
         The "current location" dialog</br>
-        <img src="https://github.com/user-attachments/assets/689f08c2-421d-4de1-9971-aa5f129a34ef" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        <img src="https://github.com/user-attachments/assets/dffcba0b-3bc3-40ff-b203-e4ef0c8c705c" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        <img src="https://github.com/user-attachments/assets/6b5f2968-4b17-4b5b-b384-03cfa9041d1f" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
         The "redirect" dialog</br>
-        <img src="https://github.com/user-attachments/assets/31b44ad1-75e3-460e-95b7-14526a4ffd15" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+        <img src="https://github.com/user-attachments/assets/aae9de1e-1108-4dd1-9217-4d33137aff2c" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        <img src="https://github.com/user-attachments/assets/cc163945-3b02-4177-9b35-8bfa4568ecc0" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
     </td>
   </tr>
 </table>
