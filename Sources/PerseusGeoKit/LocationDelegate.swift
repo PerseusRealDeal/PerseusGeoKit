@@ -24,7 +24,18 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         log.message("[\(type(of: self))].\(#function)")
 
+#if targetEnvironment(simulator)
+
+        let notice = "order: \(order), status: \(geoStatus)"
+        log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+
+        return
+
+#else
+
         locationManager.stopUpdatingLocation()
+
+#endif
 
         // ISSUE: macOS (new releases) generates an error on startUpdatingLocation() if
         // an end-user makes no decision about permission immediately, 2 or 3 sec.

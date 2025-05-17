@@ -26,7 +26,7 @@
 | Device          | Simulator | OS Version | Result  | Details |
 | --------------- | :-------: | ---------- | :-----: | ------- |
 | iPad Air        | no        | 12.5.7     | ok      | - |
-| iPhone SE (3rd) | yes       | 16.2       | ??      | - |
+| iPhone SE (3rd) | yes       | 16.2       | ok      | Simulator generates error on every event of currentLocation/start but value received |
 
 ## A3 environment
 
