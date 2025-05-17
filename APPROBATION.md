@@ -25,7 +25,7 @@
 
 | Device          | Simulator | OS Version | Result  | Details |
 | --------------- | :-------: | ---------- | :-----: | ------- |
-| iPad Air        | no        | 12.5.7     | ??      | - |
+| iPad Air        | no        | 12.5.7     | ok      | - |
 | iPhone SE (3rd) | yes       | 16.2       | ??      | - |
 
 ## A3 environment
