@@ -47,6 +47,8 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .permission, geoStatus == .notDetermined {
 
+            locationManager.stopUpdatingLocation()
+
             // It means that an end-user took more than 2 or 3 sec to make decision.
             // Does nothing, just a note.
 
@@ -60,7 +62,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
 #endif
 
-        order = .none
+        // order = .none
 
         let nsError = error as NSError
         let result: LocationError = .failedRequest(error.localizedDescription,

@@ -14,7 +14,7 @@
 | Mojave      | 10.14   | ??      | - |
 | Catalina    | 10.15   | ??      | - |
 | Big Sur     | 11.7    | ??      | - |
-| Monterey    | 12.7    | ??      | - |
+| Monterey    | 12.7    | ok      | - |
 | Ventura     | 13.7    | ??      | - |
 | Sonoma      | 14.7    | ??      | - |
 | Sequoia     | 15.1    | ??      | - |
