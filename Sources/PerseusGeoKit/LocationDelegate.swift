@@ -33,7 +33,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
 #else
 
-        locationManager.stopUpdatingLocation()
+        // locationManager.stopUpdatingLocation()
 
 #endif
 
