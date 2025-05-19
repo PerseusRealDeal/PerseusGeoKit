@@ -10,9 +10,9 @@
 
 | macOS       | Version | Result  | Details |
 | ----------- | ------- | :-----: | ------- |
-| High Sierra | 10.13   | ??      | - |
-| Mojave      | 10.14   | ??      | - |
-| Catalina    | 10.15   | ??      | - |
+| High Sierra | 10.13   | ok      | Approbated accept movement simulation. |
+| Mojave      | 10.14   | ok      | - |
+| Catalina    | 10.15   | ok      | - |
 | Big Sur     | 11.7    | ??      | - |
 | Monterey    | 12.7    | ok      | - |
 | Ventura     | 13.7    | ??      | - |
