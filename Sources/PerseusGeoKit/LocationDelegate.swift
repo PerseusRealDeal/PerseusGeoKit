@@ -48,6 +48,7 @@ extension GeoAgent: CLLocationManagerDelegate {
         if order == .permission, geoStatus == .notDetermined {
 
             locationManager.stopUpdatingLocation()
+            order = .none
 
             // It means that an end-user took more than 2 or 3 sec to make decision.
             // Does nothing, just a note.
@@ -78,9 +79,18 @@ extension GeoAgent: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function) status: \(status)")
 
-        notificationCenter.post(name: GeoEvent.locationStatus.name, object: status)
+        var auth = status
+
+        if #available(macOS 13.7, *) {
+            if status == .notDetermined {
+                reInitLocationManager()
+                auth = type(of: locationManager).authorizationStatus()
+            }
+        }
+
+        notificationCenter.post(name: GeoEvent.locationStatus.name, object: auth)
     }
 
     // MARK: - To catch current location and updates
@@ -107,6 +117,12 @@ extension GeoAgent: CLLocationManagerDelegate {
             locationManager.stopUpdatingLocation()
             order = .none
             return
+        }
+
+        if #available(macOS 13.7, *) {
+            if type(of: locationManager).authorizationStatus() == .notDetermined {
+                reInitLocationManager()
+            }
         }
 
         if order == .currentLocation {

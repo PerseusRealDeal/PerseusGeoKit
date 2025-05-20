@@ -72,7 +72,7 @@ public class GeoAgent: NSObject {
 
     // MARK: - Internals
 
-    internal let locationManager: CLLocationManager
+    internal var locationManager: CLLocationManager
     internal let notificationCenter: NotificationCenter
 
     internal var geoStatus: GeoStatus {
@@ -182,6 +182,22 @@ public class GeoAgent: NSObject {
 #elseif os(macOS)
 
         order = .permission
+
+        if #available(macOS 10.15, *) {
+            if #available(macOS 13.7, *) {
+                reInitLocationManager()
+            }
+
+            switch authorization {
+            case .whenInUse:
+                locationManager.requestWhenInUseAuthorization()
+            case .always:
+                locationManager.requestAlwaysAuthorization()
+            }
+
+            return
+        }
+
         locationManager.startUpdatingLocation()
 
 #endif
@@ -249,6 +265,18 @@ public class GeoAgent: NSObject {
 
         locationManager.stopUpdatingLocation()
         order = .none
+    }
+
+    // MARK: - Hot Fixes
+
+    internal func reInitLocationManager() {
+
+        let desiredAccuracy = locationManager.desiredAccuracy
+
+        locationManager = CLLocationManager()
+
+        locationManager.desiredAccuracy = desiredAccuracy
+        locationManager.delegate = self
     }
 }
 
