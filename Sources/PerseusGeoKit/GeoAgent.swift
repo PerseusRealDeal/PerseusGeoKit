@@ -114,6 +114,15 @@ public class GeoAgent: NSObject {
 
     // MARK: - Contract
 
+    public static func aboutLocationServices() -> (enabled: Bool,
+                                                   auth: CLAuthorizationStatus) {
+
+        let enabled = type(of: sharedInstance.locationManager).locationServicesEnabled()
+        let authorization = type(of: sharedInstance.locationManager).authorizationStatus()
+
+        return (enabled, authorization)
+    }
+
     public static func register(_ stakeholder: Any, _ selector: Selector, _ event: GeoEvent) {
 
         let detail = "for \(type(of: stakeholder)) > \(event)"

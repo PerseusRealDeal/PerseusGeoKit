@@ -52,7 +52,8 @@ extension GeoAgent: CLLocationManagerDelegate {
             // It means that an end-user took more than 2 or 3 sec to make decision.
             // Does nothing, just a note.
 
-            // TODO: - [ISSUE] What macOS systems generate a such error? List of macOS systems.
+            // List of macOS systems:
+            // Starting from macOS Ventura than Sonoma, Sequoia systems.
 
             let notice = "order: .permission, status: .notDetermined"
             log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
