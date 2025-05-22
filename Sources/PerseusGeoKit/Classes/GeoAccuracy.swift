@@ -10,7 +10,6 @@
 //  All rights reserved.
 //
 
-import Foundation
 import CoreLocation
 
 public struct GeoAccuracy: RawRepresentable, Equatable {

@@ -10,8 +10,6 @@
 //  All rights reserved.
 //
 
-import Foundation
-
 public enum LocationError: Error, Equatable, CustomStringConvertible {
 
     public var description: String {

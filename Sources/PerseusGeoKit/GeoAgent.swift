@@ -13,13 +13,13 @@
 // swiftlint:disable file_length
 //
 
+import CoreLocation
+
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(Cocoa)
 import Cocoa
 #endif
-
-import CoreLocation
 
 // MARK: - Constants
 
@@ -30,7 +30,7 @@ public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent for the App
                                                    buttonCancel: "Cancel",
                                                    buttonFunction: "Open")
 
-// MARK: - Geo Agent
+// MARK: - GeoAgent
 
 public class GeoAgent: NSObject {
 

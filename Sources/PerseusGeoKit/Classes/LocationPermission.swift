@@ -10,8 +10,6 @@
 //  All rights reserved.
 //
 
-import Foundation
-
 public enum LocationPermissionRequest: CustomStringConvertible {
 
     public var description: String {

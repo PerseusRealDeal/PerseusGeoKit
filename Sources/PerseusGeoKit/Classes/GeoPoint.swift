@@ -10,7 +10,6 @@
 //  All rights reserved.
 //
 
-import Foundation
 import CoreLocation
 
 extension CLLocation {

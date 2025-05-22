@@ -13,7 +13,7 @@
 
 import CoreLocation
 
-// MARK: - Location Delegate
+// MARK: - CLLocationManagerDelegate
 
 extension GeoAgent: CLLocationManagerDelegate {
 
