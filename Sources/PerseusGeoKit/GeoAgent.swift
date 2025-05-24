@@ -181,13 +181,9 @@ public class GeoAgent: NSObject {
 
 #elseif os(macOS)
 
-        order = .permission
+        // if statusOpenCoreFlag { reInitLocationManager() }
 
         if #available(macOS 10.15, *) {
-            if #available(macOS 13.7, *) {
-                reInitLocationManager()
-            }
-
             switch authorization {
             case .whenInUse:
                 locationManager.requestWhenInUseAuthorization()
@@ -198,6 +194,7 @@ public class GeoAgent: NSObject {
             return
         }
 
+        order = .permission
         locationManager.startUpdatingLocation()
 
 #endif
@@ -269,7 +266,11 @@ public class GeoAgent: NSObject {
 
     // MARK: - Hot Fixes
 
+    internal var statusOpenCoreFlag = false
+
     internal func reInitLocationManager() {
+
+        log.message("[\(type(of: self))].\(#function)")
 
         let desiredAccuracy = locationManager.desiredAccuracy
 
