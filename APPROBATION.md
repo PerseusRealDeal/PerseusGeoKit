@@ -16,8 +16,8 @@
 | Big Sur     | 11.7    | ok      | - |
 | Monterey    | 12.7    | ok      | - |
 | Ventura     | 13.7    | ok      | - |
-| Sonoma      | 14.7    | ??      | Unexpectedly returns LS status .notDetermed if turn off LS |
-| Sequoia     | 15.1    | ??      | Unexpectedly returns LS status .notDetermed if turn off LS |
+| Sonoma      | 14.7    | ok      | Returns LS status .notDetermed if turn LS off, OpenCore usage case. |
+| Sequoia     | 15.1    | ok      | Returns LS status .notDetermed if turn LS off, OpenCore usage case. |
 
 ## iOS approbation result
 

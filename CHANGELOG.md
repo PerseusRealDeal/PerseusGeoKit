@@ -30,6 +30,10 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
 - PerseusLogger to [CPL v1.2.0](https://github.com/perseusrealdeal/ConsolePerseusLogger).
 
+### Corrected
+
+- OpenCore Usage Case: macOS returns LS status .notDetermed if turn LS off, reinit location manager.
+
 ## [0.1.0] - [2023-07-24], Developer Release
 
 - Minimum build requirements: macOS 10.9+, iOS 9.3+, and Xcode 10.1+.

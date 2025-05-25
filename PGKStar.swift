@@ -373,17 +373,6 @@ extension GeoAgent: CLLocationManagerDelegate {
                                                    nsError.domain,
                                                    nsError.code)
 
-        if nsError.domain == kCLErrorDomain, nsError.code == 1 {
-            if GeoAgent.aboutLocationServices().auth == .notDetermined {
-                // HOTFIX: OpenCore Location Services Status
-                let notice = "domain: kCLErrorDomain, code: 1, status: .notDetermined"
-                log.message("[\(type(of: self))].\(#function) \(notice)", .error)
-                reInitLocationManager()
-
-                return
-            }
-        }
-
         // ISSUE: macOS (new releases) generates an error on startUpdatingLocation() if
         // an end-user makes no decision about permission immediately, 2 or 3 sec.
         // FIXED: In case if an end-user tries to give a permission not immediately,
@@ -394,17 +383,28 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .permission, geoStatus == .notDetermined {
 
+            // HOTFIX: End-user took more than 2 or 3 sec to make decision.
+
             locationManager.stopUpdatingLocation()
             order = .none
 
-            // It means that an end-user took more than 2 or 3 sec to make decision.
-            // Does nothing, just a note.
-
-            // List of macOS systems:
+            // List of macOS systems that generate error if start in .notDetermined:
             // Starting from macOS Ventura than Sonoma, Sequoia systems.
 
             let notice = "order: .permission, status: .notDetermined"
             log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
+
+            return
+        } else if nsError.domain == kCLErrorDomain, nsError.code == 1,
+                  type(of: locationManager).authorizationStatus() == .notDetermined {
+
+            // HOTFIX: OpenCore Location Services Status.
+            // Reinit location manager.
+
+            let notice = "domain: kCLErrorDomain, code: 1, status: .notDetermined"
+            log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+
+            reInitLocationManager()
 
             return
         }
