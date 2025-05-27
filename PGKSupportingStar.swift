@@ -70,7 +70,7 @@ var REDIRECT_ALERT_TITLES = ActionAlertText(
 
 extension ActionAlertText {
     var titleWithStatus: String {
-        return "Location Services: \(GeoAgent.currentStatus)."
+        return "Location Services: \(GeoAgent.currentStatus.description.capitalized)."
     }
 }
 

@@ -4,7 +4,7 @@
 
 > Simple Geo API wrapper in Swift for Location Services API. Hereinafter `PGK` stands for `P`erseus `G`eo `K`it.
 
-> - To be informed about current Location Services Access Status.<br/>
+> - To be awared about current Location Services Access Status.<br/>
 > - To request permission for Location Services.<br/>
 > - To redirect to system settings app for changing Location Services Access Status.<br/>
 > - To get current location and location updates.
@@ -43,23 +43,25 @@
 
 <table>
   <tr>
-    <th>Approbation App: iOS</th>
-    <th>Approbation App: macOS</th>
+    <th>Approbation App: iOS 16.2</th>
+    <th>Approbation App: macOS Monterey</th>
   </tr>
   <tr>
     <td>
-        <img src="https://github.com/user-attachments/assets/2d7ba9fc-aa1b-468e-a9b7-1f7570521a0e" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        The "current location" dialog</br>
-        <img src="https://github.com/user-attachments/assets/bbd9bff4-2754-4c1a-9c13-8aef489348e7" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        The "redirect" dialog</br>
-        <img src="https://github.com/user-attachments/assets/41c6fdc8-ca42-415f-a353-ee0dad0b665b" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+        <img src="https://github.com/user-attachments/assets/1df511f6-40af-4679-a9e0-5d203f7ad740" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        The Current Location Dialog</br>
+        <img src="https://github.com/user-attachments/assets/42d00202-1626-44c5-9e3d-a6ffcd10ecf3" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        The Redirect dDialog</br>
+        <img src="https://github.com/user-attachments/assets/20afa708-7158-47e2-887e-af322b3592c8" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        System Services</br>
+        <img src="https://github.com/user-attachments/assets/9f344e74-8d47-4986-b2a8-700456c7937c" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
     </td>
     <td>
-        The "current location" dialog</br>
-        <img src="https://github.com/user-attachments/assets/6b5f2968-4b17-4b5b-b384-03cfa9041d1f" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        The "redirect" dialog</br>
-        <img src="https://github.com/user-attachments/assets/961b9797-df34-42c9-a2f8-311b65e0bf47" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        <img src="https://github.com/user-attachments/assets/cc163945-3b02-4177-9b35-8bfa4568ecc0" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
+        <img src="https://github.com/user-attachments/assets/80834192-5d26-4d04-8aeb-f2fb3438232b" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        The Current Location Dialog</br>
+        <img src="https://github.com/user-attachments/assets/707bc81c-7f15-4e85-870b-0ada69785585" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
+        System Services and The Redirect Dialog</br>
+        <img src="https://github.com/user-attachments/assets/0a85f2ef-4cd0-4d90-8d8c-555f2a7ec1c0" width="450" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
     </td>
   </tr>
 </table>
@@ -107,23 +109,34 @@ Location Services Status is calculated as a unified value for both iOS and macOS
 ```swift
 
 let status = GeoAgent.currentStatus
+let statusInDetail = GeoAgent.aboutLocationServices().inDetail
 
 ```
 
-| Status                   | Description                                            |
-|:-------------------------|:-------------------------------------------------------|
-|.notDetermined            |Not Authorized. Neither restricted nor the app denided. |
-|.deniedForAllAndRestricted|Location Services turned off and the app restricted.    |
-|.restricted               |Location Services turned on and the app restricted.     |
-|.deniedForAllApps         |Location Services turned off but the app not restricted.|
-|.deniedForTheApp          |Location Services turned on but the app not restricted. |
-|.allowed                  |Authorized.                                             |
+| Status        | Status in Detail        | Description                                            |
+|:--------------|:-------------------------|:-------------------------------------------------------|
+|.notDetermined |.notDetermined            |Not Authorized. Neither restricted nor the app denided. |
+|.notAllowed    |.deniedForAllAndRestricted|Location Services turned off and the app restricted.    |
+|.notAllowed    |.restricted               |Location Services turned on and the app restricted.     |
+|.notAllowed    |.deniedForAllApps         |Location Services turned off but the app not restricted.|
+|.notAllowed    |.deniedForTheApp          |Location Services turned on but the app not restricted. |
+|.allowed       |.allowed                  |Authorized.                                             |
 
-> Register for Location Services Status changed event.
+> [!IMPORTANT]
+> To be awared of Location Services Status changes, register:
 
 ```swift
 
 GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
+
+```
+
+> [!IMPORTANT]
+> To know whether the app had already been granted for Location Services:
+
+```swift
+
+let isAuthorized = GeoAgent.isAuthorized
 
 ```
 

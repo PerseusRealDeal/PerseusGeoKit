@@ -10,6 +10,8 @@
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
 //
+// swiftlint:disable file_length
+//
 
 import CoreLocation
 

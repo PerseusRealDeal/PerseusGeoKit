@@ -59,7 +59,9 @@ public class GeoAgent: NSObject {
 
     // MARK: - Properties
 
-    public static var currentStatus: GeoStatus { return sharedInstance.geoStatus }
+    public static var currentStatus: GeoStatusSimplified {
+        return sharedInstance.geoStatus.short
+    }
 
     public static var currentAccuracy: GeoAccuracy {
         get {
@@ -68,6 +70,10 @@ public class GeoAgent: NSObject {
         set {
             accuracy = newValue.rawValue
         }
+    }
+
+    public static var isAuthorized: Bool {
+        return sharedInstance.isAuthorizedForLocationServices
     }
 
     // MARK: - Internals
@@ -89,6 +95,12 @@ public class GeoAgent: NSObject {
         }
         set {
             sharedInstance.locationManager.desiredAccuracy = newValue
+        }
+    }
+
+    internal var isAuthorizedForLocationServices = false {
+        didSet {
+            if oldValue { isAuthorizedForLocationServices = oldValue }
         }
     }
 
@@ -115,12 +127,15 @@ public class GeoAgent: NSObject {
     // MARK: - Contract
 
     public static func aboutLocationServices() -> (enabled: Bool,
-                                                   auth: CLAuthorizationStatus) {
+                                                   auth: CLAuthorizationStatus,
+                                                   inDetail: GeoStatus) {
 
         let enabled = type(of: sharedInstance.locationManager).locationServicesEnabled()
         let authorization = type(of: sharedInstance.locationManager).authorizationStatus()
 
-        return (enabled, authorization)
+        let status = getGeoStatus(serviceEnabled: enabled, status: authorization)
+
+        return (enabled, authorization, status)
     }
 
     public static func register(_ stakeholder: Any, _ selector: Selector, _ event: GeoEvent) {
@@ -163,7 +178,7 @@ public class GeoAgent: NSObject {
 
         guard status == .notDetermined, isAuthorizedForLocationServices == false else {
 #if os(macOS)
-            if isAuthorizedForLocationServices {
+            if status == .notDetermined, isAuthorizedForLocationServices {
 
                 // HOTFIX: Location Services Status in OpenCore usage case.
                 // Reinit location manager.
@@ -273,17 +288,7 @@ public class GeoAgent: NSObject {
         order = .none
     }
 
-    // MARK: - Hot Fixes
-
-    public var isAuthorized: Bool {
-        return isAuthorizedForLocationServices
-    }
-
-    internal var isAuthorizedForLocationServices = false {
-        didSet {
-            if oldValue { isAuthorizedForLocationServices = oldValue }
-        }
-    }
+    // MARK: - To serve hotfixes
 
     internal func reInitLocationManager() {
 

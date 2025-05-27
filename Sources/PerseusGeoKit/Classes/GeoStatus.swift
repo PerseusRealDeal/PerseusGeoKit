@@ -50,6 +50,23 @@ public enum GeoStatus: CustomStringConvertible {
 
     // Authorized. Either authorizedAlways or authorizedWhenInUse.
     case allowed
+
+    public var short: GeoStatusSimplified {
+        switch self {
+        case .notDetermined:
+            return .notDetermined
+        case .deniedForAllAndRestricted:
+            return .notAllowed
+        case .restricted:
+            return .notAllowed
+        case .deniedForAllApps:
+            return .notAllowed
+        case .deniedForTheApp:
+            return .notAllowed
+        case .allowed:
+            return .allowed
+        }
+    }
 }
 
 public func getGeoStatus(serviceEnabled: Bool, status: CLAuthorizationStatus) -> GeoStatus {
@@ -68,4 +85,22 @@ public func getGeoStatus(serviceEnabled: Bool, status: CLAuthorizationStatus) ->
     }
 
     return .allowed
+}
+
+public enum GeoStatusSimplified: CustomStringConvertible {
+
+    public var description: String {
+        switch self {
+        case .notDetermined:
+            return "not determined"
+        case .notAllowed:
+            return "not allowed"
+        case .allowed:
+            return "allowed"
+        }
+    }
+
+    case notDetermined
+    case notAllowed
+    case allowed
 }
