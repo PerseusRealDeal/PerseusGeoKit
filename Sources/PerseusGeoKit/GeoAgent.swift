@@ -157,14 +157,23 @@ public class GeoAgent: NSObject {
                                   _ actionIfAlreadyDetermined: ((_ statusUsed: GeoStatus)
                                                          -> Void)? = nil) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        var status = geoStatus
 
-        let status = geoStatus
+        log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
-        guard status == .notDetermined else {
+        guard status == .notDetermined, isAuthorizedForLocationServices == false else {
+#if os(macOS)
+            if isAuthorizedForLocationServices {
 
+                // HOTFIX: Location Services Status in OpenCore usage case.
+                // Reinit location manager.
+
+                reInitLocationManager()
+            }
+
+            status = geoStatus
             log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
-
+#endif
             actionIfAlreadyDetermined?(status)
             return
         }
@@ -177,12 +186,12 @@ public class GeoAgent: NSObject {
         case .always:
             locationManager.requestAlwaysAuthorization()
         }
+
         order = .none
+        return
 
 #elseif os(macOS)
-
-        // if statusOpenCoreFlag { reInitLocationManager() }
-
+/*
         if #available(macOS 10.15, *) {
             switch authorization {
             case .whenInUse:
@@ -193,7 +202,7 @@ public class GeoAgent: NSObject {
 
             return
         }
-
+*/
         order = .permission
         locationManager.startUpdatingLocation()
 
@@ -266,11 +275,19 @@ public class GeoAgent: NSObject {
 
     // MARK: - Hot Fixes
 
-    internal var statusOpenCoreFlag = false
+    public var isAuthorized: Bool {
+        return isAuthorizedForLocationServices
+    }
+
+    internal var isAuthorizedForLocationServices = false {
+        didSet {
+            if oldValue { isAuthorizedForLocationServices = oldValue }
+        }
+    }
 
     internal func reInitLocationManager() {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function) [REINIT LOCATION MANAGER]")
 
         let desiredAccuracy = locationManager.desiredAccuracy
 

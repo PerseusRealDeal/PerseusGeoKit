@@ -19,28 +19,27 @@ extension GeoAgent: CLLocationManagerDelegate {
 
     // MARK: - Location Services Error
 
-    public func locationManager(_ manager: CLLocationManager,
-                                didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        let nsError = error as NSError
 
 #if targetEnvironment(simulator)
 
-        let notice = "order: \(order), status: \(geoStatus)"
-        log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+        // CASE 1 NOT REPORTED - Simulator
+
+        let note = "[CASE - SIMULATOR]"
+        let details = "\(nsError.domain), code: \(nsError.code)"
+
+        log.message("[\(type(of: self))].\(#function) \(note) \(details)")
 
         return
 
 #else
 
+        log.message("[\(type(of: self))].\(#function) [ERROR ENTERED]")
         // locationManager.stopUpdatingLocation()
 
 #endif
-
-        let nsError = error as NSError
-        let result: LocationError = .failedRequest(error.localizedDescription,
-                                                   nsError.domain,
-                                                   nsError.code)
 
         // ISSUE: macOS (new releases) generates an error on startUpdatingLocation() if
         // an end-user makes no decision about permission immediately, 2 or 3 sec.
@@ -48,41 +47,81 @@ extension GeoAgent: CLLocationManagerDelegate {
         // restrict error notifiying so that there is no difference
         // in Current Location Diolog behavior in either early or newer macOS releases.
 
+        // List of macOS systems that generates error if start in .notDetermined (2 or 3 sec):
+        // Starting from macOS Monterey than Ventura, Sonoma, Sequoia, ...
+
+        let statusLM = type(of: locationManager).authorizationStatus()
+        let locationError: LocationError = .failedRequest(error.localizedDescription,
+                                                          nsError.domain,
+                                                          nsError.code)
+
 #if os(macOS)
 
-        if order == .permission, geoStatus == .notDetermined {
+        var isErrorCased = false
+        let details = "\(nsError.domain), code: \(nsError.code), statusLM: \(statusLM)"
 
-            // HOTFIX: End-user took more than 2 or 3 sec to make decision.
+        // CASE 2 NOT REPORTED - "The current location dialog"
+
+        if order == .permission, statusLM == .notDetermined {
+            isErrorCased = true
+
+            // HOTFIX: startUpdatingLocation() case with "the location dialog" invoked.
+            // Ignore that end-user takes more than 2 or 3 sec to make decision.
 
             locationManager.stopUpdatingLocation()
             order = .none
 
-            // List of macOS systems that generate error if start in .notDetermined:
-            // Starting from macOS Ventura than Sonoma, Sequoia systems.
-
-            let notice = "order: .permission, status: .notDetermined"
-            log.message("[\(type(of: self))].\(#function) \(notice)", .notice)
+            let note = "[CASE - THE CURRENT LOCATION DIALOG]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
 
             return
-        } else if nsError.domain == kCLErrorDomain, nsError.code == 1,
-                  type(of: locationManager).authorizationStatus() == .notDetermined {
+        }
 
-            // HOTFIX: OpenCore Location Services Status.
+        // CASE 3 NOT REPORTED - OpenCore usage
+
+        if nsError.domain == kCLErrorDomain, nsError.code == 1, statusLM == .notDetermined,
+           isAuthorizedForLocationServices {
+            isErrorCased = true
+
+            // HOTFIX: Location Services Status in OpenCore usage case.
             // Reinit location manager.
 
-            let notice = "domain: kCLErrorDomain, code: 1, status: .notDetermined"
-            log.message("[\(type(of: self))].\(#function) \(notice)", .error)
+            let note = "[CASE - OPENCORE]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
 
             reInitLocationManager()
 
             return
         }
 
+        // CASE 4 REPORTED - Hardware
+
+        if nsError.domain == kCLErrorDomain, nsError.code == 0 {
+            isErrorCased = true
+
+            let note = "[CASE - HARDWARE]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
+        }
+
+        // CASE 5 REPORTED - Authorization
+        // The app permitted to off, denied or Location Services off
+
+        if nsError.domain == kCLErrorDomain, nsError.code == 1 {
+            isErrorCased = true
+
+            let note = "[CASE - AUTHORIZATION]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
+        }
+
+        if isErrorCased == false {
+            let note = "[CASE - NOT KNOWN]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
+        }
+
 #endif
 
         // order = .none
-
-        notificationCenter.post(name: GeoEvent.locationError.name, object: result)
+        notificationCenter.post(name: GeoEvent.locationError.name, object: locationError)
     }
 
     // MARK: - Location Services Location Data
@@ -90,21 +129,34 @@ extension GeoAgent: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
 
-        log.message("[\(type(of: self))].\(#function) status: \(status)")
+        log.message("[\(type(of: self))].\(#function) [STATUS CHANGED ENTERED]")
 
-        let auth = status
+#if os(iOS)
+        if [.authorized, .authorizedAlways, .authorizedWhenInUse].contains(status) {
+            isAuthorizedForLocationServices = true
+        }
+#elseif os(macOS)
+        if [.authorized, .authorizedAlways].contains(status) {
+            isAuthorizedForLocationServices = true
+        }
+#endif
 
-        if status == .notDetermined, statusOpenCoreFlag == false {
-            // HOTFIX: OpenCore Location Services Status
-            statusOpenCoreFlag = true
-            reInitLocationManager()
+        let statusLM = type(of: locationManager).authorizationStatus()
+        let details = "statusLM: \(statusLM)"
 
-            // auth = type(of: locationManager).authorizationStatus()
+        if statusLM == .notDetermined, isAuthorizedForLocationServices {
+
+            // HOTFIX: Location Services Status in OpenCore usage case.
+
+            let note = "[CASE - OPENCORE]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .notice)
 
             return
         }
 
-        notificationCenter.post(name: GeoEvent.locationStatus.name, object: auth)
+        log.message("[\(type(of: self))].\(#function) \(details)", .notice)
+
+        notificationCenter.post(name: GeoEvent.locationStatus.name, object: status)
     }
 
     // MARK: - To catch current location and updates
@@ -112,12 +164,20 @@ extension GeoAgent: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        if type(of: locationManager).authorizationStatus() == .notDetermined {
+
+            // HOTFIX: Location Services Status in OpenCore usage case.
+
+            let note = "[STATUS .notDetermined]"
+            log.message("[\(type(of: self))].\(#function) \(note)", .notice)
+
+            return
+        }
 
         if order == .none {
 
-            let error = "there's no order for locations"
-            log.message("[\(type(of: self))].\(#function) \(error)", .error)
+            let note = "[ORDER .none]"
+            log.message("[\(type(of: self))].\(#function) \(note)", .notice)
 
             locationManager.stopUpdatingLocation()
             return
@@ -125,28 +185,22 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if order == .permission {
 
-            let error = "the order for permission only"
-            log.message("[\(type(of: self))].\(#function) \(error)", .error)
+            let note = "[ORDER .permission]"
+            log.message("[\(type(of: self))].\(#function) \(note)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
             return
         }
 
-        if #available(macOS 13.7, *) {
-            if type(of: locationManager).authorizationStatus() == .notDetermined {
-                reInitLocationManager()
-            }
-        }
-
         if order == .currentLocation {
 
             if locations.isEmpty {
-                let error = "location is empty" // Something went wrong.
-                log.message("[\(type(of: self))].\(#function) \(error)", .error)
+                let note = "[NO LOCATIONS]" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(note)", .notice)
             } else if locations.first != nil {
-                let debug = "location is catched"
-                log.message("[\(type(of: self))].\(#function) \(debug)")
+                let note = "[CATCHED]"
+                log.message("[\(type(of: self))].\(#function) \(note)")
             }
 
             locationManager.stopUpdatingLocation()
@@ -161,11 +215,11 @@ extension GeoAgent: CLLocationManagerDelegate {
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
-                let error = "locations is empty" // Something went wrong.
-                log.message("[\(type(of: self))].\(#function) \(error)", .error)
+                let note = "[NO LOCATIONS]" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(note)", .notice)
             } else if locations.first != nil {
-                let debug = "location updates are catched"
-                log.message("[\(type(of: self))].\(#function) \(debug)")
+                let note = "[CATCHED]"
+                log.message("[\(type(of: self))].\(#function) \(note)")
             }
 
             let result: Result<[GeoPoint], LocationError> = locations.isEmpty ?
