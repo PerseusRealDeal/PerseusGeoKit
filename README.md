@@ -2,12 +2,14 @@
 
 [`iOS approbation app`](https://github.com/perseusrealdeal/TheOneRing) [`macOS approbation app`](https://github.com/perseusrealdeal/Arkenstone)
 
-> Simple Geo API wrapper in Swift for Location Services API. Hereinafter `PGK` stands for `P`erseus `G`eo `K`it.
+> Contains location manager wrapper called as GeoAgent in Swift for Location Services API.<br/>
+> Hereinafter `PGK` stands for `P`erseus `G`eo `K`it.<br/>
 
-> - To be awared about current Location Services Access Status.<br/>
+> - To be awared of Location Services Status.<br/>
 > - To request permission for Location Services.<br/>
-> - To redirect to system settings app for changing Location Services Access Status.<br/>
-> - To get current location and location updates.
+> - To redirect to System Settings (Preferences).<br/>
+> - To get Current Location.<br/>
+> - To request Location Updates.
 
 > `PGK` is a single author and personale solution developed in `person-to-person` relationship paradigm.
 
@@ -51,7 +53,7 @@
         <img src="https://github.com/user-attachments/assets/1df511f6-40af-4679-a9e0-5d203f7ad740" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
         The Current Location Dialog</br>
         <img src="https://github.com/user-attachments/assets/42d00202-1626-44c5-9e3d-a6ffcd10ecf3" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
-        The Redirect dDialog</br>
+        The Redirect Dialog</br>
         <img src="https://github.com/user-attachments/assets/20afa708-7158-47e2-887e-af322b3592c8" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/></br>
         System Services</br>
         <img src="https://github.com/user-attachments/assets/9f344e74-8d47-4986-b2a8-700456c7937c" width="350" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;"/>
@@ -66,8 +68,9 @@
   </tr>
 </table>
 
-> [!IMPORTANT]
-> Screenshots above had been taken from Approbation Apps [`iOS`](https://github.com/perseusrealdeal/TheOneRing) and [`macOS`](https://github.com/perseusrealdeal/Arkenstone).
+> [!NOTE]
+> [`The iOS App`](https://github.com/perseusrealdeal/TheOneRing) scenes taken from the motion picture `The Lord of The Rings` based on the novel by J.R.R. Tolkien.</br>
+> [`The macOS App`](https://github.com/perseusrealdeal/Arkenstone) scenes taken from the motion picture `The Hobbit` based on the novel by J.R.R. Tolkien.
 
 ## Build system requirements
 
@@ -75,7 +78,7 @@
 
 ## First-party software
 
-- [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.2.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.2.0)
+- [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.3.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.3.0)
 
 ## Third-party software
 
@@ -85,24 +88,24 @@
 
 # Installation
 
-`Step 1:` Import PGK either with SPM or standalone
+`Step 1:` Import PGK either with SPM or standalone.
 
 > Standalone: the single source code file [PGKStar.swift](/PGKStar.swift)
 
 > Swift Package Manager: `https://github.com/perseusrealdeal/PerseusGeoKit`
 
-`Step 2:` Change `Info.plist`, add the following items
+`Step 2:` Change `Info.plist`, add the following items:
 
 | iOS                                        | macOS                    |
 |:-------------------------------------------|:-------------------------|
 |NSLocationAlwaysAndWhenInUseUsageDescription|NSLocationUsageDescription|
 |NSLocationWhenInUseUsageDescription         |                          |
 
-For macOS in `App Sandbox` of your project target tap `Location`.
+`Step 3, macOS:` Tap `Location` in `App Sandbox` of your project target.
 
 # Usage
 
-## Get Current Location Services Status
+## Get Location Services Status
 
 Location Services Status is calculated as a unified value for both iOS and macOS.
 
@@ -131,8 +134,16 @@ GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
 
 ```
 
+```swift
+
+@objc private func locationStatusHandler(_ notification: Notification) { 
+    // Location Status Change Handler. 
+}
+
+```
+
 > [!IMPORTANT]
-> To know whether the app had already been granted for Location Services:
+> To know whether the app granted for Location Services:
 
 ```swift
 
@@ -140,37 +151,40 @@ let isAuthorized = GeoAgent.isAuthorized
 
 ```
 
-## Request permission for Location Services
+## Request Permission
 
-It is good to use **GeoAgent.requestPermission()** with an ending action that will be invoked if status had been determined before. 
+Statement **GeoAgent.requestPermission()** goes with the action invoking if status already determined. 
 
-For instance, to offer an end-user open system settings app for changing Location Services status.
+For instance, to open The Redirect Dialog.
 
 ```swift
 
-GeoAgent.shared.requestPermission { status in
+GeoAgent.shared.requestPermission { status in 
+    
+    // The action invoked if status not .notDetermined. 
+    
     if status != .allowed {
-        GeoAgent.showRedirectAlert()
+        GeoAgent.showRedirectAlert() // The Redirect Dialog.
     }
 }
 
 ```
-
-> Also, custom text for the alert.
+> [!NOTE]
+> Custom Text for The Redirect Dialog:
 
 ```swift
 
-let REDIRECT_ALERT_TITLES = ActionAlertText(title: "Geo Agent for the App",
-                                            message: "Open System Settings App?",
-                                            buttonCancel: "Cancel",
-                                            buttonFunction: "Open")
+let REDIRECT_ALERT_TITLES = ActionAlertText(title: "The Redirect Dialog",
+                                            message: "Custom Message",
+                                            buttonCancel: "OK",
+                                            buttonFunction: "System Services")
 
 GeoAgent.showRedirectAlert(REDIRECT_ALERT_TITLES)
 
 ```
 
-> [!IMPORTANT]
-> For iOS **GeoAgent.showRedirectAlert(vc)** goes from parent ViewController.
+> [!NOTE]
+> `iOS:` The Redirect Dialog by **GeoAgent.showRedirectAlert(vc)** requires the parent ViewController.
 
 ```swift
 
@@ -184,8 +198,8 @@ GeoAgent.shared.requestPermission { status in
 
 ## Request Current Location
 
-> [!IMPORTANT]
-> Method **GeoAgent.shared.requestCurrentLocation()** will stop updating location.
+> [!WARNING]
+> Statement **GeoAgent.shared.requestCurrentLocation()** causes stop updating location.
 
 `Step 1:` Register for Geo events both error and current location.
 
@@ -204,7 +218,7 @@ GeoAgent.currentAccuracy = .threeKilometers
 
 ```
 
-`Step 3:` Use **GeoAgent.shared.requestCurrentLocation()**
+`Step 3:` Use **GeoAgent.shared.requestCurrentLocation()**.
 
 ```swift
 
@@ -243,7 +257,7 @@ GeoAgent.currentAccuracy = .threeKilometers
 
 ```
 
-`Step 3:` Use **GeoAgent.shared.requestUpdatingLocation()**
+`Step 3:` Use **GeoAgent.shared.requestUpdatingLocation()**.
 
 ```swift
 
@@ -264,7 +278,7 @@ do {
 ```
 
 > [!IMPORTANT]
-> Use method **GeoAgent.shared.stopUpdatingLocation()** to stop updating location.
+> Statement **GeoAgent.shared.stopUpdatingLocation()** to stop updating location.
 
 ```swift
 
@@ -272,7 +286,7 @@ GeoAgent.shared.stopUpdatingLocation()
 
 ```
 
-## Process Geo Events
+## Geo Events Processing
 
 `Event: Location Error`
 
@@ -285,10 +299,6 @@ GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
 ```
 
 > Handle event.
-
-> [!IMPORTANT]
-> Catches all errors that goes through didFailWithError method delegate.</br>
-> Every error from didFailWithError is wrapped with .failedRequest(_, _, _).
 
 ```swift
 
@@ -304,15 +314,19 @@ GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
     }
 
     switch error {
-    case .failedRequest(_, let domain, let code):
-        let domaincode = "domain: \(domain), code: \(code)"
-        switch code {
-        case 0:
-            errtext = "hardware issue: try to tap Wi-Fi in system tray, \(domaincode)"
-        case 1:
-            errtext = "permission required, \(domaincode)"
-        default:
-            break
+    case .failedRequest(let desc, let domain, let code):
+        if desc.contains("[NOTKNOWN]") {
+            errtext = "\(desc), domain: \(domain), code: \(code)"
+        } else {
+            let domaincode = "domain: \(domain), code: \(code)"
+            switch code {
+            case 0:
+                errtext = "hardware issue: try to tap Wi-Fi in system tray, \(domaincode)"
+            case 1:
+                errtext = "permission required, \(domaincode)"
+            default:
+                break
+            }
         }
     default:
         break

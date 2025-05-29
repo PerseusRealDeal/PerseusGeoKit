@@ -5,21 +5,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
-## [1.0.0] - [2025-05-NN]
+## [1.0.0] - [2025-05-31], PGK
 
 - Minimum build requirements: macOS 10.13+, iOS 11.0+, Xcode 14.2+. If standalone Xcode 10.1+.
 
 ### Changed
 
-- Classes and catologs names.
+- Project structure, classes and catologs names are changed.
 
 ### Added
 
 - Approbation and Changelog.
-- Redirecting to Settings app function for both iOS and macOS.
-- ActionAlert for both iOS and macOS.
-- GeoAgent showRedirectAlert method to simplify redirect function usage.
-- GeoAgent register method as the wrapper for addObserver to simplify notifying usage.
+- The Redirect Dialog (ActionAlert) with redirecting to System Settings for both iOS and macOS.
 
 ### Improved
 
@@ -28,11 +25,15 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
 ### Upgraded
 
-- PerseusLogger to [CPL v1.2.0](https://github.com/perseusrealdeal/ConsolePerseusLogger).
+- PerseusLogger to [CPL v1.3.0](https://github.com/perseusrealdeal/ConsolePerseusLogger).
 
 ### Corrected
 
 - OpenCore Usage Case: macOS returns LS status .notDetermed if turn LS off, reinit location manager.
+
+### Removed
+
+- Unit tests, import test only.
 
 ## [0.1.0] - [2023-07-24], Developer Release
 

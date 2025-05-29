@@ -206,20 +206,14 @@ public class GeoAgent: NSObject {
         return
 
 #elseif os(macOS)
-/*
-        if #available(macOS 10.15, *) {
-            switch authorization {
-            case .whenInUse:
-                locationManager.requestWhenInUseAuthorization()
-            case .always:
-                locationManager.requestAlwaysAuthorization()
-            }
 
+        guard #available(macOS 10.15, *) else {
+            order = .permission
+            locationManager.startUpdatingLocation()
             return
         }
-*/
-        order = .permission
-        locationManager.startUpdatingLocation()
+
+        locationManager.requestAlwaysAuthorization()
 
 #endif
 
@@ -289,6 +283,10 @@ public class GeoAgent: NSObject {
     }
 
     // MARK: - To serve hotfixes
+
+    public static func reInit() {
+        sharedInstance.reInitLocationManager()
+    }
 
     internal func reInitLocationManager() {
 

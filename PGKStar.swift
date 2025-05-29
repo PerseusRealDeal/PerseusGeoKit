@@ -2,7 +2,7 @@
 //  PerseusGeoKitStar.swift
 //  Version: 1.0.0
 //
-//  Standalone PerseusGeoKit.
+//  Standalone PerseusGeoKit
 //
 //
 //  For iOS and macOS only. Use Stars to adopt for the specifics you need.
@@ -63,6 +63,11 @@ public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent for the App
                                                    message: "Open System Settings App?",
                                                    buttonCancel: "Cancel",
                                                    buttonFunction: "Open")
+#if os(iOS)
+public let OPENSETTINGS_URL_DEFAULT = UIApplication.openSettingsURLString
+#elseif os(macOS)
+public let OPENSETTINGS_URL_DEFAULT = "x-apple.systempreferences:"
+#endif
 
 // MARK: - GeoAgent
 
@@ -240,20 +245,14 @@ public class GeoAgent: NSObject {
         return
 
 #elseif os(macOS)
-/*
-        if #available(macOS 10.15, *) {
-            switch authorization {
-            case .whenInUse:
-                locationManager.requestWhenInUseAuthorization()
-            case .always:
-                locationManager.requestAlwaysAuthorization()
-            }
 
+        guard #available(macOS 10.15, *) else {
+            order = .permission
+            locationManager.startUpdatingLocation()
             return
         }
-*/
-        order = .permission
-        locationManager.startUpdatingLocation()
+
+        locationManager.requestAlwaysAuthorization()
 
 #endif
 
@@ -324,6 +323,10 @@ public class GeoAgent: NSObject {
 
     // MARK: - To serve hotfixes
 
+    public static func reInit() {
+        sharedInstance.reInitLocationManager()
+    }
+
     internal func reInitLocationManager() {
 
         log.message("[\(type(of: self))].\(#function) [REINIT LOCATION MANAGER]")
@@ -372,13 +375,13 @@ extension GeoAgent: CLLocationManagerDelegate {
 
     // MARK: - Location Services Error
 
+#if targetEnvironment(simulator)
+
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 
         let nsError = error as NSError
 
-#if targetEnvironment(simulator)
-
-        // CASE 1 NOT REPORTED - Simulator
+        // CASE -1- NOT REPORTED, Simulator
 
         let note = "[CASE - SIMULATOR]"
         let details = "\(nsError.domain), code: \(nsError.code)"
@@ -386,13 +389,22 @@ extension GeoAgent: CLLocationManagerDelegate {
         log.message("[\(type(of: self))].\(#function) \(note) \(details)")
 
         return
+    }
 
 #else
 
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+
         log.message("[\(type(of: self))].\(#function) [ERROR ENTERED]")
+
         // locationManager.stopUpdatingLocation()
 
-#endif
+        let nsError = error as NSError
+
+        let statusLM = type(of: locationManager).authorizationStatus()
+        var locationError: LocationError = .failedRequest(error.localizedDescription,
+                                                          nsError.domain,
+                                                          nsError.code)
 
         // ISSUE: macOS (new releases) generates an error on startUpdatingLocation() if
         // an end-user makes no decision about permission immediately, 2 or 3 sec.
@@ -401,21 +413,18 @@ extension GeoAgent: CLLocationManagerDelegate {
         // in Current Location Diolog behavior in either early or newer macOS releases.
 
         // List of macOS systems that generates error if start in .notDetermined (2 or 3 sec):
-        // Starting from macOS Monterey than Ventura, Sonoma, Sequoia, ...
-
-        let statusLM = type(of: locationManager).authorizationStatus()
-        let locationError: LocationError = .failedRequest(error.localizedDescription,
-                                                          nsError.domain,
-                                                          nsError.code)
+        // Starting from macOS BigSur than Monterey, Ventura, Sonoma, Sequoia, ...
 
 #if os(macOS)
 
         var isErrorCased = false
+
         let details = "\(nsError.domain), code: \(nsError.code), statusLM: \(statusLM)"
 
-        // CASE 2 NOT REPORTED - "The current location dialog"
+        // CASE -2- NOT REPORTED, "The Current Location Dialog"
 
         if order == .permission, statusLM == .notDetermined {
+
             isErrorCased = true
 
             // HOTFIX: startUpdatingLocation() case with "the location dialog" invoked.
@@ -430,10 +439,11 @@ extension GeoAgent: CLLocationManagerDelegate {
             return
         }
 
-        // CASE 3 NOT REPORTED - OpenCore usage
+        // CASE -3- NOT REPORTED, OpenCore usage
 
         if nsError.domain == kCLErrorDomain, nsError.code == 1, statusLM == .notDetermined,
            isAuthorizedForLocationServices {
+
             isErrorCased = true
 
             // HOTFIX: Location Services Status in OpenCore usage case.
@@ -447,19 +457,22 @@ extension GeoAgent: CLLocationManagerDelegate {
             return
         }
 
-        // CASE 4 REPORTED - Hardware
+        // CASE -4- REPORTED, Hardware
 
         if nsError.domain == kCLErrorDomain, nsError.code == 0 {
+
             isErrorCased = true
 
             let note = "[CASE - HARDWARE]"
             log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
         }
 
-        // CASE 5 REPORTED - Authorization
-        // The app permitted to off, denied or Location Services off
+        // CASE -5- REPORTED, Authorization
 
         if nsError.domain == kCLErrorDomain, nsError.code == 1 {
+
+            // The app permitted to off, denied or Location Services off
+
             isErrorCased = true
 
             let note = "[CASE - AUTHORIZATION]"
@@ -469,6 +482,9 @@ extension GeoAgent: CLLocationManagerDelegate {
         if isErrorCased == false {
             let note = "[CASE - NOT KNOWN]"
             log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
+
+            let errorInfo = "[NOTKNOWN] " + error.localizedDescription
+            locationError = .failedRequest(errorInfo, nsError.domain, nsError.code)
         }
 
 #endif
@@ -476,6 +492,8 @@ extension GeoAgent: CLLocationManagerDelegate {
         // order = .none
         notificationCenter.post(name: GeoEvent.locationError.name, object: locationError)
     }
+
+#endif
 
     // MARK: - Location Services Status Change
 
@@ -485,7 +503,7 @@ extension GeoAgent: CLLocationManagerDelegate {
         log.message("[\(type(of: self))].\(#function) [STATUS CHANGED ENTERED]")
 
 #if os(iOS)
-        if [.authorized, .authorizedAlways, .authorizedWhenInUse].contains(status) {
+        if [.authorizedAlways, .authorizedWhenInUse].contains(status) {
             isAuthorizedForLocationServices = true
         }
 #elseif os(macOS)
@@ -1007,7 +1025,7 @@ public class ActionAlert {
 
 public func redirectToSettingsApp() {
 
-    guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+    guard let settingsURL = URL(string: OPENSETTINGS_URL_DEFAULT) else {
         log.message("\(#function) URL not corrent", .error)
         return
     }
@@ -1032,7 +1050,7 @@ public func redirectToSettingsApp() {
 
 public func redirectToSettingsApp() {
 
-    guard let pathURL = URL(string: "x-apple.systempreferences:")
+    guard let pathURL = URL(string: OPENSETTINGS_URL_DEFAULT)
     else {
         log.message("\(#function) URL not corrent", .error)
         return
