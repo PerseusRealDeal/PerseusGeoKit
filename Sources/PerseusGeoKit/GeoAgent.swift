@@ -186,9 +186,9 @@ public class GeoAgent: NSObject {
 
 #endif
 
-    public func requestPermission(_ authorization: LocationPermissionRequest = .always,
-                                  _ actionIfAlreadyDetermined: ((_ statusUsed: GeoStatus)
-                                                         -> Void)? = nil) {
+    public func requestPermission(
+        _ authorization: LocationPermissionRequest = .always,
+        _ actionIfAlreadyDetermined: ((_ statusUsed: GeoStatus) -> Void)? = nil) {
 
         var status = geoStatus
 

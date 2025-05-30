@@ -153,16 +153,16 @@ let isAuthorized = GeoAgent.isAuthorized
 
 ## Request Permission
 
-Statement **GeoAgent.requestPermission()** goes with the action invoking if status already determined. 
+Statement **GeoAgent.requestPermission()** can be combined with the action to be called if status has already determined. 
 
 For instance, to open The Redirect Dialog.
 
 ```swift
 
 GeoAgent.shared.requestPermission { status in 
-    
-    // The action invoked if status not .notDetermined. 
-    
+
+    // Run if status not .notDetermined. 
+
     if status != .allowed {
         GeoAgent.showRedirectAlert() // The Redirect Dialog.
     }
@@ -315,10 +315,10 @@ GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
 
     switch error {
     case .failedRequest(let desc, let domain, let code):
+        let domaincode = "domain: \(domain), code: \(code)"
         if desc.contains("[NOTKNOWN]") {
-            errtext = "\(desc), domain: \(domain), code: \(code)"
+            errtext = "\(desc), \(domaincode)"
         } else {
-            let domaincode = "domain: \(domain), code: \(code)"
             switch code {
             case 0:
                 errtext = "hardware issue: try to tap Wi-Fi in system tray, \(domaincode)"

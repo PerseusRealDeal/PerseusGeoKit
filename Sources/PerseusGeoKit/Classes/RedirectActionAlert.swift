@@ -20,9 +20,9 @@ import Cocoa
 #endif
 
 #if os(iOS)
-public let OPENSETTINGS_URL_DEFAULT = UIApplication.openSettingsURLString
+public let OPENSETTINGS_URL = UIApplication.openSettingsURLString
 #elseif os(macOS)
-public let OPENSETTINGS_URL_DEFAULT = "x-apple.systempreferences:"
+public let OPENSETTINGS_URL = "x-apple.systempreferences:"
 #endif
 
 // MARK: - Alert Titles
@@ -185,7 +185,7 @@ public class ActionAlert {
 
 public func redirectToSettingsApp() {
 
-    guard let settingsURL = URL(string: OPENSETTINGS_URL_DEFAULT) else {
+    guard let settingsURL = URL(string: OPENSETTINGS_URL) else {
         log.message("\(#function) URL not corrent", .error)
         return
     }
@@ -210,7 +210,7 @@ public func redirectToSettingsApp() {
 
 public func redirectToSettingsApp() {
 
-    guard let pathURL = URL(string: OPENSETTINGS_URL_DEFAULT)
+    guard let pathURL = URL(string: OPENSETTINGS_URL)
     else {
         log.message("\(#function) URL not corrent", .error)
         return

@@ -67,9 +67,9 @@ public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent for the App
 public let IS_AUTHORIZED_KEY = "AuthorizedForLocationServicesKey"
 
 #if os(iOS)
-public let OPENSETTINGS_URL_DEFAULT = UIApplication.openSettingsURLString
+public let OPENSETTINGS_URL = UIApplication.openSettingsURLString
 #elseif os(macOS)
-public let OPENSETTINGS_URL_DEFAULT = "x-apple.systempreferences:"
+public let OPENSETTINGS_URL = "x-apple.systempreferences:"
 #endif
 
 // MARK: - GeoAgent
@@ -122,6 +122,7 @@ public class GeoAgent: NSObject {
 
     internal var locationManager: CLLocationManager
     internal let notificationCenter: NotificationCenter
+    internal let userDefaults: UserDefaults
 
     internal var geoStatus: GeoStatus {
 
@@ -171,7 +172,9 @@ public class GeoAgent: NSObject {
         log.message("[\(GeoAgent.self)].\(#function)", .info)
 
         locationManager = CLLocationManager()
+
         notificationCenter = NotificationCenter.default
+        userDefaults = UserDefaults.standard
 
         super.init()
 
@@ -223,9 +226,9 @@ public class GeoAgent: NSObject {
 
 #endif
 
-    public func requestPermission(_ authorization: LocationPermissionRequest = .always,
-                                  _ actionIfAlreadyDetermined: ((_ statusUsed: GeoStatus)
-                                                         -> Void)? = nil) {
+    public func requestPermission(
+        _ authorization: LocationPermissionRequest = .always,
+        _ actionIfAlreadyDetermined: ((_ statusUsed: GeoStatus) -> Void)? = nil) {
 
         var status = geoStatus
 
@@ -1041,7 +1044,7 @@ public class ActionAlert {
 
 public func redirectToSettingsApp() {
 
-    guard let settingsURL = URL(string: OPENSETTINGS_URL_DEFAULT) else {
+    guard let settingsURL = URL(string: OPENSETTINGS_URL) else {
         log.message("\(#function) URL not corrent", .error)
         return
     }
@@ -1066,7 +1069,7 @@ public func redirectToSettingsApp() {
 
 public func redirectToSettingsApp() {
 
-    guard let pathURL = URL(string: OPENSETTINGS_URL_DEFAULT)
+    guard let pathURL = URL(string: OPENSETTINGS_URL)
     else {
         log.message("\(#function) URL not corrent", .error)
         return

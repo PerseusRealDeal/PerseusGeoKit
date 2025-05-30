@@ -53,7 +53,7 @@ import MapKit
 
 // MARK: - Geo Constants
 
-let PREFERED_ACCURACY: GeoAccuracy = .threeKilometers
+let DEFAULT_ACCURACY: GeoAccuracy = .threeKilometers
 
 let DEFAULT_MAP_POINT = CLLocation(latitude: 55.036857, longitude: 82.914063)
 let DEFAULT_MAP_RADIUS: CLLocationDistance = 1000
@@ -269,10 +269,10 @@ class GeoCoordinator: NSObject {
 
         switch error {
         case .failedRequest(let desc, let domain, let code):
+            let domaincode = "domain: \(domain), code: \(code)"
             if desc.contains("[NOTKNOWN]") {
-                errtext = "\(desc), domain: \(domain), code: \(code)"
+                errtext = "\(desc), \(domaincode)"
             } else {
-                let domaincode = "domain: \(domain), code: \(code)"
                 switch code {
                 case 0:
                     errtext = "hardware issue: try to tap Wi-Fi in system tray, \(domaincode)"
