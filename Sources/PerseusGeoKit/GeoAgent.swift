@@ -30,6 +30,8 @@ public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent for the App
                                                    buttonCancel: "Cancel",
                                                    buttonFunction: "Open")
 
+public let IS_AUTHORIZED_KEY = "AuthorizedForLocationServicesKey"
+
 // MARK: - GeoAgent
 
 public class GeoAgent: NSObject {
@@ -72,7 +74,7 @@ public class GeoAgent: NSObject {
         }
     }
 
-    public static var isAuthorized: Bool {
+    public static var isAuthorized: Bool { // True if once was determined.
         return sharedInstance.isAuthorizedForLocationServices
     }
 
@@ -80,6 +82,7 @@ public class GeoAgent: NSObject {
 
     internal var locationManager: CLLocationManager
     internal let notificationCenter: NotificationCenter
+    internal let userDefaults: UserDefaults
 
     internal var geoStatus: GeoStatus {
 
@@ -98,11 +101,24 @@ public class GeoAgent: NSObject {
         }
     }
 
+    internal var isAuthorizedForLocationServices: Bool {
+        get {
+            return userDefaults.bool(forKey: IS_AUTHORIZED_KEY)
+        }
+        set {
+            if newValue {
+                userDefaults.setValue(newValue, forKey: IS_AUTHORIZED_KEY)
+            }
+        }
+    }
+
+    /*
     internal var isAuthorizedForLocationServices = false {
         didSet {
             if oldValue { isAuthorizedForLocationServices = oldValue }
         }
     }
+    */
 
     internal var order: GeoAgentOrder = .none
 
@@ -116,7 +132,9 @@ public class GeoAgent: NSObject {
         log.message("[\(GeoAgent.self)].\(#function)", .info)
 
         locationManager = CLLocationManager()
+
         notificationCenter = NotificationCenter.default
+        userDefaults = UserDefaults.standard
 
         super.init()
 

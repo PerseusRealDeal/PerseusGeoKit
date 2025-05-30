@@ -63,6 +63,9 @@ public let REDIRECT_TEXT_DEFAULT = ActionAlertText(title: "Geo Agent for the App
                                                    message: "Open System Settings App?",
                                                    buttonCancel: "Cancel",
                                                    buttonFunction: "Open")
+
+public let IS_AUTHORIZED_KEY = "AuthorizedForLocationServicesKey"
+
 #if os(iOS)
 public let OPENSETTINGS_URL_DEFAULT = UIApplication.openSettingsURLString
 #elseif os(macOS)
@@ -111,7 +114,7 @@ public class GeoAgent: NSObject {
         }
     }
 
-    public static var isAuthorized: Bool {
+    public static var isAuthorized: Bool { // True if once was determined.
         return sharedInstance.isAuthorizedForLocationServices
     }
 
@@ -137,11 +140,24 @@ public class GeoAgent: NSObject {
         }
     }
 
+    internal var isAuthorizedForLocationServices: Bool {
+        get {
+            return userDefaults.bool(forKey: IS_AUTHORIZED_KEY)
+        }
+        set {
+            if newValue {
+                userDefaults.setValue(newValue, forKey: IS_AUTHORIZED_KEY)
+            }
+        }
+    }
+
+    /*
     internal var isAuthorizedForLocationServices = false {
         didSet {
             if oldValue { isAuthorizedForLocationServices = oldValue }
         }
     }
+    */
 
     internal var order: GeoAgentOrder = .none
 
