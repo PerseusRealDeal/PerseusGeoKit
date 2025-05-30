@@ -1,6 +1,6 @@
 //
 //  LocationPermission.swift
-//  PerseusGeoLocationKit
+//  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
@@ -10,9 +10,7 @@
 //  All rights reserved.
 //
 
-import Foundation
-
-public enum LocationPermission: CustomStringConvertible {
+public enum LocationPermissionRequest: CustomStringConvertible {
 
     public var description: String {
         switch self {

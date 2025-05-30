@@ -3,6 +3,8 @@
 /* Package.swift
  Version: 1.0.0
 
+ For iOS and macOS only. Use Stars to adopt for the specifics you need.
+
  Created by Mikhail Zhigulin in 7531.
 
  Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk
@@ -12,21 +14,21 @@
  All rights reserved.
 
  Abstract:
- Package manifest for an App component.
+ Package manifest for PerseusGeoKit.
  */
 
 import PackageDescription
 
 let package = Package(
-    name: "PerseusGeoLocationKit",
+    name: "PerseusGeoKit",
     platforms: [
         .macOS(.v10_13),
         .iOS(.v11)
     ],
     products: [
         .library(
-            name: "PerseusGeoLocationKit",
-            targets: ["PerseusGeoLocationKit"])
+            name: "PerseusGeoKit",
+            targets: ["PerseusGeoKit"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -34,10 +36,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PerseusGeoLocationKit",
+            name: "PerseusGeoKit",
             dependencies: []),
         .testTarget(
-            name: "PerseusGeoLocationKitTests",
-            dependencies: ["PerseusGeoLocationKit"])
+            name: "UnitTests",
+            dependencies: ["PerseusGeoKit"])
     ]
 )

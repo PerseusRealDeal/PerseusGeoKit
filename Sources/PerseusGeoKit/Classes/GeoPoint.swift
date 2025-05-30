@@ -1,6 +1,6 @@
 //
-//  PerseusLocation.swift
-//  PerseusGeoLocationKit
+//  GeoPoint.swift
+//  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
@@ -10,33 +10,26 @@
 //  All rights reserved.
 //
 
-import Foundation
 import CoreLocation
 
-extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
-
-extension Double {
-
-    public enum DecimalPlaces: Double {
-        case two  = 100.0
-        case four = 10000.0
-    }
-
-    public func cut(_ off: DecimalPlaces) -> Double {
-        return (self * off.rawValue).rounded(self > 0 ? .down : .up) / off.rawValue
+extension CLLocation {
+    public var point: GeoPoint {
+        return GeoPoint(self)
     }
 }
 
-public struct PerseusLocation: CustomStringConvertible, Equatable {
+public struct GeoPoint: CustomStringConvertible, Equatable {
 
     public var description: String {
-
+        /*
         let locationTwo = "[\(latitude.cut(.two)), \(longitude.cut(.two))]"
 
         let latitudeFour = "latitude = \(latitude.cut(.four))"
         let longitudeFour = "longitude = \(longitude.cut(.four))"
 
-        return locationTwo + ": " + latitudeFour + ", " + longitudeFour
+        return locationTwo + ": \(latitudeFour), \(longitudeFour)"
+        */
+        return "\(latitude.cut(.four)), \(longitude.cut(.four))"
     }
 
     // MARK: - Location Data, As Is
@@ -54,7 +47,19 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
 
     // MARK: - Equatable
 
-    public static func == (lhs: PerseusLocation, rhs: PerseusLocation) -> Bool {
+    public static func == (lhs: GeoPoint, rhs: GeoPoint) -> Bool {
         return lhs.location == rhs.location
+    }
+}
+
+extension Double {
+
+    public enum DecimalPlaces: Double { // Mathematical precision.
+        case two  = 100.0
+        case four = 10000.0
+    }
+
+    public func cut(_ off: DecimalPlaces) -> Double {
+        return (self * off.rawValue).rounded(self > 0 ? .down : .up) / off.rawValue
     }
 }

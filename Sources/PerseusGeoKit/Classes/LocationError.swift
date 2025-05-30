@@ -1,6 +1,6 @@
 //
 //  LocationError.swift
-//  PerseusGeoLocationKit
+//  PerseusGeoKit
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
@@ -10,11 +10,20 @@
 //  All rights reserved.
 //
 
-import Foundation
+public enum LocationError: Error, Equatable, CustomStringConvertible {
 
-public enum LocationError: Error, Equatable {
+    public var description: String {
+        switch self {
+        case .permissionRequired(let status):
+            return "permission required if status: \(status)"
+        case .receivedEmptyLocationData:
+            return "recieved empty location data"
+        case .failedRequest(_, let domain, let code):
+            return "domain: \(domain), code: \(code)"
+        }
+    }
 
-    case permissionRequired(LocationPermit) // Permission status used to make decision.
+    case permissionRequired(GeoStatus)
     case receivedEmptyLocationData
     case failedRequest(String, String, Int) // localizedDescription, domain, code.
 
