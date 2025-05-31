@@ -142,15 +142,6 @@ GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
 
 ```
 
-> [!IMPORTANT]
-> To know whether the app granted for Location Services:
-
-```swift
-
-let isAuthorized = GeoAgent.isAuthorized
-
-```
-
 ## Request Permission
 
 Statement **GeoAgent.requestPermission()** can be combined with the action to be called if status has already determined. 
