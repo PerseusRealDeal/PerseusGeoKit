@@ -172,8 +172,17 @@ public class GeoAgent: NSObject {
 
         log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
+#if os(iOS)
+
+        guard status == .notDetermined else {
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
+            actionIfAlreadyDetermined?(status)
+            return
+        }
+
+#elseif os(macOS)
+
         guard status == .notDetermined, isAuthorizedForLocationServices == false else {
-#if os(macOS)
             if status == .notDetermined, isAuthorizedForLocationServices {
 
                 // HOTFIX: Location Services Status in OpenCore usage case.
@@ -184,10 +193,12 @@ public class GeoAgent: NSObject {
 
             status = geoStatus
             log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
-#endif
+
             actionIfAlreadyDetermined?(status)
             return
         }
+
+#endif
 
 #if os(iOS)
 
@@ -210,7 +221,6 @@ public class GeoAgent: NSObject {
         }
 
         locationManager.requestAlwaysAuthorization()
-
 #endif
 
     }
