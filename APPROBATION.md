@@ -1,4 +1,4 @@
-# Approbation Matrix / PerseusGeoLocationKit 1.0.0
+# Approbation Matrix / PerseusGeoLocationKit 1.0.0 & 1.0.1
 
 > NOTE: To catch all log messages Mac Console should be started first then after a little while the logged app.
 
@@ -6,7 +6,7 @@
 
 ## macOS approbation result
 
-> The macOS app used to approbate PerseusGeoLocationKit 1.0.0 is [Arkenstone](https://github.com/perseusrealdeal/Arkenstone).
+> The macOS app used to approbate PerseusGeoLocationKit 1.0.0 & 1.0.1 is [Arkenstone](https://github.com/perseusrealdeal/Arkenstone).
 
 | macOS       | Version | Result  | Details |
 | ----------- | ------- | :-----: | ------- |
@@ -21,7 +21,7 @@
 
 ## iOS approbation result
 
-> The iOS app used to approbate PerseusGeoLocationKit 1.0.0 is [The One Ring](https://github.com/perseusrealdeal/TheOneRing).
+> The iOS app used to approbate PerseusGeoLocationKit 1.0.0 & 1.0.1 is [The One Ring](https://github.com/perseusrealdeal/TheOneRing).
 
 | Device          | Simulator | OS Version | Result  | Details |
 | --------------- | :-------: | ---------- | :-----: | ------- |
