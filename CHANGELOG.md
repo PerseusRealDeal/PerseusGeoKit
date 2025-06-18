@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
+## [1.0.3] - [2025-06-18], PGK
+
+### Fixed
+
+- Logger access modifier, typealias `log` must be not public.
+
 ## [1.0.2] - [2025-06-17], PGK
 
 ### Upgraded
