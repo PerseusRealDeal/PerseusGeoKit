@@ -1,6 +1,6 @@
 //
 //  PerseusGeoKitStar.swift
-//  Version: 1.0.3
+//  Version: 1.0.4
 //
 //  Standalone PerseusGeoKit
 //
@@ -47,13 +47,14 @@
 //
 
 import CoreLocation
-import ConsolePerseusLogger
 
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(Cocoa)
 import Cocoa
 #endif
+
+// import ConsolePerseusLogger
 
 // MARK: - Constants
 
@@ -177,6 +178,7 @@ public class GeoAgent: NSObject {
     public static func register(_ stakeholder: Any, _ selector: Selector, _ event: GeoEvent) {
 
         let detail = "for \(type(of: stakeholder)) > \(event)"
+        log.message("[\(type(of: self))].\(#function) \(detail)")
 
         let nc = sharedInstance.notificationCenter
         nc.addObserver(stakeholder, selector: selector, name: event.name, object: nil)
@@ -187,12 +189,16 @@ public class GeoAgent: NSObject {
     public static func showRedirectAlert(_ parentViewController: UIViewController,
                                          _ titles: ActionAlertText = REDIRECT_TEXT_DEFAULT) {
 
+        log.message("[\(type(of: self))].\(#function)")
+
         ActionAlert(redirectToSettingsApp, titles).show(using: parentViewController)
     }
 
 #elseif os(macOS)
 
     public static func showRedirectAlert(_ titles: ActionAlertText = REDIRECT_TEXT_DEFAULT) {
+
+        log.message("[\(type(of: self))].\(#function)")
 
         ActionAlert(redirectToSettingsApp, titles).show()
     }
@@ -205,9 +211,12 @@ public class GeoAgent: NSObject {
 
         var status = geoStatus
 
+        log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
+
 #if os(iOS)
 
         guard status == .notDetermined else {
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
             actionIfAlreadyDetermined?(status)
             return
         }
@@ -224,6 +233,7 @@ public class GeoAgent: NSObject {
             }
 
             status = geoStatus
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
             actionIfAlreadyDetermined?(status)
             return
@@ -258,9 +268,13 @@ public class GeoAgent: NSObject {
 
     public func requestCurrentLocation() throws {
 
+        log.message("[\(type(of: self))].\(#function)")
+
         let status = geoStatus
 
         guard status == .allowed else {
+
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
@@ -287,9 +301,13 @@ public class GeoAgent: NSObject {
 
     public func requestUpdatingLocation() throws {
 
+        log.message("[\(type(of: self))].\(#function)")
+
         let status = geoStatus
 
         guard status == .allowed else {
+
+            log.message("[\(type(of: self))].\(#function) status: \(status)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
@@ -305,6 +323,8 @@ public class GeoAgent: NSObject {
 
     public func stopUpdatingLocation() {
 
+        log.message("[\(type(of: self))].\(#function)")
+
         locationManager.stopUpdatingLocation()
         order = .none
     }
@@ -316,6 +336,8 @@ public class GeoAgent: NSObject {
     }
 
     internal func reInitLocationManager() {
+
+        log.message("[\(type(of: self))].\(#function) [REINIT LOCATION MANAGER]")
 
         let desiredAccuracy = locationManager.desiredAccuracy
 
@@ -372,12 +394,16 @@ extension GeoAgent: CLLocationManagerDelegate {
         let note = "[CASE - SIMULATOR]"
         let details = "\(nsError.domain), code: \(nsError.code)"
 
+        log.message("[\(type(of: self))].\(#function) \(note) \(details)")
+
         return
     }
 
 #else
 
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+
+        log.message("[\(type(of: self))].\(#function) [ERROR ENTERED]")
 
         // locationManager.stopUpdatingLocation()
 
@@ -416,6 +442,7 @@ extension GeoAgent: CLLocationManagerDelegate {
             order = .none
 
             let note = "[CASE - THE CURRENT LOCATION DIALOG]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
 
             return
         }
@@ -431,6 +458,7 @@ extension GeoAgent: CLLocationManagerDelegate {
             // Reinit location manager.
 
             let note = "[CASE - OPENCORE]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
 
             reInitLocationManager()
 
@@ -444,6 +472,7 @@ extension GeoAgent: CLLocationManagerDelegate {
             isErrorCased = true
 
             let note = "[CASE - HARDWARE]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
         }
 
         // CASE -5- REPORTED, Authorization
@@ -455,10 +484,12 @@ extension GeoAgent: CLLocationManagerDelegate {
             isErrorCased = true
 
             let note = "[CASE - AUTHORIZATION]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
         }
 
         if isErrorCased == false {
             let note = "[CASE - NOT KNOWN]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .error)
 
             let errorInfo = "[NOTKNOWN] " + error.localizedDescription
             locationError = .failedRequest(errorInfo, nsError.domain, nsError.code)
@@ -472,10 +503,12 @@ extension GeoAgent: CLLocationManagerDelegate {
 
 #endif
 
-    // MARK: - Location Services Status Change
+    // MARK: - Location Services Location Data
 
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
+
+        log.message("[\(type(of: self))].\(#function) [STATUS CHANGED ENTERED]")
 
 #if os(iOS)
         if [.authorizedAlways, .authorizedWhenInUse].contains(status) {
@@ -495,14 +528,17 @@ extension GeoAgent: CLLocationManagerDelegate {
             // HOTFIX: Location Services Status in OpenCore usage case.
 
             let note = "[CASE - OPENCORE]"
+            log.message("[\(type(of: self))].\(#function) \(note) \(details)", .notice)
 
             return
         }
 
+        log.message("[\(type(of: self))].\(#function) \(details)", .notice)
+
         notificationCenter.post(name: GeoEvent.locationStatus.name, object: status)
     }
 
-    // MARK: - Location Services Location Data
+    // MARK: - To catch current location and updates
 
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
@@ -512,6 +548,7 @@ extension GeoAgent: CLLocationManagerDelegate {
             // HOTFIX: Location Services Status in OpenCore usage case.
 
             let note = "[STATUS .notDetermined]"
+            log.message("[\(type(of: self))].\(#function) \(note)", .notice)
 
             return
         }
@@ -519,6 +556,7 @@ extension GeoAgent: CLLocationManagerDelegate {
         if order == .none {
 
             let note = "[ORDER .none]"
+            log.message("[\(type(of: self))].\(#function) \(note)", .notice)
 
             locationManager.stopUpdatingLocation()
             return
@@ -527,6 +565,7 @@ extension GeoAgent: CLLocationManagerDelegate {
         if order == .permission {
 
             let note = "[ORDER .permission]"
+            log.message("[\(type(of: self))].\(#function) \(note)", .notice)
 
             locationManager.stopUpdatingLocation()
             order = .none
@@ -537,8 +576,10 @@ extension GeoAgent: CLLocationManagerDelegate {
 
             if locations.isEmpty {
                 let note = "[NO LOCATIONS]" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(note)", .notice)
             } else if locations.first != nil {
                 let note = "[CATCHED]"
+                log.message("[\(type(of: self))].\(#function) \(note)")
             }
 
             locationManager.stopUpdatingLocation()
@@ -554,8 +595,10 @@ extension GeoAgent: CLLocationManagerDelegate {
 
             if locations.isEmpty {
                 let note = "[NO LOCATIONS]" // Something went wrong.
+                log.message("[\(type(of: self))].\(#function) \(note)", .notice)
             } else if locations.first != nil {
                 let note = "[CATCHED]"
+                log.message("[\(type(of: self))].\(#function) \(note)")
             }
 
             let result: Result<[GeoPoint], LocationError> = locations.isEmpty ?
@@ -859,6 +902,9 @@ public class ActionAlert {
 
     public var titles: ActionAlertText? {
         didSet {
+
+            log.message("[\(type(of: self))].\(#function)")
+
             self.alertText = titles ?? ActionAlertText()
             self.alert = create()
         }
@@ -876,6 +922,8 @@ public class ActionAlert {
 
     init(_ function: @escaping () -> Void, _ titles: ActionAlertText? = nil) {
 
+        log.message("[\(type(of: self))].\(#function)", .info)
+
         self.action = function
         self.alertText = titles ?? ActionAlertText()
 
@@ -883,6 +931,8 @@ public class ActionAlert {
     }
 
     private func create() -> UIAlertController {
+
+        log.message("[\(type(of: self))].\(#function)")
 
         let alert = UIAlertController(title: alertText.title,
                                       message: alertText.message,
@@ -901,6 +951,8 @@ public class ActionAlert {
 
     public func show(using parent: UIViewController) {
 
+        log.message("[\(type(of: self))].\(#function)")
+
         if let alert = alert {
             parent.present(alert, animated: true, completion: nil)
         }
@@ -915,6 +967,9 @@ public class ActionAlert {
 
     public var titles: ActionAlertText? {
         didSet {
+
+            log.message("[\(type(of: self))].\(#function)")
+
             self.alertText = titles ?? ActionAlertText()
             self.alert = create()
         }
@@ -929,6 +984,8 @@ public class ActionAlert {
 
     init(_ function: @escaping () -> Void, _ titles: ActionAlertText? = nil) {
 
+        log.message("[\(type(of: self))].\(#function)", .info)
+
         self.action = function
         self.alertText = titles ?? ActionAlertText()
 
@@ -936,6 +993,8 @@ public class ActionAlert {
     }
 
     private func create() -> NSAlert {
+
+        log.message("[\(type(of: self))].\(#function)")
 
         let alert = NSAlert.init()
 
@@ -953,6 +1012,8 @@ public class ActionAlert {
     // MARK: - Contract
 
     public func show() {
+
+        log.message("[\(type(of: self))].\(#function)")
 
         guard let alert = alert, alert.runModal() == .alertFirstButtonReturn
         else {
@@ -973,18 +1034,23 @@ public class ActionAlert {
 public func redirectToSettingsApp() {
 
     guard let settingsURL = URL(string: OPENSETTINGS_URL) else {
+        log.message("\(#function) URL not corrent", .error)
         return
     }
 
     guard UIApplication.shared.canOpenURL(settingsURL) else {
+        log.message("\(#function) right URL, but cann't be opened", .error)
         return
     }
 
     UIApplication.shared.open(settingsURL) { (opened) in
-        // Status opened.
+        if opened {
+            log.message("\(#function) opened")
+        } else {
+            log.message("\(#function) not opened", .error)
+        }
     }
 }
-
 #elseif os(macOS)
 
 // MARK: - Redirect Function for macOS
@@ -993,13 +1059,14 @@ public func redirectToSettingsApp() {
 
     guard let pathURL = URL(string: OPENSETTINGS_URL)
     else {
+        log.message("\(#function) URL not corrent", .error)
         return
     }
 
     if NSWorkspace.shared.open(pathURL) {
-       // Opened.
+        log.message("\(#function) opened")
     } else {
-        // Not opened.
+        log.message("\(#function) not opened", .error)
     }
 }
 

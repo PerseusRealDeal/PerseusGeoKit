@@ -1,6 +1,6 @@
 //
 //  PGKSupportingStar.swift
-//  Version: 1.0.3
+//  Version: 1.0.4
 //
 //  PerseusGeoKit Support Code
 //
@@ -43,13 +43,13 @@
 // swiftlint:disable file_length
 //
 
-import ConsolePerseusLogger
-import PerseusGeoKit
-
 #if os(iOS)
 import UIKit
 #endif
 import MapKit
+
+// import ConsolePerseusLogger
+// import PerseusGeoKit
 
 // MARK: - Geo Constants
 
@@ -120,6 +120,8 @@ class LocationDealer {
             try GeoAgent.shared.requestCurrentLocation()
         } catch LocationError.permissionRequired(let status) { // Permission required.
 
+            log.message("[\(type(of: self))].\(#function) permission required", .notice)
+
             if status == .notDetermined {
                 GeoAgent.shared.requestPermission() // Request permission.
             } else if let parentVC = alertViewController {
@@ -128,7 +130,7 @@ class LocationDealer {
             }
 
         } catch {
-            // Error.
+            log.message("[\(type(of: self))].\(#function) something went wrong", .error)
         }
     }
 
@@ -145,7 +147,7 @@ class LocationDealer {
             }
 
         } catch {
-            // Error.
+            log.message("[\(type(of: self))].\(#function) something went wrong", .error)
         }
     }
 
@@ -167,6 +169,8 @@ class LocationDealer {
             try GeoAgent.shared.requestCurrentLocation()
         } catch LocationError.permissionRequired(let status) { // Permission required.
 
+            log.message("[\(type(of: self))].\(#function) permission required", .notice)
+
             if status == .notDetermined {
                 GeoAgent.shared.requestPermission() // Request permission.
             } else {
@@ -175,7 +179,7 @@ class LocationDealer {
             }
 
         } catch {
-            // Error.
+            log.message("[\(type(of: self))].\(#function) something went wrong", .error)
         }
     }
 
@@ -192,7 +196,7 @@ class LocationDealer {
             }
 
         } catch {
-            // Error.
+            log.message("[\(type(of: self))].\(#function) something went wrong", .error)
         }
     }
 
@@ -219,6 +223,8 @@ class GeoCoordinator: NSObject {
 
     private override init() {
 
+        log.message("[\(GeoCoordinator.self)].\(#function)", .info)
+
         super.init()
 
         GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
@@ -237,12 +243,14 @@ class GeoCoordinator: NSObject {
     }
 
     public static func reloadGeoComponents() {
+        log.message("[\(type(of: self))].\(#function)")
         shared.updateGeoComponents()
     }
 
     // MARK: - Implementation
 
     private func updateGeoComponents() {
+        log.message("[\(type(of: self))].\(#function)")
         self.notifier?.post(name: .ReloadGeoDataNotification, object: nil)
     }
 
@@ -250,10 +258,12 @@ class GeoCoordinator: NSObject {
 
     @objc private func locationErrorHandler(_ notification: Notification) {
 
+        log.message("[\(type(of: self))].\(#function) [EVENT]")
         var errtext = ""
 
         guard let error = notification.object as? LocationError else {
             errtext = "nothing is about error"
+            log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
             return
         }
 
@@ -276,13 +286,14 @@ class GeoCoordinator: NSObject {
             break
         }
 
-        // Error.
+        log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
     }
 
     @objc private func locationStatusHandler(_ notification: Notification) {
 
         guard let sysStatus = notification.object as? CLAuthorizationStatus else {
             let errtext = "nothing is about status event"
+            log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
             return
         }
 
@@ -290,9 +301,12 @@ class GeoCoordinator: NSObject {
 
         if lmStatus != sysStatus {
             let statues = "lm status: \(lmStatus), system status: \(sysStatus)"
+            log.message("[\(type(of: self))].\(#function) \(statues)", .error)
         }
 
         let status = GeoAgent.currentStatus
+
+        log.message("[\(type(of: self))].\(#function) currentStatus: \(status) [EVENT]")
 
         updateGeoComponents()
 
@@ -303,11 +317,14 @@ class GeoCoordinator: NSObject {
 
     @objc private func currentLocationHandler(_ notification: Notification) {
 
+        log.message("[\(type(of: self))].\(#function) [EVENT]")
+
         var errtext = ""
         var location: GeoPoint?
 
         guard let result = notification.object as? Result<GeoPoint, LocationError> else {
             errtext = "nothing is about location"
+            log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
             return
         }
 
@@ -321,19 +338,21 @@ class GeoCoordinator: NSObject {
         if let current = location {
             locationRecieved?(current)
         } else if !errtext.isEmpty {
-            // Error.
+            log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
         }
 
         updateGeoComponents()
     }
 
     @objc private func locationUpdatesHandler(_ notification: Notification) {
+        log.message("[\(type(of: self))].\(#function) [EVENT]")
 
         var errtext = ""
         var updates: [GeoPoint]?
 
         guard let result = notification.object as? Result<[GeoPoint], LocationError> else {
             errtext = "nothing is about location updates"
+            log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
             return
         }
 
@@ -347,7 +366,7 @@ class GeoCoordinator: NSObject {
         if let updates = updates {
             locationUpdatesRecieved?(updates)
         } else if !errtext.isEmpty {
-            // Error.
+            log.message("[\(type(of: self))].\(#function) \(errtext)", .error)
         }
 
         updateGeoComponents()
