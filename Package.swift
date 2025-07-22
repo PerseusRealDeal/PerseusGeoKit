@@ -1,7 +1,7 @@
 // swift-tools-version:5.7
 
 /* Package.swift
- Version: 1.0.3
+ Version: 1.0.4
 
  For iOS and macOS only. Use Stars to adopt for the specifics you need.
 
@@ -21,10 +21,6 @@ import PackageDescription
 
 let package = Package(
     name: "PerseusGeoKit",
-    platforms: [
-        .macOS(.v10_13),
-        .iOS(.v11)
-    ],
     products: [
         .library(
             name: "PerseusGeoKit",
