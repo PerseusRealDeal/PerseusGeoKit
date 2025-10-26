@@ -1,6 +1,6 @@
 //
 //  PerseusGeoKitStar.swift
-//  Version: 1.0.4
+//  Version: 1.1.0
 //
 //  Standalone PerseusGeoKit
 //
@@ -11,16 +11,16 @@
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
-//  Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk
-//  Copyright © 7533 PerseusRealDeal
+//  Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk
+//  Copyright © 7533 - 7534 PerseusRealDeal
 //
 //  All rights reserved.
 //
 //
 //  MIT License
 //
-//  Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk
-//  Copyright © 7533 PerseusRealDeal
+//  Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk
+//  Copyright © 7533 - 7534 PerseusRealDeal
 //
 //  The year starts from the creation of the world according to a Slavic calendar.
 //  September, the 1st of Slavic year.

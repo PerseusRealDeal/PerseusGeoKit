@@ -1,53 +1,82 @@
 # PerseusGeoKit — Xcode 14.2+
 
-> [`iOS approbation app`](https://github.com/perseusrealdeal/TheOneRing) [`macOS approbation app`](https://github.com/perseusrealdeal/Arkenstone)<br/>
-
-> Contains location manager wrapper called as GeoAgent in Swift for Location Services API.<br/>
-> Hereinafter `PGK` stands for `P`erseus `G`eo `K`it.<br/>
-
-> - To be awared of Location Services Status.<br/>
-> - To request permission for Location Services.<br/>
-> - To redirect to System Settings (Preferences).<br/>
-> - To get Current Location.<br/>
-> - To request Location Updates.
-
-> `PGK` is a single author and personale solution developed in `person-to-person` relationship paradigm.
-
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/main.yml)
 [![Style](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/swiftlint.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/swiftlint.yml)
-[![Version](https://img.shields.io/badge/Version-1.0.4-green.svg)](/CHANGELOG.md)
-[![Platforms](https://img.shields.io/badge/Platforms-macOS%2010.13+Cocoa_|_iOS%2011.0+UIKit-orange.svg)](https://en.wikipedia.org/wiki/List_of_Apple_products)
+[![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](/CHANGELOG.md)
+[![Platforms](https://img.shields.io/badge/Platforms-macOS%2010.13+_|_iOS%2011.0+-orange.svg)](https://en.wikipedia.org/wiki/List_of_Apple_products)
 [![Xcode 14.2](https://img.shields.io/badge/Xcode-14.2+-red.svg)](https://en.wikipedia.org/wiki/Xcode)
 [![Swift 5.7](https://img.shields.io/badge/Swift-5.7-red.svg)](https://www.swift.org)
 [![License](http://img.shields.io/:License-MIT-blue.svg)](/LICENSE)
+
+> Home-made product. The location manager wrapper for Location Services API.
+
+> `1:` Be awared of Location Services Status.<br/>
+> `2:` Request permission for Location Services.<br/>
+> `3:` Redirect to System Settings (Preferences).<br/>
+> `4:` Get Current Location.<br/>
+> `5:` Request Location Updates.
+
+> `PGK` is a single author and personale solution developed in `P2P` relationship paradigm.
 
 ## Integration Capabilities
 
 [![Standalone](https://img.shields.io/badge/Standalone%20-available-informational.svg)](/PGKStar.swift)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-4BC51D.svg)](/Package.swift)
 
-> Use Stars to adopt [`PGK`](/PGKStar.swift) for the specifics you need.
-
 ## Dependencies
 
-[![ConsolePerseusLogger](http://img.shields.io/:ConsolePerseusLogger-1.5.1-green.svg)](https://github.com/perseusrealdeal/ConsolePerseusLogger.git)
+[![ConsolePerseusLogger](http://img.shields.io/:ConsolePerseusLogger-1.6.0-green.svg)](https://github.com/perseusrealdeal/ConsolePerseusLogger.git)
 
-# Support Code
+## Support Code
 
 [![Standalone](https://img.shields.io/badge/Standalone-available-informational.svg)](/PGKSupportingStar.swift)
 [![License](http://img.shields.io/:License-Unlicense-green.svg)](http://unlicense.org/)
 
-> [`PGKSupportingStar.swift`](/PGKSupportingStar.swift) is a peace of code a widly helpful in accord with PGK.
+> [`PGKSupportingStar.swift`](/PGKSupportingStar.swift) is a peace of code a widly helpful in accord with PGK.</br>
+> `PGKSupportingStar.swift` goes as an external part of PGK.
 
-> PGKSupportingStar.swift goes as an external part of PGK.
+## Our Terms
 
-## Approbation Matrix
+> [`CPL`](https://github.com/perseusrealdeal/ConsolePerseusLogger.git) stands for `C`onsole `P`erseus `L`ogger.</br>
+> [`PGK`](https://github.com/perseusrealdeal/PerseusGeoKit.git) stands for `P`erseus `G`eo `K`it.</br>
+> [`PDM`](https://github.com/perseusrealdeal/PerseusDarkMode.git) stands for `P`erseus `D`ark `M`ode.</br>
+> `P2P` stands for `P`erson-`to`-`P`erson.</br>
+> [`A3`](https://docs.google.com/document/d/1K2jOeIknKRRpTEEIPKhxO2H_1eBTof5uTXxyOm5g6nQ) stands for `A`pple `A`pps `A`pprobation.</br>
+> [`T3`](https://github.com/perseusrealdeal/TheTechnologicalTree) stands for `T`he `T`echnological `T`ree.
 
-> [`A3 Environment and Approbation`](/APPROBATION.md) / [`CHANGELOG`](/CHANGELOG.md) for details.
+## PGK in Use
 
-## In brief > Idea to use, the Why
+> `In approbation:` [`iOS app`](https://github.com/perseusrealdeal/TheOneRing) [`macOS app`](https://github.com/perseusrealdeal/Arkenstone)</br>
+> `In business:` [`The Dark Moon`](https://github.com/perseusrealdeal/TheDarkMoon)
 
-> HAVE A DEAL WITH WHERE YOU ARE.</br>
+> `For details:` [`Approbation and A3 Environment`](/APPROBATION.md) / [`CHANGELOG`](/CHANGELOG.md)</br>
+
+# Contents
+
+* [In brief](#In-brief)
+* [Build requirements](#Build-requirements)
+* [First-party software](#First-party-software)
+* [Third-party software](#Third-party-software)
+* [Installation](#Installation)
+* [Usage](#Usage)
+    * [Get location services status](#Get-location-services-status)
+    * [Request permission](#Request-permission)
+    * [Request current location](#Request-current-location)
+    * [Request updating location](#Request-updating-location)
+    * [Geo events processing](#Geo-events-processing)
+        * [Location error](#Location-error)
+        * [Location status](#Location-status)
+        * [Current location](#Current-location)
+        * [Location updates](#Location-updates)
+* [Points taken into account](#Points-taken-into-account)
+* [License MIT](#License-MIT)
+    * [Other Required License Notices](#Other-Required-License-Notices)
+* [Credits](#Credits)
+* [Author](#Author)
+
+# In brief
+
+> HAVE A DEAL WITH WHERE YOU ARE</br>
 
 <table>
   <tr>
@@ -78,7 +107,7 @@
 > [`The iOS App`](https://github.com/perseusrealdeal/TheOneRing) scenes taken from the motion picture `The Lord of The Rings` based on the novel by J.R.R. Tolkien.</br>
 > [`The macOS App`](https://github.com/perseusrealdeal/Arkenstone) scenes taken from the motion picture `The Hobbit` based on the novel by J.R.R. Tolkien.
 
-## Build system requirements
+# Build system requirements
 
 - [macOS Monterey 12.7.6+](https://apps.apple.com/by/app/macos-monterey/id1576738294) / [Xcode 14.2+](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_14.2/Xcode_14.2.xip)
 
@@ -86,7 +115,7 @@
 
 | Type | Name                                                                                                                                                                  | License |
 | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| Star | [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.5.1](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.5.1) | MIT     |
+| Star | [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.6.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.6.0) | MIT     |
 
 # Third-party software
 
@@ -116,7 +145,7 @@
 
 # Usage
 
-## Get Location Services Status
+## Get location services status
 
 Location Services Status is calculated as a unified value for both iOS and macOS.
 
@@ -153,7 +182,7 @@ GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
 
 ```
 
-## Request Permission
+## Request permission
 
 Statement **GeoAgent.requestPermission()** can be combined with the action to be called if status has already determined. 
 
@@ -198,7 +227,7 @@ GeoAgent.shared.requestPermission { status in
 
 ```
 
-## Request Current Location
+## Request current location
 
 > [!WARNING]
 > Statement **GeoAgent.shared.requestCurrentLocation()** causes stop updating location.
@@ -240,7 +269,7 @@ do {
 
 ```
 
-## Request Updating Location
+## Request updating location
 
 `Step 1:` Register for Geo events both error and updating location.
 
@@ -288,9 +317,9 @@ GeoAgent.shared.stopUpdatingLocation()
 
 ```
 
-## Geo Events Processing
+## Geo events processing
 
-`Event: Location Error`
+### Location error
 
 > Register first.
 
@@ -341,7 +370,7 @@ GeoAgent.register(self, #selector(locationErrorHandler(_:)), .locationError)
 
 ```
 
-`Event: Location Status`
+### Location status
 
 > Register first.
 
@@ -365,7 +394,7 @@ GeoAgent.register(self, #selector(locationStatusHandler(_:)), .locationStatus)
 
 ```
 
-`Event: Current Location`
+### Current location
 
 > Register first.
 
@@ -410,7 +439,7 @@ GeoAgent.register(self, #selector(currentLocationHandler(_:)), .currentLocation)
 
 ```
 
-`Event: Location Updates`
+### Location updates
 
 > Register first.
 
@@ -465,8 +494,8 @@ GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
 
 # License MIT
 
-Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk<br/>
-Copyright © 7533 PerseusRealDeal
+Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk<br/>
+Copyright © 7533 - 7534 PerseusRealDeal
 
 - The year starts from the creation of the world according to a Slavic calendar.
 - September, the 1st of Slavic year. It means that "Sep 01, 2024" is the beginning of 7533.
