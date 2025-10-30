@@ -1,14 +1,14 @@
 // swift-tools-version:5.7
 
 /* Package.swift
- Version: 1.0.4
+ Version: 1.1.0
 
  For iOS and macOS only. Use Stars to adopt for the specifics you need.
 
  Created by Mikhail Zhigulin in 7531.
 
- Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk
- Copyright © 7533 PerseusRealDeal
+ Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk
+ Copyright © 7533 - 7534 PerseusRealDeal
 
  Licensed under the MIT license. See LICENSE file.
  All rights reserved.
