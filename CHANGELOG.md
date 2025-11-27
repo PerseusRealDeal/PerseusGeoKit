@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
+## [1.1.1] - [2025-11-30], PGK
+
+### Updated
+
+- CPL dependency to v1.7.0.
+
 ## [1.1.0] - [2025-10-30], PGK
 
 ### Added

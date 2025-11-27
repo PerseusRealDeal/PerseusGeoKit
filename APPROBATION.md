@@ -1,4 +1,4 @@
-# Approbation Matrix / PerseusGeoLocationKit 1.0.0 && 1.0.1 && 1.0.2 && 1.0.2 && 1.0.3 && 1.0.4 && 1.1.0
+# Approbation Matrix / PerseusGeoLocationKit 1.0.0 && 1.0.1 && 1.0.2 && 1.0.2 && 1.0.3 && 1.0.4 && 1.1.0 && 1.1.1
 
 > NOTE: To catch all log messages Mac Console should be started first then after a little while the logged app.
 

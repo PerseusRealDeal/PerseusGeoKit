@@ -2,13 +2,13 @@
 
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/main.yml)
 [![Style](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/swiftlint.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoKit/actions/workflows/swiftlint.yml)
-[![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.1.1-green.svg)](/CHANGELOG.md)
 [![Platforms](https://img.shields.io/badge/Platforms-macOS%2010.13+_|_iOS%2011.0+-orange.svg)](https://en.wikipedia.org/wiki/List_of_Apple_products)
 [![Xcode 14.2](https://img.shields.io/badge/Xcode-14.2+-red.svg)](https://en.wikipedia.org/wiki/Xcode)
 [![Swift 5.7](https://img.shields.io/badge/Swift-5.7-red.svg)](https://www.swift.org)
 [![License](http://img.shields.io/:License-MIT-blue.svg)](/LICENSE)
 
-> Home-made product. The location manager wrapper for Location Services API.
+> This is the great home-made product in Swift for easily managed `Location Services API`.
 
 > `1:` Be awared of Location Services Status.<br/>
 > `2:` Request permission for Location Services.<br/>
@@ -25,7 +25,7 @@
 
 ## Dependencies
 
-[![ConsolePerseusLogger](http://img.shields.io/:ConsolePerseusLogger-1.6.0-green.svg)](https://github.com/perseusrealdeal/ConsolePerseusLogger.git)
+[![ConsolePerseusLogger](http://img.shields.io/:ConsolePerseusLogger-1.7.0-green.svg)](https://github.com/perseusrealdeal/ConsolePerseusLogger.git)
 
 ## Support Code
 
@@ -69,8 +69,8 @@
         * [Current location](#Current-location)
         * [Location updates](#Location-updates)
 * [Points taken into account](#Points-taken-into-account)
-* [License MIT](#License-MIT)
-    * [Other Required License Notices](#Other-Required-License-Notices)
+* [License](#License)
+    * [Other required license notices](#Other-required-license-notices)
 * [Credits](#Credits)
 * [Author](#Author)
 
@@ -115,7 +115,7 @@
 
 | Type | Name                                                                                                                                                                  | License |
 | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| Star | [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.6.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.6.0) | MIT     |
+| Star | [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.7.0](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.7.0) | MIT     |
 
 # Third-party software
 
@@ -492,15 +492,17 @@ GeoAgent.register(self, #selector(locationUpdatesHandler(_:)), .locationUpdates)
 - Preconfigured GitHub config [.gitignore](/.gitignore)
 - Preconfigured GitHub CI [main.yml](/.github/workflows/main.yml)
 
-# License MIT
+# License
+
+`License:` MIT
 
 Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk<br/>
 Copyright © 7533 - 7534 PerseusRealDeal
 
 - The year starts from the creation of the world according to a Slavic calendar.
-- September, the 1st of Slavic year. It means that "Sep 01, 2024" is the beginning of 7533.
+- September, the 1st of Slavic year. It means that "Sep 01, 2025" is the beginning of 7534.
 
-## Other Required License Notices
+## Other required license notices
 
 © 2025 The SwiftLint Contributors **for** SwiftLint</br>
 © GitHub **for** GitHub Action cirruslabs/swiftlint-action@v1</br>
@@ -514,22 +516,22 @@ Copyright © 7533 - 7534 PerseusRealDeal
 <tr>
     <td>Balance and Control</td>
     <td>kept by</td>
-    <td>Mikhail A. Zhigulin</td>
+    <td>Mikhail Zhigulin</td>
 </tr>
 <tr>
     <td>Source Code</td>
     <td>written by</td>
-    <td>Mikhail A. Zhigulin</td>
+    <td>Mikhail Zhigulin</td>
 </tr>
 <tr>
     <td>Documentation</td>
     <td>prepared by</td>
-    <td>Mikhail A. Zhigulin</td>
+    <td>Mikhail Zhigulin</td>
 </tr>
 <tr>
     <td>Product Approbation</td>
     <td>tested by</td>
-    <td>Mikhail A. Zhigulin</td>
+    <td>Mikhail Zhigulin</td>
 </tr>
 </table>
 
