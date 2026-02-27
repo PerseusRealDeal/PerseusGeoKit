@@ -1,11 +1,10 @@
 //
-//  PGKSupportingStar.swift
-//  Version: 1.1.2
+//  TheGeoSupport.swift
 //
 //  PerseusGeoKit Support Code
 //
 //
-//  For iOS and macOS only. Use Stars to adopt for the specifics you need.
+//  Stars to adopt for the specifics you need.
 //
 //  Created by Mikhail Zhigulin of Novosibirsk in 7533.
 //
