@@ -1,10 +1,18 @@
-# Approbation Matrix / PerseusGeoLocationKit 1.0.0 && 1.0.1 && 1.0.2 && 1.0.2 && 1.0.3 && 1.0.4 && 1.1.0 && 1.1.1 && 1.1.2
+# Approbation Matrix for PerseusGeoLocationKit
+
+## Approbated Versions
+
+> This report is actual for the following product versions: 
+
+v1.0.0 v1.0.1 v1.0.2 v1.0.2 v1.0.3 v1.0.4 v1.1.0 v1.1.1 v1.1.2 **v1.2.0**
+
+## Approbation Note
 
 > NOTE: To catch all log messages Mac Console should be started first then after a little while the logged app.
 
 > Compilation: macOS Monterey 12.7.6 / Xcode 14.2
 
-## macOS approbation result
+# macOS approbation result
 
 > The macOS app used to approbate PerseusGeoLocationKit is [Arkenstone](https://github.com/perseusrealdeal/Arkenstone).
 
@@ -19,7 +27,7 @@
 | Sonoma      | 14.7    | ok      | Returns LS status .notDetermed if turn LS off, OpenCore usage case. |
 | Sequoia     | 15.1    | ok      | Returns LS status .notDetermed if turn LS off, OpenCore usage case. |
 
-## iOS approbation result
+# iOS approbation result
 
 > The iOS app used to approbate PerseusGeoLocationKit is [The One Ring](https://github.com/perseusrealdeal/TheOneRing).
 
@@ -28,9 +36,9 @@
 | iPad Air        | no        | 12.5.7     | ok      | - |
 | iPhone SE (3rd) | yes       | 16.2       | ok      | Simulator generates error on every event of currentLocation/start but value received |
 
-## A3 environment
+# A3 environment
 
-### List of available Apple machines
+## List of available Apple machines
 
 > Excluded: virtualization (e.g. VirtualBox) and hackintosh
 
@@ -39,7 +47,7 @@
 | Mac mini    | 16GB   | SATA 480GB, NVMe 256GB |
 | MacBook Pro | 8GB    | 256GB                  |
 
-### System configuration for A3 environment
+## System configuration for A3 environment
 
 | macOS       | Version | Machine     | Xcode  | OpenCore | Git Client     |
 | ----------- | ------- | ----------- | ------ | -------- | -------------- |

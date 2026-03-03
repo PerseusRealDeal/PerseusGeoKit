@@ -5,19 +5,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
-## [1.1.2] - [2025-12-14], PGK
+## [1.2.0] - [2026-03-03], PerseusGeoKit
+
+### Included 
+
+- The support code to the main code.
+
+### Renamed
+
+- `PGKStar.swift` to `TheGeoStar.swift`.
+
+### Added:
+
+- Minor changes to documentation.
+
+### Updated:
+
+- CPL dependency to v1.7.1.
+
+## [1.1.2] - [2025-12-14], PerseusGeoKit
 
 ### Added:
 
 - Calculated property to ActionAlertText to simplify complex localization issues.
 
-## [1.1.1] - [2025-11-30], PGK
+## [1.1.1] - [2025-11-30], PerseusGeoKit
 
 ### Updated
 
 - CPL dependency to v1.7.0.
 
-## [1.1.0] - [2025-10-30], PGK
+## [1.1.0] - [2025-10-30], PerseusGeoKit
 
 ### Added
 
@@ -27,7 +45,7 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
 - CPL dependency to v1.6.0.
 
-## [1.0.4] - [2025-07-22], PGK
+## [1.0.4] - [2025-07-22], PerseusGeoKit
 
 ### Removed
 
@@ -38,25 +56,25 @@ Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 - GitHub CI scripts.
 - CPL dependency to v1.5.1.
 
-## [1.0.3] - [2025-06-18], PGK
+## [1.0.3] - [2025-06-18], PerseusGeoKit
 
 ### Fixed
 
 - Logger access modifier, typealias `log` must be not public.
 
-## [1.0.2] - [2025-06-17], PGK
+## [1.0.2] - [2025-06-17], PerseusGeoKit
 
 ### Upgraded
 
 - PerseusLogger to [CPL v1.5.0](https://github.com/perseusrealdeal/ConsolePerseusLogger).
 
-## [1.0.1] - [2025-05-31], PGK
+## [1.0.1] - [2025-05-31], PerseusGeoKit
 
 ### Fixed
 
 - iOS: Location Services permission request if status in .notDetermined.
 
-## [1.0.0] - [2025-05-31], PGK
+## [1.0.0] - [2025-05-31], PerseusGeoKit
 
 - Minimum build requirements: macOS 10.13+, iOS 11.0+, Xcode 14.2+. If standalone Xcode 10.1+.
 
