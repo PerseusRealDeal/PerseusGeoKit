@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
+## [1.2.1] - [2026-03-04], PerseusGeoKit
+
+### Fixed
+
+- Access modifiers in use case with SPM.
+
 ## [1.2.0] - [2026-03-03], PerseusGeoKit
 
 ### Included 
