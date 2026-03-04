@@ -52,23 +52,23 @@ import MapKit
 
 // MARK: - Geo Constants
 
-let DEFAULT_ACCURACY: GeoAccuracy = .threeKilometers
+public let DEFAULT_ACCURACY: GeoAccuracy = .threeKilometers
 
-let DEFAULT_MAP_POINT = CLLocation(latitude: 55.036857, longitude: 82.914063)
-let DEFAULT_MAP_RADIUS: CLLocationDistance = 1000
+public let DEFAULT_MAP_POINT = CLLocation(latitude: 55.036857, longitude: 82.914063)
+public let DEFAULT_MAP_RADIUS: CLLocationDistance = 1000
 
-let DEFAULT_VISIBLE_REGION = MKCoordinateRegion(center: DEFAULT_MAP_POINT.coordinate,
-                                                latitudinalMeters: DEFAULT_MAP_RADIUS,
-                                                longitudinalMeters: DEFAULT_MAP_RADIUS)
+public let DEFAULT_VISIBLE_REGION = MKCoordinateRegion(center: DEFAULT_MAP_POINT.coordinate,
+                                                       latitudinalMeters: DEFAULT_MAP_RADIUS,
+                                                       longitudinalMeters: DEFAULT_MAP_RADIUS)
 
-var REDIRECT_ALERT_TITLES = ActionAlertText(
+public var REDIRECT_ALERT_TITLES = ActionAlertText(
     title: "Location Services.",
     message: "The Current Location Services Status can be changed in System Services.",
     buttonCancel: "OK",
     buttonFunction: "System Services")
 
 extension ActionAlertText {
-    var titleWithStatus: String {
+    public var titleWithStatus: String {
         guard let status = titleCalculated else {
             return "Location Services: \(GeoAgent.currentStatus.description.capitalized)."
         }
@@ -84,7 +84,7 @@ extension Notification.Name {
 
 extension UIView {
 
-    func parentViewController() -> UIViewController? {
+    public func parentViewController() -> UIViewController? {
 
         guard let responder = self.next as? UIViewController else {
             guard let responder = self.next as? UIView else {
@@ -102,7 +102,7 @@ extension UIView {
 
 // MARK: - LocationDealer class
 
-class LocationDealer {
+public class LocationDealer {
 
     // MARK: - iOS Contract
 
@@ -208,7 +208,7 @@ class LocationDealer {
 
 // MARK: - GeoCoordinator class
 
-class GeoCoordinator: NSObject {
+public class GeoCoordinator: NSObject {
 
     // MARK: - Properties
 

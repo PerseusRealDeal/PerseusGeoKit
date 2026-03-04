@@ -4,7 +4,7 @@
 
 > This report is actual for the following product versions: 
 
-v1.0.0 v1.0.1 v1.0.2 v1.0.2 v1.0.3 v1.0.4 v1.1.0 v1.1.1 v1.1.2 **v1.2.0**
+v1.0.0 v1.0.1 v1.0.2 v1.0.2 v1.0.3 v1.0.4 v1.1.0 v1.1.1 v1.1.2 v1.2.0 **v1.2.1**
 
 ## Approbation Note
 
