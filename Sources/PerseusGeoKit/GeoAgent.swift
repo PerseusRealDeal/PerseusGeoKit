@@ -4,8 +4,8 @@
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
-//  Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk
-//  Copyright © 7533 - 7534 PerseusRealDeal
+//  Copyright © 7531 - 7535 Mikhail A. Zhigulin of Novosibirsk
+//  Copyright © 7533 - 7535 PerseusRealDeal
 //
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
@@ -101,7 +101,9 @@ public class GeoAgent: NSObject {
     }
 
     internal var order: GeoAgentOrder = .none
-
+#if os(macOS)
+    internal var isReinitLocationManagerTried = false
+#endif
     // MARK: - Singletone
 
     public static var shared: GeoAgent { return sharedInstance }
@@ -109,7 +111,7 @@ public class GeoAgent: NSObject {
     private static let sharedInstance = GeoAgent()
     private override init() {
 
-        log.message("[\(GeoAgent.self)].\(#function)", .info)
+        log.message("[\(GeoAgent.self)].\(#function)", .notice)
 
         locationManager = CLLocationManager()
         notificationCenter = NotificationCenter.default
@@ -185,7 +187,7 @@ public class GeoAgent: NSObject {
         guard status == .notDetermined, isAuthorizedForLocationServices == false else {
             if status == .notDetermined, isAuthorizedForLocationServices {
 
-                // HOTFIX: Location Services Status in OpenCore usage case.
+                // MARK: HOTFIX: Location Services Status in OpenCore usage case.
                 // Reinit location manager.
 
                 reInitLocationManager()
@@ -288,7 +290,7 @@ public class GeoAgent: NSObject {
         order = .none
     }
 
-    // MARK: - To serve hotfixes
+    // MARK: - Serves hotfixes
 
     public static func reInit() {
         sharedInstance.reInitLocationManager()
@@ -297,7 +299,9 @@ public class GeoAgent: NSObject {
     internal func reInitLocationManager() {
 
         log.message("[\(type(of: self))].\(#function) [REINIT LOCATION MANAGER]")
-
+#if os(macOS)
+        isReinitLocationManagerTried = true
+#endif
         let desiredAccuracy = locationManager.desiredAccuracy
 
         locationManager = CLLocationManager()
@@ -314,9 +318,13 @@ public enum Result<Value, Error: Swift.Error> {
     case failure(Error)
 }
 
-extension CLAuthorizationStatus: CustomStringConvertible {
+extension CLAuthorizationStatus {
 
-    public var description: String {
+    // MARK: FIXED: Xcode 16.2 triggers a compiler warning
+    // Not recommended forcing CustomStringConvertible conformance onto the imported enum.
+    // Better extend CLAuthorizationStatus with a standard computed property
+    // (e.g., customDescription) to return the corresponding string.
+    public var customDescription: String {
         switch self {
         case .notDetermined:
             return "notDetermined"
@@ -329,8 +337,8 @@ extension CLAuthorizationStatus: CustomStringConvertible {
         case .authorizedWhenInUse: // iOS only.
             return "authorizedWhenInUse"
         @unknown default:
-            log.message("Unknown CLAuthorizationStatus \(self)", .error)
-            // fatalError("Unknown CLAuthorizationStatus \(self)")
+            log.message("Unknown CLAuthorizationStatus", .notice)
+            // fatalError("Unknown CLAuthorizationStatus")
             return "unknown"
         }
     }
