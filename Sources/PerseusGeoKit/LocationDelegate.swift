@@ -4,8 +4,8 @@
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
-//  Copyright © 7531 - 7534 Mikhail A. Zhigulin of Novosibirsk
-//  Copyright © 7533 - 7534 PerseusRealDeal
+//  Copyright © 7531 - 7535 Mikhail A. Zhigulin of Novosibirsk
+//  Copyright © 7533 - 7535 PerseusRealDeal
 //
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
@@ -92,7 +92,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
             isErrorCased = true
 
-            // HOTFIX: Location Services Status in OpenCore usage case.
+            // MARK: HOTFIX: Location Services Status in OpenCore usage case.
             // Reinit location manager.
 
             let note = "[CASE - OPENCORE]"
@@ -159,18 +159,30 @@ extension GeoAgent: CLLocationManagerDelegate {
 #endif
 
         let statusLM = type(of: locationManager).authorizationStatus()
-        let details = "statusLM: \(statusLM)"
-
+        let details = "statusLM: \(statusLM.customDescription)"
+#if os(macOS)
         if statusLM == .notDetermined, isAuthorizedForLocationServices {
 
-            // HOTFIX: Location Services Status in OpenCore usage case.
+            // MARK: HOTFIX: Location Services Status in OpenCore usage case.
 
-            let note = "[CASE - OPENCORE]"
+            let note = "[POSSIBLE CASE - OPENCORE]"
             log.message("[\(type(of: self))].\(#function) \(note) \(details)", .notice)
+
+            // MARK: If reinit doesn't help, offer redirect (from v1.2.2)
+            if isReinitLocationManagerTried {
+                log.message("[\(type(of: self))].\(#function): alert invoked", .notice)
+
+                isReinitLocationManagerTried = false
+
+                REDIRECT_ALERT_TITLES.title = REDIRECT_ALERT_TITLES.titleWithStatus
+                GeoAgent.showRedirectAlert(REDIRECT_ALERT_TITLES) // Redirect offer.
+            }
 
             return
         }
 
+        isReinitLocationManagerTried = false
+#endif
         log.message("[\(type(of: self))].\(#function) \(details)", .notice)
 
         notificationCenter.post(name: GeoEvent.locationStatus.name, object: status)
@@ -183,7 +195,7 @@ extension GeoAgent: CLLocationManagerDelegate {
 
         if type(of: locationManager).authorizationStatus() == .notDetermined {
 
-            // HOTFIX: Location Services Status in OpenCore usage case.
+            // MARK: HOTFIX: Location Services Status in OpenCore usage case.
 
             let note = "[STATUS .notDetermined]"
             log.message("[\(type(of: self))].\(#function) \(note)", .notice)

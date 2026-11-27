@@ -4,8 +4,8 @@
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
-//  Copyright © 7531 - 7533 Mikhail A. Zhigulin of Novosibirsk
-//  Copyright © 7533 PerseusRealDeal
+//  Copyright © 7531 - 7535 Mikhail A. Zhigulin of Novosibirsk
+//  Copyright © 7533 - 7535 PerseusRealDeal
 //
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
@@ -23,19 +23,21 @@ final class FunctionalTests: XCTestCase {
         log.time = true
         log.owner = true
     }
-/*
+
     override static func tearDown() {
         super.tearDown()
+
+        log.message("[\(type(of: self))].\(#function)")
     }
 
-    func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
-*/
+    // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
+
     func test_the_first_success() {
         log.message("[\(type(of: self))].\(#function)")
 
         let isReseted = log.loadConfig(.defaultDebug)
         let result = isReseted ? "CPL options loaded." : "Failed to load options!"
 
-        log.message(result)
+        log.text(result)
     }
 }

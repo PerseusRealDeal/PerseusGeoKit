@@ -5,6 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in this file meets Gregorian calendar. Date in format YYYY-MM-DD.
 
+## [1.2.2] - [2026-11-27], PerseusGeoKit
+
+### Fixed:
+
+- Xcode 16.2 triggers a compiler warning about CLAuthorizationStatus with CustomStringConvertible.
+
+### Added:
+
+- macOS: Alert redirect if reinit makes no sense.
+
 ## [1.2.1] - [2026-03-04], PerseusGeoKit
 
 ### Fixed

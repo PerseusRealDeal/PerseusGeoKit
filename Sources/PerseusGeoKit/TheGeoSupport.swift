@@ -9,7 +9,7 @@
 //  Created by Mikhail Zhigulin of Novosibirsk in 7533.
 //
 //  The year starts from the creation of the world according to a Slavic calendar.
-//  September, the 1st of Slavic year. For instance, "Sep 01, 2025" is the beginning of 7534.
+//  September, the 1st of Slavic year. For instance, "Sep 01, 2026" is the beginning of 7535.
 //
 //
 //  Unlicensed Free Software
@@ -225,7 +225,7 @@ public class GeoCoordinator: NSObject {
 
     private override init() {
 
-        log.message("[\(GeoCoordinator.self)].\(#function)", .info)
+        log.message("[\(GeoCoordinator.self)].\(#function)", .notice)
 
         super.init()
 
